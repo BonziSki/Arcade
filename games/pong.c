@@ -26,4 +26,6 @@ Pong_Player * createPongPlayer(Pong_Player * player, int nplayer, int color){
 };
 
 
-void drawPongGame(Pong_Player * p1, Pong_Player * p2, Ball * ball);
+void drawPongGame(Pong_Player * p1, Pong_Player * p2, Ball * ball){
+    
+};
