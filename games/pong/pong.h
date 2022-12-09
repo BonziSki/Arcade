@@ -19,6 +19,7 @@ typedef struct Pong_Player{
         4 - vert clair
         */
     int color;
+    int score;
 }Pong_Player;
 
 
