@@ -1,4 +1,6 @@
-#include </opt/homebrew/Cellar/sdl2/2.26.0/include/SDL.h>
+//#include </opt/homebrew/Cellar/sdl2/2.26.0/include/SDL.h> MAC
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 
