@@ -26,7 +26,7 @@ typedef struct Pong_Player{
 //Fonctions
 
 Pong_Player * createPongPlayer();
-void drawPongGame(Pong_Player * p1, Pong_Player * p2, Ball * ball);
+void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Pong_Player * p1, Pong_Player * p2, Ball * ball);
 
 
 

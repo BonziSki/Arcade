@@ -1,10 +1,15 @@
-#include </opt/homebrew/Cellar/sdl2/2.26.0/include/SDL.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "func.h"
-#include "pong.h"
+#include "games/pong/pong.h"
 
+
+/*
+commande de compilation :
+gcc main.c -o prog $(sdl2-config --cflags --libs)
+*/
 
 
 int main(int argc, char **argv){
