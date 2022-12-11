@@ -14,7 +14,7 @@
 /*
 commande de compilation :
 MAC : gcc main.c -o prog $(sdl2-config --cflags --libs)
-WINDOWS : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 
+WINDOWS : gcc main.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 
 WINDOWS sans terminal : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 -mwindows
 */
 
@@ -35,18 +35,19 @@ int main(int argc, char **argv){
     if(SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer) != 0){
         SDL_ExitWithError("Impossible de créer la fenetre et le rendu");
     }
+    SDL_SetWindowTitle(window,"JEUX");
 
-        
-  
-    SDL_bool quit = SDL_FALSE;
-    while (!quit){
-        SDL_Event event;
-        while (SDL_PollEvent(&event)){
-            if (event.type == SDL_QUIT){
-                quit = SDL_TRUE;
-            }
-        }
-    }
+
+        menu(window,renderer);     
+    
+ 
+  /*
+  var gameplayed = 0;
+  0=menu
+  1=snake
+  ...
+  */
+
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

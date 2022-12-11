@@ -16,3 +16,9 @@ void SDL_PrintVersion(){
 
     printf("SDL %d.%d.%d \n", nb.major, nb.minor, nb.patch);
 }
+
+void clean(SDL_Window * window){
+    SDL_FillRect(SDL_GetWindowSurface(window),
+    NULL,
+    SDL_MapRGB(SDL_GetWindowSurface(window)->format,0,0,0));
+}
