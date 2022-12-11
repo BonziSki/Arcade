@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "func.h"

@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,11 +21,25 @@ Pong_Player * createPongPlayer(Pong_Player * player, int nplayer, int color){
     }
 
     temp->color = color;
+    temp->score = 0;
 
     return temp;    
 };
 
 
-void drawPongGame(Pong_Player * p1, Pong_Player * p2, Ball * ball){
+void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Pong_Player * p1, Pong_Player * p2, Ball * ball){
+
+    if (SDL_SetRendererDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE))
+    {
+        /* code */
+    }
     
+
+    //Dessin du terrain
+
+    //Dessin du score
+
+    //Dessin des joueurs
+
+    //Dessin de la balle
 };
