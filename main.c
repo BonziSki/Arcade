@@ -1,6 +1,11 @@
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h>
+#define SDL_MAIN_HANDLED
+//MAC
+//#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+//Windows
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 
 #include "func.h"
 #include "games/pong/pong.h"
@@ -8,17 +13,18 @@
 
 /*
 commande de compilation :
-gcc main.c -o prog $(sdl2-config --cflags --libs)
+MAC : gcc main.c -o prog $(sdl2-config --cflags --libs)
+WINDOWS : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2
 */
 
 
 int main(int argc, char **argv){
 
-    SDL_PrintVersion();
+    //SDL_PrintVersion();
 
     //initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
-        SDL_ExitWithError("Initialisation SDL");
+        SDL_ExitWithError("Initialisation SDL");;
     }
     
     //programme
@@ -39,6 +45,7 @@ int main(int argc, char **argv){
             }
         }
     }
+    SDL_Delay(5000);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
