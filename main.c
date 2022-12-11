@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#include "menu/menu.h"
 #include "func.h"
 #include "games/pong/pong.h"
 
@@ -14,7 +14,8 @@
 /*
 commande de compilation :
 MAC : gcc main.c -o prog $(sdl2-config --cflags --libs)
-WINDOWS : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2
+WINDOWS : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 
+WINDOWS sans terminal : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 -mwindows
 */
 
 
@@ -36,16 +37,16 @@ int main(int argc, char **argv){
     }
 
         
-    SDL_Event event;
-    int quit = 0;
+  
+    SDL_bool quit = SDL_FALSE;
     while (!quit){
+        SDL_Event event;
         while (SDL_PollEvent(&event)){
             if (event.type == SDL_QUIT){
-                quit = 1;
+                quit = SDL_TRUE;
             }
         }
     }
-    SDL_Delay(5000);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
