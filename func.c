@@ -1,4 +1,5 @@
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h>
+//#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> //MAC
+#include <SDL2/SDL.h>  //Windows
 #include <stdio.h>
 #include <stdlib.h>
 #include "func.h"
@@ -35,4 +36,3 @@ void SDL_ClearScreen(SDL_Renderer * renderer){
     }
 
     SDL_RenderPresent(renderer);
-}
