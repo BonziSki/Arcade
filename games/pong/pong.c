@@ -33,9 +33,10 @@ void updatePong(Pong_Player * p1, Pong_Player * p2, Ball * ball){
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Pong_Player * p1, Pong_Player * p2, Ball * ball){
 
     if (SDL_SetRendererDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE)){
-        /* code */
+        SDL_ExitWithError("Impossible de changer de couleur --- drawPongGame()");
     }
-    
+
+    SDL_Rect FillBlack;
 
     //Dessin du terrain
 

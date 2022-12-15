@@ -33,6 +33,7 @@ int main(int argc, char **argv){
     SDL_Event event;
     int quit = 0;
     while (!quit){
+        SDL_ClearScreen(renderer);
         while (SDL_PollEvent(&event)){
             if (event.type == SDL_QUIT){
                 quit = 1;

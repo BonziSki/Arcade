@@ -15,3 +15,24 @@ void SDL_PrintVersion(){
 
     printf("SDL %d.%d.%d \n", nb.major, nb.minor, nb.patch);
 }
+
+void SDL_ClearScreen(SDL_Renderer * renderer){
+
+    if (SDL_SetRenderDrawColor(renderer, 120, 0, 120, SDL_ALPHA_OPAQUE)){
+        SDL_ExitWithError("Impossible de changer de couleur");
+    }
+
+    SDL_Rect FillBlack = {
+        .x = 0,
+        .y = 0,
+        .h = HEIGHT,
+        .w = WIDTH
+    };
+
+    
+    if (SDL_RenderFillRect(renderer, &FillBlack)){
+        SDL_ExitWithError("Impossible de clear l'écran");
+    }
+
+    SDL_RenderPresent(renderer);
+}
