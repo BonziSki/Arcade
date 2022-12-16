@@ -19,7 +19,7 @@ void SDL_PrintVersion(){
 
 void SDL_ClearScreen(SDL_Renderer * renderer){
 
-    if (SDL_SetRenderDrawColor(renderer, 120, 0, 120, SDL_ALPHA_OPAQUE)){
+    if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE)){
         SDL_ExitWithError("Impossible de changer de couleur");
     }
 
