@@ -1,6 +1,14 @@
-#include <SDL2/SDL.h>
+//MAC
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+//Windows
+//#include <SDL2/SDL.h>s
 #include <stdio.h>
 #include <stdlib.h>
+#include "menu.h"
+
+void preMenu(SDL_Window * window, SDL_Renderer * renderer){
+    
+}
 
 void menu(SDL_Window * window, SDL_Renderer * renderer){
     SDL_bool quit = SDL_FALSE;
@@ -65,7 +73,7 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
 
 
 void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
-    clean(window);
+    //clean(window);
     //dessin
     //...drawmenu
     

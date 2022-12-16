@@ -1,8 +1,8 @@
 #define SDL_MAIN_HANDLED
 //MAC
-//#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
 //Windows
-#include <SDL2/SDL.h>
+//#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -38,9 +38,17 @@ int main(int argc, char **argv){
     SDL_SetWindowTitle(window,"JEUX");
 
 
-        menu(window,renderer);     
-    
- 
+    menu(window,renderer);  
+    SDL_Event event;
+    int quit = 0;
+    while (!quit){
+        SDL_ClearScreen(renderer);
+        while (SDL_PollEvent(&event)){
+            if (event.type == SDL_QUIT){
+                quit = 1;
+            }
+        }
+    }
   /*
   var gameplayed = 0;
   0=menu
