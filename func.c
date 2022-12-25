@@ -26,8 +26,8 @@ void SDL_ClearScreen(SDL_Renderer * renderer){
     SDL_Rect FillBlack = {
         .x = 0,
         .y = 0,
-        .h = HEIGHT,
-        .w = WIDTH
+        .h = 400,
+        .w = 800
     };
 
     
