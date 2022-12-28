@@ -119,3 +119,5 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
 };
+
+

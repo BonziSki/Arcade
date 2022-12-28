@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 //#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> //MAC
 //#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 #include <SDL2/SDL.h>  //Windows
 #include <SDL2/SDL_ttf.h>
+=======
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h>
+#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+>>>>>>> cbc7e2b (ajout de la fonction de dessin du pong)
 #include <stdio.h>
 #include <stdlib.h>
 #include "func.h"
