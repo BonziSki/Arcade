@@ -8,10 +8,7 @@
 
 void SDL_PrintVersion();
 void SDL_ExitWithError(char * message);
-/*void escape(SDL_Window * window, SDL_Renderer * renderer);
-    lorsque appuyer fenêtre de pause
-    bouton 1 quitter
-    bouton 2 continuer
-*/
-void clean(SDL_Window * window);
+void SDL_ClearScreen(SDL_Renderer * renderer);
+void SDL_WriteText(SDL_Renderer * renderer, int x, int y, int w, int h, SDL_Color color, char * text);
+
 #endif
