@@ -131,9 +131,9 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     Ball * ball = createPongBall();
 
     for (int i = 0; i < 500; i++){
-        SDL_Delay(50);
-        drawPongGame(window, renderer, ball, p1, p2);
         pongUpdate(ball, p1, p2);
+        drawPongGame(window, renderer, ball, p1, p2);
+        SDL_Delay(50);
     }
     
 }
@@ -147,25 +147,40 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
             switch (event.key.keysym.sym){
             //touches pour le joueur 1
             case SDLK_z:
-                p1->y = p1->y - 10;
+                if (p1->y > 10){
+                    p1->y = p1->y - 10;
+                }else{
+                    p1->y = 0;
+                }
                 break;
             case SDLK_s:
-                p1->y = p1->y + 10;
+                if(p1->y < HEIGHT - 50){
+                    p1->y = p1->y + 10;
+                }else{
+                    p1->y = HEIGHT - 40;
+                }
                 break;
             
             //touches pour le joueur 2
             case SDLK_UP:
-                p2->y = p2->y - 10;
+                if (p2->y > 10){
+                    p2->y = p2->y - 10;
+                }else{
+                    p2->y = 0;
+                }
                 break;
             case SDLK_DOWN:
-                p2->y = p2->y + 10;
+                if(p2->y < HEIGHT - 50){
+                    p2->y = p2->y + 10;
+                }else{
+                    p2->y = HEIGHT - 40;
+                }
                 break;
             
             default:
                 break;
             }
         }
-        
     }
 
 
