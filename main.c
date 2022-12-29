@@ -56,10 +56,10 @@ int main(int argc, char **argv){
     Pong_Player * p2 = createPongPlayer(2);
     Ball * ball = createPongBall();
 
-        
+    
     SDL_Event event;
     int quit = 0;
-    drawPongGame(window, renderer, ball, p1, p2);
+    mainPongLoop(window, renderer);
     while (!quit){
         while (SDL_PollEvent(&event)){
             if (event.type == SDL_QUIT){

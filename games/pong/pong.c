@@ -69,13 +69,13 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
     SDL_Color greyWhite = {200, 200, 200};
     char * score[2];
 
-    //score du joueur 1
-    sprintf(score, "%d", p1->score);
-    SDL_WriteText(renderer, 30, 30, 30, 30, greyWhite, score);
+    // //score du joueur 1
+    // sprintf(score, "%d", p1->score);
+    // SDL_WriteText(renderer, 30, 30, 30, 30, greyWhite, score);
 
-    //score du joueur 2
-    sprintf(score, "%d", p2->score);
-    SDL_WriteText(renderer, WIDTH - 60, HEIGHT - 60, 30, 30, greyWhite, score);
+    // //score du joueur 2
+    // sprintf(score, "%d", p2->score);
+    // SDL_WriteText(renderer, WIDTH - 60, HEIGHT - 60, 30, 30, greyWhite, score);
 
 
 
@@ -124,4 +124,51 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
     SDL_RenderPresent(renderer);
 };
 
+void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
 
+    Pong_Player * p1 = createPongPlayer(1);
+    Pong_Player * p2 = createPongPlayer(2);
+    Ball * ball = createPongBall();
+
+    for (int i = 0; i < 500; i++){
+        SDL_Delay(50);
+        drawPongGame(window, renderer, ball, p1, p2);
+        pongUpdate(ball, p1, p2);
+    }
+    
+}
+
+void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
+    //Update des positions des joueurs
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)){
+        if (event.type == SDL_KEYDOWN){
+            switch (event.key.keysym.sym){
+            //touches pour le joueur 1
+            case SDLK_z:
+                p1->y = p1->y - 10;
+                break;
+            case SDLK_s:
+                p1->y = p1->y + 10;
+                break;
+            
+            //touches pour le joueur 2
+            case SDLK_UP:
+                p2->y = p2->y - 10;
+                break;
+            case SDLK_DOWN:
+                p2->y = p2->y + 10;
+                break;
+            
+            default:
+                break;
+            }
+        }
+        
+    }
+
+
+    //Update de la position de la balle
+
+}
