@@ -38,6 +38,8 @@ void SDL_ClearScreen(SDL_Renderer * renderer){
     }
 
     SDL_RenderPresent(renderer);
+
+
 }
 
 void SDL_WriteText(SDL_Renderer * renderer, int x, int y, int w, int h, SDL_Color color, char * text){
