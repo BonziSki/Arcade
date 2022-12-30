@@ -185,5 +185,39 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
 
 
     //Update de la position de la balle
+    //update X
+    ball->x = ball->x + (10 * ball->horizontal_direction);
 
+    if (ball->x > WIDTH - 30){
+        //si la balle rebondie sur le joueur 2
+        if ((ball->y > p2->y + 40) && (ball->y + 10 < p2->y)){
+            ball->horizontal_direction = ball->horizontal_direction * -1;
+            ball->x = WIDTH - (ball->x - (WIDTH - 30));
+        }else{
+            //le joueur 1 marque un point
+        }
+        
+    }else if (ball->x < 30){
+        //si la balle rebondie sur le joueur 1
+        if ((ball->y > p1->y + 40) && (ball->y + 10 < p1->y)){
+            ball->horizontal_direction = ball->horizontal_direction * -1;
+            ball->x = ((ball->x - 30) * -1) + 30;
+        }else{
+            //le joueur 2 marque un point
+        }
+    }
+    
+    
+
+    //update Y
+    ball->y = ball->y + (10 * ball->vertical_direction);
+
+    //si la ball dépasse l'écran verticalement 
+    if (ball->y > HEIGHT){
+        ball->y = HEIGHT - (ball->y - HEIGHT);
+        ball->vertical_direction = ball->vertical_direction * -1;
+    }else if (ball->y < 0){
+        ball->y = ball->y * -1;
+        ball->vertical_direction = ball->vertical_direction * -1;
+    }
 }
