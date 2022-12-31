@@ -195,6 +195,8 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
             ball->x = WIDTH - (ball->x - (WIDTH - 30));
         }else{
             //le joueur 1 marque un point
+            p1->score = p1->score + 1;
+            resetBall(1, ball);
         }
         
     }else if (ball->x < 30){
@@ -204,6 +206,8 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
             ball->x = ((ball->x - 30) * -1) + 30;
         }else{
             //le joueur 2 marque un point
+            p2->score = p2->score + 1;
+            resetBall(-1, ball);
         }
     }
     
@@ -220,4 +224,13 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         ball->y = ball->y * -1;
         ball->vertical_direction = ball->vertical_direction * -1;
     }
+}
+
+void resetBall(int hdir, Ball * ball){
+
+    ball->x = WIDTH / 2 - 5;
+    ball->y = HEIGHT / 2 - 5;
+
+    ball->horizontal_direction = hdir;
+    ball->vertical_direction = hdir;
 }
