@@ -35,12 +35,21 @@ Ball * createPongBall(){
     temp->x = WIDTH / 2 - 5;
     temp->y = HEIGHT / 2 - 5;
 
-    temp->horizontal_direction = 1;
+    temp->horizontal_direction = -1;
     temp->vertical_direction = 1;
 
     return temp;
 }
 
+
+void resetBall(int hdir, Ball * ball){
+
+    ball->x = WIDTH / 2 - 5;
+    ball->y = HEIGHT / 2 - 5;
+
+    ball->horizontal_direction = hdir;
+    ball->vertical_direction = hdir;
+}
 
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2){
 
@@ -130,10 +139,10 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     Pong_Player * p2 = createPongPlayer(2);
     Ball * ball = createPongBall();
 
-    for (int i = 0; i < 500; i++){
+    for (int i = 0; i < 1000; i++){
         pongUpdate(ball, p1, p2);
         drawPongGame(window, renderer, ball, p1, p2);
-        SDL_Delay(50);
+        SDL_Delay(10);
     }
     
 }
@@ -186,11 +195,11 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
 
     //Update de la position de la balle
     //update X
-    ball->x = ball->x + (10 * ball->horizontal_direction);
+    ball->x = ball->x + (5 * ball->horizontal_direction);
 
     if (ball->x > WIDTH - 30){
         //si la balle rebondie sur le joueur 2
-        if ((ball->y > p2->y + 40) && (ball->y + 10 < p2->y)){
+        if ((ball->y < p2->y + 40) && (ball->y + 10 > p2->y)){
             ball->horizontal_direction = ball->horizontal_direction * -1;
             ball->x = WIDTH - (ball->x - (WIDTH - 30));
         }else{
@@ -201,7 +210,7 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         
     }else if (ball->x < 30){
         //si la balle rebondie sur le joueur 1
-        if ((ball->y > p1->y + 40) && (ball->y + 10 < p1->y)){
+        if ((ball->y < p1->y + 40) && (ball->y + 10 > p1->y)){
             ball->horizontal_direction = ball->horizontal_direction * -1;
             ball->x = ((ball->x - 30) * -1) + 30;
         }else{
@@ -214,7 +223,7 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
     
 
     //update Y
-    ball->y = ball->y + (10 * ball->vertical_direction);
+    ball->y = ball->y + (5 * ball->vertical_direction);
 
     //si la ball dépasse l'écran verticalement 
     if (ball->y > HEIGHT){
@@ -224,13 +233,4 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         ball->y = ball->y * -1;
         ball->vertical_direction = ball->vertical_direction * -1;
     }
-}
-
-void resetBall(int hdir, Ball * ball){
-
-    ball->x = WIDTH / 2 - 5;
-    ball->y = HEIGHT / 2 - 5;
-
-    ball->horizontal_direction = hdir;
-    ball->vertical_direction = hdir;
 }
