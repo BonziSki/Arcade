@@ -37,7 +37,7 @@ void SDL_ClearScreen(SDL_Renderer * renderer){
         SDL_ExitWithError("Impossible de clear l'écran");
     }
 
-    SDL_RenderPresent(renderer);
+    // SDL_RenderPresent(renderer);
 
 
 }
