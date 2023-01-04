@@ -18,7 +18,7 @@ Pong_Player * createPongPlayer(int nplayer){
         temp->x = 20;
         temp->y = (HEIGHT / 2) - 20;
     }else if (nplayer == 2){
-        temp->x = WIDTH - 20;
+        temp->x = WIDTH - 30;
         temp->y = (HEIGHT / 2) - 20;
     }else{
         SDL_ExitWithError("Arguments non valides");
@@ -38,6 +38,8 @@ Ball * createPongBall(){
     temp->horizontal_direction = -1;
     temp->vertical_direction = 1;
 
+    temp->speed = 1;
+
     return temp;
 }
 
@@ -49,6 +51,8 @@ void resetBall(int hdir, Ball * ball){
 
     ball->horizontal_direction = hdir;
     ball->vertical_direction = hdir;
+
+    ball->speed = 1;
 }
 
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2){
@@ -139,12 +143,17 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     Pong_Player * p2 = createPongPlayer(2);
     Ball * ball = createPongBall();
 
-    for (int i = 0; i < 1000; i++){
+    int quitpong = 0;
+    
+
+    while(!quitpong){
         pongUpdate(ball, p1, p2);
         drawPongGame(window, renderer, ball, p1, p2);
         SDL_Delay(10);
+        if (p1->score == 2){
+            quitpong = 1;
+        }
     }
-    
 }
 
 void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
@@ -157,14 +166,14 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
             //touches pour le joueur 1
             case SDLK_z:
                 if (p1->y > 10){
-                    p1->y = p1->y - 10;
+                    p1->y = p1->y - 20;
                 }else{
                     p1->y = 0;
                 }
                 break;
             case SDLK_s:
                 if(p1->y < HEIGHT - 50){
-                    p1->y = p1->y + 10;
+                    p1->y = p1->y + 20;
                 }else{
                     p1->y = HEIGHT - 40;
                 }
@@ -173,14 +182,14 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
             //touches pour le joueur 2
             case SDLK_UP:
                 if (p2->y > 10){
-                    p2->y = p2->y - 10;
+                    p2->y = p2->y - 20;
                 }else{
                     p2->y = 0;
                 }
                 break;
             case SDLK_DOWN:
                 if(p2->y < HEIGHT - 50){
-                    p2->y = p2->y + 10;
+                    p2->y = p2->y + 20;
                 }else{
                     p2->y = HEIGHT - 40;
                 }
@@ -195,13 +204,22 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
 
     //Update de la position de la balle
     //update X
-    ball->x = ball->x + (5 * ball->horizontal_direction);
+    if (ball->x >700){
+        printf("\n------------\nball X : %d", ball->x);
+    }
+    
+    ball->x = ball->x + (ball->speed * ball->horizontal_direction);
 
     if (ball->x > WIDTH - 30){
+        printf("\nball X : %d", ball->x);
         //si la balle rebondie sur le joueur 2
         if ((ball->y < p2->y + 40) && (ball->y + 10 > p2->y)){
+            printf("\nball X : %d", ball->x);
             ball->horizontal_direction = ball->horizontal_direction * -1;
-            ball->x = WIDTH - (ball->x - (WIDTH - 30));
+            ball->x = (WIDTH - 30) - (ball->x - (WIDTH - 30));
+            printf("\nball X : %d", ball->x);
+
+            ball->speed = ball->speed + 1;
         }else{
             //le joueur 1 marque un point
             p1->score = p1->score + 1;
@@ -213,6 +231,8 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         if ((ball->y < p1->y + 40) && (ball->y + 10 > p1->y)){
             ball->horizontal_direction = ball->horizontal_direction * -1;
             ball->x = ((ball->x - 30) * -1) + 30;
+
+            ball->speed = ball->speed + 1;
         }else{
             //le joueur 2 marque un point
             p2->score = p2->score + 1;
@@ -223,7 +243,7 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
     
 
     //update Y
-    ball->y = ball->y + (5 * ball->vertical_direction);
+    ball->y = ball->y + (ball->speed * ball->vertical_direction);
 
     //si la ball dépasse l'écran verticalement 
     if (ball->y > HEIGHT){
