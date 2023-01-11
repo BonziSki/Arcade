@@ -1,10 +1,10 @@
 // #define SDL_MAIN_HANDLED
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -52,6 +52,8 @@ int main(int argc, char **argv){
         SDL_ExitWithError("Chargement de la police d'écriture");
     }
 
+    menu(window,renderer);
+/*
     Pong_Player * p1 = createPongPlayer(1);
     Pong_Player * p2 = createPongPlayer(2);
     Ball * ball = createPongBall();
@@ -66,7 +68,7 @@ int main(int argc, char **argv){
                 quit = 1;
             }
         }
-    }
+    }/*/
     
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
