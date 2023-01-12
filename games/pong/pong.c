@@ -154,9 +154,6 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
         }
         drawPongGame(window, renderer, ball, p1, p2);
         SDL_Delay(10);
-        if (p1->score == 2){
-            quitpong = 1;
-        }
     }
 }
 
