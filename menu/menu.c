@@ -113,8 +113,8 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
     textRect->x=300;
     textRect->y=400;
     SDL_RenderFillRect(renderer, textRect);
-
-    SDL_RenderPresent(renderer);
     SDL_RenderCopy(renderer,texture,NULL,textRect);
+    SDL_RenderPresent(renderer);
+
     //SDL_DestroyTexture(texture);
 }
