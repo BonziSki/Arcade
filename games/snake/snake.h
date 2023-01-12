@@ -20,7 +20,7 @@ typedef struct Fruit
 
 
 Snake * createSnake(int snakeSize);
-Fruit * createFruit();
+Fruit * createFruit(Snake * tete);
 void drawSnake(SDL_Window * window, SDL_Renderer * renderer, Snake * snake);
 void mainSnake(SDL_Window * window, SDL_Renderer * renderer);
 void snakeUpdate(Snake * snake);
