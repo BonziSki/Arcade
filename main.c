@@ -17,7 +17,7 @@
 commande de compilation :
 MAC : gcc main.c -o prog $(sdl2-config --cflags --libs)
 WINDOWS : gcc main.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 
-WINDOWS sans terminal : gcc main.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -mwindows
+WINDOWS sans terminal : gcc main.c func.c menu/menu.c games/pong/pong.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -mwindows
 */
 
 

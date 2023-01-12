@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "../func.h"
+#include "../games/pong/pong.h"
 #include "menu.h"
 
 void menu(SDL_Window * window, SDL_Renderer * renderer){
@@ -21,27 +22,24 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_RIGHT:
-                        if (choice==3)
-                        {}else{
+                        if (choice<3)
                             choice++;
-                        }
-
                         //+1 choix menu
                         break;
                     case SDLK_LEFT:
-                        if (choice==0)
-                        {}else{
+                            if (choice>0)
                             choice--;
-                        }
                         //-1 choix menu
                         break;
-                    case SDLK_KP_ENTER:
-                            SDL_ClearScreen(renderer);
-                            SDL_Delay(10);
+                    case SDLK_RETURN:
                         switch (choice)
                         {
+                            case 0:
+                            //pong
+                                mainPongLoop(window, renderer);
+                                break;
                             case 1:
-                                    
+                                //func(game)
                                 break;
                             case 2:
                                 //func(game)
@@ -49,13 +47,16 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                             case 3:
                                 //func(game)
                                 break;
-                            case 4:
-                                //func(game)
-                                break;
                             default:
                                 break;
                         }
+                        SDL_RenderPresent(renderer);  
                     break;
+                    case SDLK_ESCAPE:
+                        if(Escape(window,renderer)==0){
+                            quit=SDL_TRUE;
+                        };
+                        break;
                 default:
                     break;
                 }
@@ -86,20 +87,20 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
     rect->h = 80;
     rect->y = 280;
 
-for (int i = 0; i < 4; i++)
-{
-    if (choice==i)
+    for (int i = 0; i < 4; i++)
     {
-        if (SDL_SetRenderDrawColor(renderer, 0, 0,255, SDL_ALPHA_OPAQUE) != 0){
+        if (choice==i)
+        {
+            if (SDL_SetRenderDrawColor(renderer, 0, 0,255, SDL_ALPHA_OPAQUE) != 0){
+                SDL_ExitWithError("Changement de couleur du rendu");
+            }
+        }
+        rect->x = 40+ (80 + (rect->w*i*2));
+            SDL_RenderFillRect(renderer, rect);
+        if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
             SDL_ExitWithError("Changement de couleur du rendu");
         }
     }
-    rect->x = 40+ (80 + (rect->w*i*2));
-        SDL_RenderFillRect(renderer, rect);
-    if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
-        SDL_ExitWithError("Changement de couleur du rendu");
-    }
-}
 
     rect->w = rect->w *3;
     rect->h = 80;
