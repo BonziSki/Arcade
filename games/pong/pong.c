@@ -39,6 +39,7 @@ Ball * createPongBall(){
     temp->vertical_direction = 1;
 
     temp->speed = 1;
+    temp->bounce = 0;
 
     return temp;
 }
@@ -78,18 +79,19 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
         SDL_RenderFillRect(renderer, rect);
     }
     
+    /*
     //Dessin du score
     SDL_Color greyWhite = {200, 200, 200};
     char * score[2];
 
     // //score du joueur 1
-    // sprintf(score, "%d", p1->score);
-    // SDL_WriteText(renderer, 30, 30, 30, 30, greyWhite, score);
+    sprintf(score, "%d", p1->score);
+    SDL_WriteText(renderer, 30, 30, 30, 30, greyWhite, score);
 
     // //score du joueur 2
-    // sprintf(score, "%d", p2->score);
-    // SDL_WriteText(renderer, WIDTH - 60, HEIGHT - 60, 30, 30, greyWhite, score);
-
+    sprintf(score, "%d", p2->score);
+    SDL_WriteText(renderer, WIDTH - 60, HEIGHT - 60, 30, 30, greyWhite, score);
+    */
 
 
     //Dessin des joueurs
@@ -147,7 +149,9 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     
 
     while(!quitpong){
-        pongUpdate(ball, p1, p2);
+        if(pongUpdate(ball, p1, p2) == 0){
+            quitpong = 1;
+        }
         drawPongGame(window, renderer, ball, p1, p2);
         SDL_Delay(10);
         if (p1->score == 2){
@@ -156,11 +160,15 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     }
 }
 
-void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
+int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
     //Update des positions des joueurs
     SDL_Event event;
 
     while (SDL_PollEvent(&event)){
+        if (event.type == SDL_QUIT){
+            //quitter le programme
+            return 0;
+        }
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
             //touches pour le joueur 1
@@ -204,20 +212,14 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
 
     //Update de la position de la balle
     //update X
-    if (ball->x >700){
-        printf("\n------------\nball X : %d", ball->x);
-    }
     
     ball->x = ball->x + (ball->speed * ball->horizontal_direction);
 
     if (ball->x > WIDTH - 30){
-        printf("\nball X : %d", ball->x);
         //si la balle rebondie sur le joueur 2
         if ((ball->y < p2->y + 40) && (ball->y + 10 > p2->y)){
-            printf("\nball X : %d", ball->x);
             ball->horizontal_direction = ball->horizontal_direction * -1;
             ball->x = (WIDTH - 30) - (ball->x - (WIDTH - 30));
-            printf("\nball X : %d", ball->x);
 
             ball->speed = ball->speed + 1;
         }else{
@@ -253,4 +255,6 @@ void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         ball->y = ball->y * -1;
         ball->vertical_direction = ball->vertical_direction * -1;
     }
+
+    return 1;
 }

@@ -6,7 +6,8 @@ typedef struct Ball{
     int y;
     int vertical_direction;
     int horizontal_direction;
-
+    int speed;
+    int bounce;
 }Ball;
 
 typedef struct Pong_Player{
@@ -22,7 +23,7 @@ Pong_Player * createPongPlayer(int nplayer);
 Ball * createPongBall();
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2);
 void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer);
-void pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2);
+int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2);
 
 
 
