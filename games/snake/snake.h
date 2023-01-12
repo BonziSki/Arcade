@@ -1,16 +1,17 @@
-#ifndef A
-#define A
+#ifndef G
+#define G
 
 
-#define HEIGHT 600
-#define WIDTH 800
+// #define HEIGHT 600
+// #define WIDTH 800
 
-typedef struct Snake
+typedef struct Snake Snake;
+struct Snake
 {
     int x;
     int y;
     Snake *next;
-}Snake;
+};
 
 typedef struct Fruit
 {

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "snake.h"
 #include <SDL2/SDL.h>
+#include "../../func.h"
 #include <time.h>
 
 //SNAKE CREATION
@@ -19,7 +20,7 @@ Snake * createSnake(int snakeSize){
         tete->x = 20 + (snakeSize - 2);
         tete->y = 15;
         tete->next = createSnake(snakeSize-1);
-    
+           
         return tete;
     }else{
         return NULL;
@@ -33,7 +34,7 @@ Fruit * createFruit(Snake * tete){
     while (tete = tete->next)
     {
         pomme->x = rand()%(40);
-        pomme->y = rands()%(30);
+        pomme->y = rand()%(30);
     }
 
     return pomme;
