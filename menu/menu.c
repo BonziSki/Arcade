@@ -74,9 +74,16 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
 
 
 void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
-    SDL_Surface * Surface1 = SDL_LoadBMP("./ressources/textures/choupette_block.bmp");
-    SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,Surface1);
-    SDL_FreeSurface(Surface1);
+    char * bmp_string[]= {"./ressources/textures/pong.bmp","./ressources/textures/tron.bmp","./ressources/textures/snake.bmp","./ressources/textures/tetris.bmp"};
+    SDL_Surface * Surface[4];
+    SDL_Texture * texture[4];
+    for (int i = 0; i < 4; i++)
+    {
+        Surface[i]= SDL_LoadBMP(bmp_string[i]);
+        texture[i] = SDL_CreateTextureFromSurface(renderer,Surface[i]);
+        SDL_FreeSurface(Surface[i]);
+    }
+    // SDL_Surface * Surface1 = SDL_LoadBMP("./ressources/textures/choupette_block.bmp");
     SDL_ClearScreen(renderer);
     SDL_Rect * textRect = malloc(sizeof(SDL_Rect));
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
@@ -87,19 +94,36 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
     rect->h = 80;
     rect->y = 280;
 
+    textRect->w=80;
+    textRect->h=80;
+    textRect->y=rect->y;
+
     for (int i = 0; i < 4; i++)
     {
         if (choice==i)
         {
-            if (SDL_SetRenderDrawColor(renderer, 0, 0,255, SDL_ALPHA_OPAQUE) != 0){
+            if (SDL_SetRenderDrawColor(renderer, 255, 255,255, SDL_ALPHA_OPAQUE) != 0){
                 SDL_ExitWithError("Changement de couleur du rendu");
             }
-        }
-        rect->x = 40+ (80 + (rect->w*i*2));
+            rect->x=40+ (80 + (rect->w*i*2))-3;
+            rect->y-=3;
+
+            rect->w+=6;
+            rect->h+=6;
             SDL_RenderFillRect(renderer, rect);
+            rect->y+=3;
+            rect->w-=6;
+            rect->h-=6;
+        }
         if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
             SDL_ExitWithError("Changement de couleur du rendu");
         }
+        rect->x = 40+ (80 + (rect->w*i*2));
+            SDL_RenderFillRect(renderer, rect);
+        textRect->x=rect->x;
+        SDL_RenderCopy(renderer,texture[i],NULL,textRect);
+        
+
     }
 
     rect->w = rect->w *3;
@@ -107,16 +131,12 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
     rect->x = WIDTH/2-rect->w/2;
     rect->y = 100;
     SDL_RenderFillRect(renderer, rect);
-
-    textRect->w=80;
-    textRect->h=80;
-    textRect->x=300;
-    textRect->y=400;
-    //SDL_RenderFillRect(renderer, textRect);
-    SDL_RenderCopy(renderer,texture,NULL,textRect);
     SDL_RenderPresent(renderer);
-
-    SDL_DestroyTexture(texture);
+    for (int i = 0; i < 4; i++)
+    {
+        SDL_DestroyTexture(texture[i]);
+    }
+    
     free(textRect);
     free(rect);
 }
