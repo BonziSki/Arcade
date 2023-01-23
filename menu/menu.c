@@ -4,6 +4,7 @@
 
 #include "../func.h"
 #include "../games/pong/pong.h"
+#include "../games/tetris/tetris.h"
 #include "menu.h"
 
 void menu(SDL_Window * window, SDL_Renderer * renderer){
@@ -45,7 +46,7 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                                 //func(game)
                                 break;
                             case 3:
-                                //func(game)
+                                MainTetrisLoop(window,renderer);
                                 break;
                             default:
                                 break;
