@@ -11,6 +11,7 @@
 #include "menu/menu.h"
 #include "func.h"
 #include "games/pong/pong.h"
+#include "games/tron/tron.h"
 
 
 /*
@@ -52,16 +53,12 @@ int main(int argc, char **argv){
         SDL_ExitWithError("Chargement de la police d'écriture");
     }
 
-    // menu(window,renderer);
-
-    Pong_Player * p1 = createPongPlayer(1);
-    Pong_Player * p2 = createPongPlayer(2);
-    Ball * ball = createPongBall();
-
     
     SDL_Event event;
     int quit = 0;
-    mainPongLoop(window, renderer);
+    mainTronLoop(window, renderer);
+
+    SDL_Delay(1000);
     SDL_ClearScreen(renderer);
     SDL_RenderPresent(renderer);
     while (!quit){
