@@ -1,32 +1,20 @@
 #ifndef G
 #define G
 
-typedef struct tetrisCell{
-    int x;
-    int y;
-    int size;
-    int filled;
-
-}tetrisCell;
-
-typedef struct tetrisView
-{
-    int width;
-    int heigth;
-    tetrisCell *** Cell;
-
-}tetrisView;
+#define WIDTH_TABLE 12
+#define HEIGTH_TABLE 22
+#define CELL_SIZE 20
 
 
 void MainTetrisLoop(SDL_Window * window, SDL_Renderer * renderer);
 void PartialClean(SDL_Renderer * renderer);
- 
+ int ** createTmpTable(int height, int width);
+ int ** createPermTable(int height, int width);
 void DrawControl(SDL_Renderer * renderer);
 void DrawGame(SDL_Renderer * renderer);
 void DrawNext(SDL_Renderer * renderer);
 void DrawScore(SDL_Renderer * renderer);
-tetrisCell * CreateCell(int xPos,int yPos);
-tetrisView * CreateView();
-void tetrisViewSetup(tetrisView * tetrisView);
+void supprLine(int row,int ** permArray,int width)
+void updateTetris(int ** tempArray, int ** permArray,int heigth, int width);
 
 #endif

@@ -15,10 +15,12 @@ void MainTetrisLoop(SDL_Window * window, SDL_Renderer * renderer){
     SDL_ClearScreen(renderer);
     int quit =0;
     DrawControl(renderer);
-
+    int ** tempArray = createTmpTable(HEIGTH_TABLE,WIDTH_TABLE);
+    int ** permArray = createPermTable(HEIGTH_TABLE,WIDTH_TABLE);
     while (!quit)
     {
         void DrawGame(renderer);
+
     }
     
 
@@ -33,6 +35,13 @@ void DrawNext(SDL_Renderer * renderer){
 }
 
 void DrawGame(SDL_Renderer * renderer){
+    //print tableau permanent 
+
+
+    // print tableau temporaire
+
+
+    // clean tableau temporaire
     PartialClean(renderer);
     
 }
