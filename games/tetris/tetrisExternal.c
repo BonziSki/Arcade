@@ -11,9 +11,6 @@
 #include "../../func.h"
 #include "../../menu/menu.h"
  
-void DrawControl(SDL_Renderer * renderer){
-
-}
 
 
 int ** createTmpTable(int height, int width){
@@ -21,6 +18,11 @@ int ** createTmpTable(int height, int width){
     for (int i = 0; i < height; i++)
     {
         tempArray[i]=malloc(sizeof(int)*width);
+        for (int j = 0; j < width; j++)
+        {
+            tempArray[i][j]=0;
+        }
+        
     }
     
     return tempArray;
@@ -30,14 +32,19 @@ int ** createPermTable(int height, int width){
     for (int i = 0; i < height; i++)
     {
         permArray[i]=malloc(sizeof(int)*width);
+        for (int j = 0; j < width; j++)
+        {
+            permArray[i][j]=0;
+        }
     }
     
     return permArray;
 }
 
 
-void updateTetris(int ** tempArray, int ** permArray,int heigth, int width){  
+void updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score){  
     int flag =0;
+    int lineFlag= 1;
     //Check collision
     for (int i = 0; i < heigth; i++)
     {
@@ -50,17 +57,17 @@ void updateTetris(int ** tempArray, int ** permArray,int heigth, int width){
                     flag=1;
                 }
             }
-            if (flag==1)
-            {
-                break;
-            }
+            // if (flag==1)
+            // {
+            //     break;
+            // }
         }
-        if (flag==1)
-        {
-            break;
-        }   
+        // if (flag==1)
+        // {
+        //     break;
+        // }   
     }
-    //copie tableau temp dans perm moins cellule vide
+    // //copie tableau temp dans perm moins cellule vide
     if (flag==1)
     {
         for (int i = 0; i < heigth; i++)
@@ -73,28 +80,48 @@ void updateTetris(int ** tempArray, int ** permArray,int heigth, int width){
                 }  
             }
         }
-        //
+    //     //check si ligne complète est vrai
         for (int i = 0; i < heigth; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-
+                    if (permArray[i][j]==0)
+                    {
+                        lineFlag=0;
+                    }else{
+                        //break;
+                        }
+                }
+                if (lineFlag==1)
+                {
+                    supprLine(i,permArray,width,heigth);
+                    *score+=100;
                 }
             }
-        //sinon descendre tableau temp *burp* -1
+    //     //sinon descendre tableau temp *burp* -1
     }else{
         for (int i = heigth; i > 0; i--)
         {
             for (int j = 0; j < width; j++)
             {
-                tempArray[i-1][j]=tempArray[i][j];
+                    tempArray[i-1][j]=tempArray[i][j];
             }
         }
     }
 }
-
-void supprLine(int row,int ** permArray,int width){
-    
+//suppr line + 
+void supprLine(int row,int ** permArray,int width, int heigth){
+    for (int i = 0; i < width; i++)
+    {
+        permArray[row][i]=0;
+    }
+    for (int i = heigth; i > 0; i--)
+    {
+       for (int j = 0; j < width; j++)
+       {
+        permArray[i+1][j]=permArray[i][j];
+       }
+    }
 }
 
 void PartialClean(SDL_Renderer * renderer){

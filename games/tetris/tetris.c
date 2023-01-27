@@ -13,35 +13,48 @@
  
 void MainTetrisLoop(SDL_Window * window, SDL_Renderer * renderer){
     SDL_ClearScreen(renderer);
+    int score=0;
     int quit =0;
     DrawControl(renderer);
     int ** tempArray = createTmpTable(HEIGTH_TABLE,WIDTH_TABLE);
     int ** permArray = createPermTable(HEIGTH_TABLE,WIDTH_TABLE);
     while (!quit)
     {
-        void DrawGame(renderer);
-
+        updateTetris(tempArray,permArray,HEIGTH_TABLE,WIDTH_TABLE,&score);
+        DrawGame(renderer);
+        DrawScore(renderer,score);
+        DrawNext(renderer);
     }
-    
-
 }
 
 
-void DrawScore(SDL_Renderer * renderer){
+void DrawScore(SDL_Renderer * renderer,int score){
 
 }
 void DrawNext(SDL_Renderer * renderer){
 
 }
+void DrawControl(SDL_Renderer * renderer){
+
+}
 
 void DrawGame(SDL_Renderer * renderer){
+    PartialClean(renderer);
     //print tableau permanent 
+    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+    if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+        SDL_ExitWithError("Changement de couleur du rendu");
+    }
+    rect->w = 80;
+    rect->h = 80;
+    rect->y = 280;
+    rect->x = 280;
+        SDL_RenderFillRect(renderer, rect);
+    SDL_RenderPresent(renderer);
 
 
     // print tableau temporaire
 
 
     // clean tableau temporaire
-    PartialClean(renderer);
-    
 }

@@ -13,8 +13,8 @@ void PartialClean(SDL_Renderer * renderer);
 void DrawControl(SDL_Renderer * renderer);
 void DrawGame(SDL_Renderer * renderer);
 void DrawNext(SDL_Renderer * renderer);
-void DrawScore(SDL_Renderer * renderer);
-void supprLine(int row,int ** permArray,int width)
-void updateTetris(int ** tempArray, int ** permArray,int heigth, int width);
+void DrawScore(SDL_Renderer * renderer,int score);
+void supprLine(int row,int ** permArray,int width, int heigth);
+void updateTetris(int ** tempArray, int ** permArray,int heigth, int width,int * score);
 
 #endif
