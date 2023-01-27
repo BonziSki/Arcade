@@ -43,33 +43,9 @@ int main(int argc, char **argv){
         SDL_ExitWithError("Impossible de créer la fenetre et le rendu");
     }
 
-    //chargement de la police d'écriture
-    TTF_Font * arcadeFont = NULL;
-    
-    arcadeFont = TTF_OpenFont("./ressources/font/ARCADEPI.TTF",20);
-
-    if(arcadeFont == NULL){
-        SDL_ExitWithError("Chargement de la police d'écriture");
-    }
 
     menu(window,renderer);
-/*
-    Pong_Player * p1 = createPongPlayer(1);
-    Pong_Player * p2 = createPongPlayer(2);
-    Ball * ball = createPongBall();
 
-    
-    SDL_Event event;
-    int quit = 0;
-    mainPongLoop(window, renderer);
-    while (!quit){
-        while (SDL_PollEvent(&event)){
-            if (event.type == SDL_QUIT){
-                quit = 1;
-            }
-        }
-    }/*/
-    
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

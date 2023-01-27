@@ -95,3 +95,10 @@ void SDL_WriteText(SDL_Renderer * renderer, int x, int y, int w, int h, SDL_Colo
     TTF_CloseFont(font);
 
 }
+void SDL_WriteTextBuffered(SDL_Renderer * renderer,int x, int y, int w, int h, SDL_Color color,char * arraySTR){
+
+    char * buffer = malloc(sizeof(char)*SDL_strlen(arraySTR));
+    sprintf(buffer,"%s",arraySTR);
+    SDL_WriteText(renderer, x, y, w, h, color, buffer);
+    free(buffer);
+}

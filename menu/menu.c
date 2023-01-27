@@ -53,7 +53,7 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                         SDL_RenderPresent(renderer);  
                     break;
                     case SDLK_ESCAPE:
-                        if(Escape(window,renderer)==0){
+                        if(Escape(renderer)==0){
                             quit=SDL_TRUE;
                         };
                         break;

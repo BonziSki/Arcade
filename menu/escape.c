@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,12 +7,12 @@
 #include "../games/pong/pong.h"
 #include "menu.h"
 
-int Escape(SDL_Window * window, SDL_Renderer * renderer){
+int Escape(SDL_Renderer * renderer){
     SDL_bool quit = SDL_FALSE;
     int choice=0;
     while (!quit){
         SDL_Event event;
-        DrawEscape(window,renderer,choice);
+        DrawEscape(renderer,choice);
         while (SDL_PollEvent(&event)){
         
             switch (event.type){
@@ -40,7 +41,7 @@ int Escape(SDL_Window * window, SDL_Renderer * renderer){
         }
     }
 }
-void DrawEscape(SDL_Window * window, SDL_Renderer * renderer, int choice){
+void DrawEscape(SDL_Renderer * renderer, int choice){
     SDL_ClearScreen(renderer);
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
     if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
@@ -71,6 +72,14 @@ void DrawEscape(SDL_Window * window, SDL_Renderer * renderer, int choice){
     rect->x = WIDTH/2-rect->w/2;
     rect->y = 100;
     SDL_RenderFillRect(renderer, rect);
-    
+
+//recentrer les zones
+    SDL_Color greyWhite = {200, 200, 200};
+    char * dico[] = {"voulez vous quitter?","oui","non"};
+
+SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
+// SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
+// SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+
     SDL_RenderPresent(renderer);
 }

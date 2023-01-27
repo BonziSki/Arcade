@@ -80,17 +80,18 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
         SDL_RenderFillRect(renderer, rect);
     }
     
-    /*
+    
     //Dessin du score
     SDL_Color greyWhite = {200, 200, 200};
-    char * score[2];
+    char * score = malloc(sizeof(char)*2);
     // //score du joueur 1
     sprintf(score, "%d", p1->score);
     SDL_WriteText(renderer, 30, 30, 30, 30, greyWhite, score);
     // //score du joueur 2
     sprintf(score, "%d", p2->score);
     SDL_WriteText(renderer, WIDTH - 60, HEIGHT - 60, 30, 30, greyWhite, score);
-    */
+    //clean buffer car plus utile
+    free(score);
 
 
     //Dessin des joueurs
@@ -148,7 +149,7 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     
 
     while(!quitpong){
-        if(pongUpdate(ball, p1, p2) == 0){
+        if(pongUpdate(ball, p1, p2,renderer) == 0){
             quitpong = 1;
         }
         drawPongGame(window, renderer, ball, p1, p2);
@@ -157,9 +158,12 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
             quitpong = 1;
         }
     }
+    free(ball);
+    free(p1);
+    free(p2);
 }
 
-int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
+int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2, SDL_Renderer * renderer){
     //Update des positions des joueurs
     SDL_Event event;
 
@@ -201,6 +205,11 @@ int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
                     p2->y = HEIGHT - 40;
                 }
                 break;
+            case SDLK_ESCAPE:
+                        if(Escape(renderer)==0){
+                            return 0;
+                        };
+                        break;
 
             default:
                 break;
