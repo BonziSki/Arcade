@@ -64,7 +64,6 @@ void drawSnake(SDL_Window * window, SDL_Renderer * renderer, Snake * snake){
     }
 
     SDL_RenderFillRect(renderer, rect);
-    free(rect);
 
     
 
