@@ -16,16 +16,19 @@
 #include "snake.h"
 
 Snake* initializeSnake() {
-    Snake* snake = malloc(sizeof(Snake));
-    for (int i = 0; i < count; i++)
+    int mdScreen = WIDTH/2;
+       Snake* snake = malloc(sizeof(Snake));
+
+    for (int i = mdScreen; i <i-4; i--)
     {
-        /* code */
+        snake->next = snake->next-1;
     }
-    
     return snake;
 }
 
-// Fruit* initializeFruit();
+Fruit* initializeFruit(){
+    Fruit
+};
 // void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer);
 // int updateSnake(Snake * Snake, Fruit * Fruit);
 
