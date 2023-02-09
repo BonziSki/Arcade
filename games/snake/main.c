@@ -29,10 +29,10 @@ WINDOWS sans terminal : gcc main.c func.c menu/menu.c games/pong/pong.c -o prog.
 #include <time.h>
 #include "snake.h"
 
-#define WIDTH 800
-#define HEIGHT 600
-#define true 1
-#define false 0
+// #define WIDTH 800
+// #define HEIGHT 600
+// #define true 1
+// #define false 0
 
 int isRunning;
 
