@@ -13,67 +13,95 @@
 #include <time.h>
 
 //SNAKE CREATION
-Snake * createSnake(int snakeSize){
-    Snake * tete = malloc(sizeof(Snake));
-    if (snakeSize>0)
-    {
-        tete->x = 20 + (snakeSize - 2);
-        tete->y = 15;
-        tete->next = createSnake(snakeSize-1);
-           
-        return tete;
-    }else{
-        return NULL;
-    }
-};
+#include "snake.h"
 
-//RANDOM FRUIT POSITION
-Fruit * createFruit(Snake * tete){
-    Fruit * pomme = malloc(sizeof(Fruit));
+Snake* initializeSnake() {
+    Snake* snake = malloc(sizeof(snake));
+    if (snake != NULL) {
+        snake->head = NULL;
+        snake->tail = NULL;
+    }
+    return snake;
+}
+
+void insertBeginning(Snake* snake, int x, int y) {
     
-    while (tete = tete->next)
-    {
-        pomme->x = rand()%(40);
-        pomme->y = rand()%(30);
+    if (snake->head == NULL) {
+        
+        Node* node = malloc(sizeof(Node));
+        if (node != NULL) {
+            node->next = snake->tail;
+            node->body.x = x;
+            node->body.y = y;
+            node->body.w = 25;
+            node->body.h = 25;
+            snake->head = node;
+        }
+        return;
     }
 
-    return pomme;
-};
-
-void drawSnake(SDL_Window * window, SDL_Renderer * renderer, Snake * snake){
-    //nettoyage de l'écran
-    SDL_ClearScreen(renderer);
-
-    //changement de couleur
-    if (SDL_SetRenderDrawColor(renderer, 200, 200, 200, SDL_ALPHA_OPAQUE) != 0){
-        SDL_ExitWithError("Changement de couleur du rendu");
+    else {
+        Node* temp = snake->head;
+        Node* node = malloc(sizeof(Node));
+        if (node != NULL) {
+            node->body.x = x;
+            node->body.y = y;
+            node->body.w = 25;
+            node->body.h = 25;
+            node->next = snake->head;
+            snake->head = node;
+        }
+        
     }
-
-    //Dessin du terrain
-    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
-
     
-    //Dessin du snake
-    rect->x = snake->x;
-    rect->y = snake->y;
-    rect->w = 10;
-    rect->h = 10;
+}
 
-    if (SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE) != 0){
-        SDL_ExitWithError("Changement de couleur du rendu");
+void insertEnd(Snake* snake, int x, int y) {
+
+    if (snake->tail == NULL) {
+        Node* node = malloc(sizeof(Node));
+        node->next = NULL;
+        snake->head->next = node;
+        node->body.x = x;
+        node->body.y = y;
+        node->body.w = 25;
+        node->body.h = 25;
+        snake->tail = node;
     }
 
-    SDL_RenderFillRect(renderer, rect);
+    else {
+        Node* node = malloc(sizeof(Node));
+        if (node != NULL) {
+            node->next = NULL;
+            node->body.x = x;
+            node->body.y = y;
+            node->body.w = 25;
+            node->body.h = 25;
+            snake->tail->next = node;
+            snake->tail = node;
+        }
+        
+    }
+}
 
+void deleteBeginning(Snake* snake) {
     
+    if (snake->head != NULL) {
+        Node* temp = snake->head;
+        snake->head = snake->head->next;
+        free(temp);
+    }
+}
 
-    //affichage de tous les éléments
-    SDL_RenderPresent(renderer);
-};
+void deleteEnd(Snake* snake) {
 
+    if (snake->tail != NULL) {
+        Node* temp = snake->head;
+        while (temp->next != snake->tail) {
+            temp = temp->next;
+        }
+        snake->tail = temp;
+        free(temp);
+    }
 
-
-
-
-// void mainSnake(SDL_Window * window, SDL_Renderer * renderer){};
-// void snakeUpdate(Snake * snake){};
+}
