@@ -10,25 +10,39 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
-typedef struct {
-    SDL_Rect body;
-    struct Node* next;
-} Node;
 
-typedef struct Snake Snake;
-struct Snake
+
+
+typedef struct Snake
 {
     
     int x;
     int y;
-    Node *head, *tail;
-};
+    Snake* next;
+}Snake;
+
+
+typedef struct Fruit
+{
+    int x;
+    int y;
+}Fruit;
+
 
 Snake* initializeSnake();
-void insertBeginning(Snake* snake, int x, int y);
-void insertEnd(Snake* snake, int x, int y);
-void deleteBeginning(Snake* snake);
-void deleteEnd(Snake* snake);
-//void mainSnake();
+Fruit* initializeFruit();
+void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer);
+int updateSnake(Snake * Snake, Fruit * Fruit);
+
+
+
+
+
+
+
+// void insertBeginning(Snake* snake, int x, int y);
+// void insertEnd(Snake* snake, int x, int y);
+// void deleteBeginning(Snake* snake);
+// void deleteEnd(Snake* snake);
 
 #endif

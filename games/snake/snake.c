@@ -16,92 +16,150 @@
 #include "snake.h"
 
 Snake* initializeSnake() {
-    Snake* snake = malloc(sizeof(snake));
-    if (snake != NULL) {
-        snake->head = NULL;
-        snake->tail = NULL;
+    Snake* snake = malloc(sizeof(Snake));
+    for (int i = 0; i < count; i++)
+    {
+        /* code */
     }
+    
     return snake;
 }
 
-void insertBeginning(Snake* snake, int x, int y) {
+// Fruit* initializeFruit();
+// void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer);
+// int updateSnake(Snake * Snake, Fruit * Fruit);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// void insertBeginning(Snake* snake, int x, int y) {
     
-    if (snake->head == NULL) {
+//     if (snake->head == NULL) {
         
-        Node* node = malloc(sizeof(Node));
-        if (node != NULL) {
-            node->next = snake->tail;
-            node->body.x = x;
-            node->body.y = y;
-            node->body.w = 25;
-            node->body.h = 25;
-            snake->head = node;
-        }
-        return;
-    }
+//         Node* node = malloc(sizeof(Node));
+//         if (node != NULL) {
+//             node->next = snake->tail;
+//             node->body.x = x;
+//             node->body.y = y;
+//             node->body.w = 25;
+//             node->body.h = 25;
+//             snake->head = node;
+//         }
+//         return;
+//     }
 
-    else {
-        Node* temp = snake->head;
-        Node* node = malloc(sizeof(Node));
-        if (node != NULL) {
-            node->body.x = x;
-            node->body.y = y;
-            node->body.w = 25;
-            node->body.h = 25;
-            node->next = snake->head;
-            snake->head = node;
-        }
+//     else {
+//         Node* temp = snake->head;
+//         Node* node = malloc(sizeof(Node));
+//         if (node != NULL) {
+//             node->body.x = x;
+//             node->body.y = y;
+//             node->body.w = 25;
+//             node->body.h = 25;
+//             node->next = snake->head;
+//             snake->head = node;
+//         }
         
-    }
+//     }
     
-}
+// }
 
-void insertEnd(Snake* snake, int x, int y) {
+// void insertEnd(Snake* snake, int x, int y) {
 
-    if (snake->tail == NULL) {
-        Node* node = malloc(sizeof(Node));
-        node->next = NULL;
-        snake->head->next = node;
-        node->body.x = x;
-        node->body.y = y;
-        node->body.w = 25;
-        node->body.h = 25;
-        snake->tail = node;
-    }
+//     if (snake->tail == NULL) {
+//         Node* node = malloc(sizeof(Node));
+//         node->next = NULL;
+//         snake->head->next = node;
+//         node->body.x = x;
+//         node->body.y = y;
+//         node->body.w = 25;
+//         node->body.h = 25;
+//         snake->tail = node;
+//     }
 
-    else {
-        Node* node = malloc(sizeof(Node));
-        if (node != NULL) {
-            node->next = NULL;
-            node->body.x = x;
-            node->body.y = y;
-            node->body.w = 25;
-            node->body.h = 25;
-            snake->tail->next = node;
-            snake->tail = node;
-        }
+//     else {
+//         Node* node = malloc(sizeof(Node));
+//         if (node != NULL) {
+//             node->next = NULL;
+//             node->body.x = x;
+//             node->body.y = y;
+//             node->body.w = 25;
+//             node->body.h = 25;
+//             snake->tail->next = node;
+//             snake->tail = node;
+//         }
         
-    }
-}
+//     }
+// }
 
-void deleteBeginning(Snake* snake) {
+// void deleteBeginning(Snake* snake) {
     
-    if (snake->head != NULL) {
-        Node* temp = snake->head;
-        snake->head = snake->head->next;
-        free(temp);
-    }
-}
+//     if (snake->head != NULL) {
+//         Node* temp = snake->head;
+//         snake->head = snake->head->next;
+//         free(temp);
+//     }
+// }
 
-void deleteEnd(Snake* snake) {
+// void deleteEnd(Snake* snake) {
 
-    if (snake->tail != NULL) {
-        Node* temp = snake->head;
-        while (temp->next != snake->tail) {
-            temp = temp->next;
-        }
-        snake->tail = temp;
-        free(temp);
-    }
+//     if (snake->tail != NULL) {
+//         Node* temp = snake->head;
+//         while (temp->next != snake->tail) {
+//             temp = temp->next;
+//         }
+//         snake->tail = temp;
+//         free(temp);
+//     }
 
-}
+// }
