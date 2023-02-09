@@ -15,6 +15,7 @@
 
 
 
+
 typedef struct Snake Snake;
 struct Snake
 {
