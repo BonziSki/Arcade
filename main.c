@@ -58,16 +58,15 @@ int main(int argc, char **argv){
     int quit = 0;
     mainTronLoop(window, renderer);
 
-    SDL_Delay(1000);
     SDL_ClearScreen(renderer);
     SDL_RenderPresent(renderer);
-    while (!quit){
-        while (SDL_PollEvent(&event)){
-            if (event.type == SDL_QUIT){
-                quit = 1;
-            }
-        }
-    }
+    // while (!quit){
+    //     while (SDL_PollEvent(&event)){
+    //         if (event.type == SDL_QUIT){
+    //             quit = 1;
+    //         }
+    //     }
+    // }
     
     TTF_Quit();
     SDL_DestroyRenderer(renderer);

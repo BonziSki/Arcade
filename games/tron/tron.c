@@ -20,7 +20,7 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
     TronPlayer * temp = malloc(sizeof(TronPlayer));
 
     if (pn == 1){
-        temp->x = width - 20;
+        temp->x = (width / 2) - 20;
         temp->y = height;
 
         temp->dir_h = 1;
@@ -28,7 +28,7 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
 
         temp->score = 0;
     }else{
-        temp->x = width + 20;
+        temp->x = (width / 2) + 20;
         temp->y = height;
         
         temp->dir_h = -1;
@@ -77,16 +77,22 @@ void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer *
 
     for (int i = 0; i < MAP_HEIGHT; i++){
         for (int j = 0; j < MAP_WIDTH; j++){
-            if (map[i][j] == 1){
+            if (map[i][j] != 0){
+                printf("1");
                 rect->x = i * CASE_SIZE;
                 rect->y = j * CASE_SIZE;
                 rect->w = CASE_SIZE;
                 rect->h = CASE_SIZE;
-            
+
                 SDL_RenderFillRect(renderer, rect);
+            }else{
+                printf("O");
             }
         }
+        printf("\n");
     }
+    printf("\n");
+    printf("\n");
     
 
 
@@ -154,14 +160,19 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
 
 
     //Update de la map
-    map[p1->x][p1->y] = 1;
-    map[p2->x][p2->y] = 2;
+    printf("\n%d\n", map[p1->y][p1->x]);
+    map[p1->y][p1->x] = 1;
+    printf("%d\n", map[p1->y][p1->x]);
+    map[p2->y][p2->x] = 2;
 
 
     //Detection des touches
     SDL_Event event;
 
     while (SDL_PollEvent(&event)){
+        if(event.type == SDL_QUIT){
+            return -1;
+        }
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
             //touches pour le joueur 1
@@ -231,20 +242,22 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     
     //Update des positions
     //joueur 1
-    p1->x = p1->x + 2 * p1->dir_h;
-    p1->y = p1->y + 2 * p1->dir_v;
+    printf("\np1 x = %d", p1->x);
+    printf("\np1 y = %d\n", p1->y);
+    p1->x = p1->x + (2 * p1->dir_h);
+    p1->y = p1->y + (2 * p1->dir_v);
 
-    if (map[p1->x][p1->y] != 0){
+    if (map[p1->y][p1->x] != 0 || (p1->x > MAP_WIDTH || p1->x < 0) || (p1->y > MAP_HEIGHT || p1->y < 0)){
         lose += 1;
     }
 
     
 
     //joueur 2
-    p2->x = p2->x + 2 * p2->dir_h;
-    p2->y = p2->y + 2 * p2->dir_v;
+    p2->x = p2->x + (2 * p2->dir_h);
+    p2->y = p2->y + (2 * p2->dir_v);
 
-    if (map[p2->x][p2->y] != 0){
+    if (map[p2->y][p2->x] != 0 || (p2->x > MAP_WIDTH || p2->x < 0) || (p2->y > MAP_HEIGHT || p2->y < 0)){
         lose += 2;
     }
     
@@ -283,7 +296,7 @@ int updateTronScore(TronPlayer * p1, TronPlayer * p2, int looser){
 }
 
 void drawWinner(SDL_Renderer * renderer, int winner, int score_p1, int score_p2){
-
+    //bloquer le jeu jusqu'au relancement de la part du joueur
 }
 
 void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
@@ -318,19 +331,22 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
     int update = 0;
 
     testScreen(renderer);
+    SDL_Event eventtron;
 
-    // while (!quitTron){
-        // update = updateTron(p1, p2, map);
+    while (!quitTron){
+        update = updateTron(p1, p2, map);
 
-    //     if (update == -1){
-    //         quitTron = 1;
-    //     }else if (update == 1){
-    //         drawWinner(renderer, 1, p1->score, p2->score);
-    //     }else if (update == 2){
-    //         drawWinner(renderer, 2, p1->score, p2->score);
-    //     }
+        if (update == -1){
+            quitTron = 1;
+        }
+        // else if (update == 1){
+        //     drawWinner(renderer, 1, p1->score, p2->score);
+        // }else if (update == 2){
+        //     drawWinner(renderer, 2, p1->score, p2->score);
+        // }
 
-        // drawTron(renderer, map, p1, p2);
-        SDL_Delay(3000);
-    // }
+        drawTron(renderer, map, p1, p2);
+        
+        SDL_Delay(200);
+    }
 }
