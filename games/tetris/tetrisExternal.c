@@ -6,7 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 #include "tetris.h"
 #include "../../func.h"
 #include "../../menu/menu.h"
@@ -42,30 +42,68 @@ int ** createPermTable(int height, int width){
 }
 
 
-void updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score){  
+int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score, SDL_Renderer * renderer){  
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)){
+        if (event.type == SDL_QUIT){
+            //quitter le programme
+            return 0;
+        }
+        if (event.type == SDL_KEYDOWN){
+            switch (event.key.keysym.sym){
+            case SDLK_RIGHT:
+
+                break;
+            case SDLK_LEFT:
+
+                break;
+            case SDLK_UP:
+
+                break;
+            case SDLK_DOWN:
+
+                break;
+            case SDLK_ESCAPE:
+                        if(Escape(renderer)==0){
+                            return 0;
+                        };
+                        break;
+            default:
+                break;
+            }
+        }
+    }
+    
+
     int flag =0;
     int lineFlag= 1;
     //Check collision
+    /*
+    A CHANGER 
+
+    check collision en bas si bouton down ou descente du tableau
+    check collision si déplacement a gauche
+    check collision si déplacement a droite
+    */
     for (int i = 0; i < heigth; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            if (tempArray[i][j]!=0)
+            if (tempArray[i][j]!=0 && permArray[i+1][j]!=0)
             {
-                if (permArray[i+1][j]!=0){
-                    //trigger flag
-                    flag=1;
-                }
+                //trigger flag
+                flag=1;
             }
-            // if (flag==1)
-            // {
-            //     break;
-            // }
+            if (flag==1)
+            {
+                break;
+            }
         }
-        // if (flag==1)
-        // {
-        //     break;
-        // }   
+        if (flag==1)
+        {
+            break;
+        }   
     }
     // //copie tableau temp dans perm moins cellule vide
     if (flag==1)
@@ -76,7 +114,8 @@ void updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int 
             {
                 if (tempArray[i][j]!=0)
                 {
-                    permArray[i][j]=tempArray[i][j];
+                    
+                    permArray[i+1][j]=tempArray[i][j];
                 }  
             }
         }
@@ -100,13 +139,16 @@ void updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int 
             }
     //     //sinon descendre tableau temp *burp* -1
     }else{
-        for (int i = heigth; i > 0; i--)
+        for (int i = heigth-1; i > 0; i--)
         {
             for (int j = 0; j < width; j++)
-            {
-                    tempArray[i-1][j]=tempArray[i][j];
+            {   
+                printf("i=%d j=%d \n",i,j);
+                //bug
+                tempArray[i][j]=tempArray[i-1][j];
             }
         }
+        
     }
 }
 //suppr line + 
@@ -130,7 +172,7 @@ void PartialClean(SDL_Renderer * renderer){
         SDL_ExitWithError("Impossible de changer de couleur");
     }
 
-    SDL_Rect FillBlack = {
+    SDL_Rect  FillBlack = {
         .x = WIDTH/4,
         .y = 0,
         .h = HEIGHT,

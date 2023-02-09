@@ -84,7 +84,6 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
         texture[i] = SDL_CreateTextureFromSurface(renderer,Surface[i]);
         SDL_FreeSurface(Surface[i]);
     }
-    // SDL_Surface * Surface1 = SDL_LoadBMP("./ressources/textures/choupette_block.bmp");
     SDL_ClearScreen(renderer);
     SDL_Rect * textRect = malloc(sizeof(SDL_Rect));
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
@@ -123,8 +122,6 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
             SDL_RenderFillRect(renderer, rect);
         textRect->x=rect->x;
         SDL_RenderCopy(renderer,texture[i],NULL,textRect);
-        
-
     }
 
     rect->w = rect->w *3;
