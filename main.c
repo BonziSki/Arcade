@@ -6,6 +6,7 @@
 //#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "menu/menu.h"
 #include "func.h"
@@ -22,6 +23,8 @@ WINDOWS sans terminal : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL
 
 
 int main(int argc, char **argv){
+
+    srand(time(NULL));
 
     SDL_PrintVersion();
 
@@ -44,13 +47,14 @@ int main(int argc, char **argv){
     int quit = 0;
     SDL_Event event;
 
+    mainLoopSnake(window, renderer);
+    
     while (!quit){
         while (SDL_PollEvent(&event)){
             if (event.type == SDL_QUIT){
                 quit = 1;
             }
         }
-        mainLoopSnake(window, renderer);
     }
     
     

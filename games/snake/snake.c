@@ -1,3 +1,5 @@
+
+//--------- SDL ---------
 //MAC
 #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
 #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
@@ -6,58 +8,76 @@
 // #include <SDL2/SDL.h> 
 // #include <SDL2/SDL_ttf.h>
 
+//-----------------------
+
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "snake.h"
 #include "../../func.h"
-// #include <time.h>
-
-#define WIDTH 800
 
 
 
 
 
-Snake* initializeSnake() {
-    int mdScreen = ((WIDTH / 25) % 2) ? (WIDTH / 25)/2 : ((WIDTH / 25) - 1)/2;
+
+Snake * createSnake() {
+
+    printf("\n\nCréation du serpent : \n");
+    
+    int midScreen = ((WIDTH / CASE_SIZE) % 2) ? (WIDTH / CASE_SIZE)/2 : ((WIDTH / CASE_SIZE) - 1)/2;
+    printf("milieu de l'écran : %d\n", midScreen);
+
     Snake* temp = NULL;
-    for (int i = mdScreen; i <mdScreen-4; i--)
-    {
+
+
+    for (int i = midScreen; i > midScreen - 4; i--){
         Snake* snake = malloc(sizeof(Snake));
-        snake->y=10;
-        snake->x=i;
+
+        snake->y = 10;
+        snake->x = i;
         snake->next = temp;
         temp = snake;
+
+        printf("noeud n°%d : x = %d | y = %d | next = %p\n", i, snake->x, snake->y, snake->next);
+        printf("temp = %p\n", temp);
     }
     return temp;
 }
 
-void initializeFruit(Fruit * fruit){
+void createFruit(Fruit * fruit, Snake * snake){
     
-    fruit->x= rand()%32;
-    fruit->y=rand()%24;
+    fruit->x = rand() % MAX_CASE_WIDTH;
+    fruit->y = rand() % MAX_CASE_HEIGHT;
+
+    Snake * tempSnake = snake;
+
+    int a = 1;
+
+    while (a){
+        if (fruit->x == tempSnake->x){
+            if (fruit->y == tempSnake->y){
+                fruit->x = rand() % MAX_CASE_WIDTH;
+                fruit->y = rand() % MAX_CASE_HEIGHT;
+
+                tempSnake = snake;
+            }
+        }
+
+        tempSnake = tempSnake->next; 
+
+        if(tempSnake->next != NULL){
+            a = 0;
+        }
+    }
 };
 
-// void SDL_ClearScreen(SDL_Renderer * renderer){
-//     if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE)){
-//         SDL_ExitWithError("Impossible de changer de couleur");
-//     }
 
-//     SDL_Rect FillBlack = {
-//         .x = 0,
-//         .y = 0,
-//         .h = HEIGHT,
-//         .w = WIDTH
-//     };
-//     if (SDL_RenderFillRect(renderer, &FillBlack)){
-//         SDL_ExitWithError("Impossible de clear l'écran");
-//     }
+void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
 
-//     // SDL_RenderPresent(renderer);
+    Snake * tempSnake = snake;
 
-// }
 
-void drawSnake(Snake * snake, Fruit *fruit, SDL_Renderer * renderer){
     //nettoyage de l'écran
     SDL_ClearScreen(renderer);
 
@@ -70,18 +90,30 @@ void drawSnake(Snake * snake, Fruit *fruit, SDL_Renderer * renderer){
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
 
     //Dessin du snake
-    rect->x= snake->x;
-    rect->y= snake->y;
-    rect->h= 25;
-    rect->w= 25;
+    while (tempSnake->next != NULL){
+        printf("print snake node : x = %d | y = %d | next = %p\n", tempSnake->x, tempSnake->y, tempSnake->next);
 
-    SDL_RenderFillRect(renderer, rect);
+        rect->x = tempSnake->x * CASE_SIZE;
+        rect->y = tempSnake->y * CASE_SIZE;
+        rect->h = CASE_SIZE;
+        rect->w = CASE_SIZE;
+
+        SDL_RenderFillRect(renderer, rect);
+
+        tempSnake = tempSnake->next;
+    }
+    
+
+    //changement de couleur
+    if (SDL_SetRenderDrawColor(renderer, 200, 20, 20, SDL_ALPHA_OPAQUE) != 0){
+        SDL_ExitWithError("Changement de couleur du rendu");
+    }
 
     //Dessin fruit
-    rect->x= fruit->x;
-    rect->y= fruit->y;
-    rect->h= 25;
-    rect->w= 25;
+    rect->x = fruit->x * CASE_SIZE;
+    rect->y = fruit->y * CASE_SIZE;
+    rect->h = CASE_SIZE;
+    rect->w = CASE_SIZE;
     SDL_RenderFillRect(renderer, rect);
 
     free(rect);
@@ -90,17 +122,44 @@ void drawSnake(Snake * snake, Fruit *fruit, SDL_Renderer * renderer){
     SDL_RenderPresent(renderer);
 }
 
-void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
-    Snake *snake = initializeSnake();
-    Fruit *fruit = malloc(sizeof(Fruit));
-    initializeFruit(fruit);
+void drawTest(){
 
-    drawSnake(snake, fruit, renderer);
-    SDL_Delay(5000);
+    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+
+    rect->h= 25;
+    rect->w= 25;
+
+
+    for (int i = 0; i < MAX_CASE_HEIGHT; i++){
+        for (int j = 0; j < MAX_CASE_WIDTH; j++){
+            rect->x = j;
+            rect->y = i;
+        }
+    }
+}
+
+void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
+
+    Snake * snake = createSnake();
+
+    printf("\n%p\n", snake);
+
+
+    Fruit * fruit = malloc(sizeof(Fruit));
+    createFruit(fruit, snake);
+
+    printf("\nFruit : x = %d | y = %d", fruit->x, fruit->y);
+
+
+    drawSnake(renderer, snake, fruit);
+    SDL_Delay(1000);
+
+    free(snake);
+    free(fruit);
 
 };
 
-// int updateSnake(Snake * Snake, Fruit * Fruit);
+int updateSnake(Snake * Snake, Fruit * Fruit);
 
 
 
