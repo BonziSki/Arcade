@@ -1,13 +1,9 @@
 #ifndef G
 #define G
 
-#include <SDL2/SDL.h> 
-
-#define HEIGHT 600
-#define WIDTH 800
-#define true 1
-#define false 0
-
+#define CASE_SIZE 25
+#define MAX_CASE_HEIGHT HEIGHT / CASE_SIZE
+#define MAX_CASE_WIDTH WIDTH / CASE_SIZE
 
 typedef struct Snake Snake;
 struct Snake
@@ -25,12 +21,14 @@ typedef struct Fruit
 }Fruit;
 
 
-Snake* initializeSnake();
-void* initializeFruit(Fruit * fruit);
+Snake * createSnake();
+void createFruit(Fruit * fruit,  Snake * snake);
+
+void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit);
+int updateSnake(Snake * Snake, Fruit * Fruit);
+
 void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
-void drawSnake(Snake * snake, Fruit *fruit, SDL_Renderer * renderer);
-//int updateSnake(Snake * Snake, Fruit * Fruit);
-// void SDL_ClearScreen(SDL_Renderer *renderer);
+
 
 
 
