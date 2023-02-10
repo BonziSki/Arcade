@@ -1,7 +1,7 @@
 #ifndef G
 #define G
 
-#include <SDL2/SDL.h> 
+// #include <SDL2/SDL.h> 
 
 #define HEIGHT 600
 #define WIDTH 800
@@ -26,11 +26,11 @@ typedef struct Fruit
 
 
 Snake* initializeSnake();
-void* initializeFruit(Fruit * fruit);
-void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
+void initializeFruit(Fruit * fruit);
 void drawSnake(Snake * snake, Fruit *fruit, SDL_Renderer * renderer);
-//int updateSnake(Snake * Snake, Fruit * Fruit);
-// void SDL_ClearScreen(SDL_Renderer *renderer);
+void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
+//int updateSnake(Snake * Snake, Fruit * Fruit);s
+
 
 
 

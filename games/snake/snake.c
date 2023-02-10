@@ -1,34 +1,20 @@
 //MAC
-// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
  
 //Windows
-#include <SDL2/SDL.h> 
-#include <SDL2/SDL_ttf.h>
+// #include <SDL2/SDL.h> 
+// #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #include "snake.h"
+#include "snake.h"
 #include "../../func.h"
-#include <time.h>
+// #include <time.h>
 
 #define WIDTH 800
 
 
 
-typedef struct Snake Snake;
-struct Snake
-{
-    int x;
-    int y;
-    Snake * next;
-};
-
-
-typedef struct Fruit
-{
-    int x;
-    int y;
-}Fruit;
 
 
 Snake* initializeSnake() {
@@ -45,7 +31,7 @@ Snake* initializeSnake() {
     return temp;
 }
 
-void* initializeFruit(Fruit * fruit){
+void initializeFruit(Fruit * fruit){
     
     fruit->x= rand()%32;
     fruit->y=rand()%24;
@@ -97,14 +83,16 @@ void drawSnake(Snake * snake, Fruit *fruit, SDL_Renderer * renderer){
     rect->w= 25;
     SDL_RenderFillRect(renderer, rect);
 
-        //affichage de tous les éléments
+    free(rect);
+
+    //affichage de tous les éléments
     SDL_RenderPresent(renderer);
 }
 
 void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     Snake *snake = initializeSnake();
     Fruit *fruit = malloc(sizeof(Fruit));
-    fruit = initializeFruit(fruit);
+    initializeFruit(fruit);
 
     drawSnake(snake, fruit, renderer);
     SDL_Delay(5000);
