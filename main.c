@@ -23,7 +23,7 @@ WINDOWS sans terminal : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL
 
 int main(int argc, char **argv){
 
-    //SDL_PrintVersion();
+    SDL_PrintVersion();
 
     //initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
