@@ -135,6 +135,10 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
                 
                         //ICI CHECK COLLISION AVEC Le sol plus augment vitesse
                 break;
+            case SDLK_RCTRL:
+                        //rotation avec ctrl de droite
+                        
+                        break;
             case SDLK_ESCAPE:
                         if(Escape(renderer)==0){
                             return 0;
