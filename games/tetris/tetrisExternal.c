@@ -40,11 +40,19 @@ int ** createPermTable(int height, int width){
     
     return permArray;
 }
+player * createPlayer(int x, int y){
+    player * temp = malloc(sizeof(player));
+    temp->x= WIDTH_TABLE/2;
+    temp->y= 0;
+    temp->previous_x=0;
+    temp->previous_y=0;
+    return temp;
+}
 
-
-int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score, SDL_Renderer * renderer){  
+int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score, SDL_Renderer * renderer,player * player){  
     SDL_Event event;
-
+    player->previous_x=player->x;
+    player->previous_y=player->y;
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
@@ -53,16 +61,79 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
             case SDLK_RIGHT:
-
+                    if (player->x!=WIDTH_TABLE-1)
+                    {
+                        if (permArray[player->y][player->x+1]==0)
+                        {
+                            player->x++;
+                        }else{
+                            printf("collision!\n");
+                            copyArrayInto(tempArray,permArray,heigth,width);
+                            player->x=WIDTH_TABLE/2;
+                            player->y=0;
+                        }  
+                    }
+                    printf("player x:%d y:%d\n",player->x,player->y);
+                        //ICI CHECK COLLISION AVEC LA DROITE
                 break;
             case SDLK_LEFT:
+            int flag=0;
+                for (int i = 0; i < heigth; i++)
+                {
+                    if (/* condition */)
+                    {
+                        /* code */
+                    }
+                    
+                    if(tempArray[i][0]==0 && permArray[][]==0){
+                        flag=1;
+                    }
+                }
+                if (flag==1)
+                {
+                    for (int i = 0; i < heigth; i++)
+                    {
+                        for (int j = 0; j < width-1; j++)
+                        {
+                            tempArray[i][j]=tempArray[i][j+1]
+                        }
+                        tempArray[i][width]=0;
+                    }
+                    
+                }
+                    
+                    
 
-                break;
-            case SDLK_UP:
 
+                // if (player->x!=0)
+                //     {
+                //         if (permArray[player->y][player->x-1]==0)
+                //         {
+                //             player->x--;
+                //         }else{
+                //             printf("collision!\n");
+                //             copyArrayInto(tempArray,permArray,heigth,width);
+                //             player->x=WIDTH_TABLE/2;
+                //             player->y=0;
+                //         }  
+                //     }
+                //     printf("player x:%d y:%d\n",player->x,player->y);
+                        //ICI CHECK COLLISION AVEC LA GAUCHE
                 break;
             case SDLK_DOWN:
-
+                if (player->y!=0)
+                {
+                    if (permArray[player->y+1][player->x]==0)
+                        {
+                            player->y++;
+                        }else{
+                            copyArrayInto(tempArray,permArray,heigth,width);
+                            player->x=WIDTH_TABLE/2;
+                            player->y=0;
+                        }  
+                }
+                
+                        //ICI CHECK COLLISION AVEC Le sol plus augment vitesse
                 break;
             case SDLK_ESCAPE:
                         if(Escape(renderer)==0){
@@ -83,8 +154,6 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
     A CHANGER 
 
     check collision en bas si bouton down ou descente du tableau
-    check collision si déplacement a gauche
-    check collision si déplacement a droite
     */
     for (int i = 0; i < heigth; i++)
     {
@@ -108,18 +177,8 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
     // //copie tableau temp dans perm moins cellule vide
     if (flag==1)
     {
-        for (int i = 0; i < heigth; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                if (tempArray[i][j]!=0)
-                {
-                    
-                    permArray[i+1][j]=tempArray[i][j];
-                }  
-            }
-        }
-    //     //check si ligne complète est vrai
+       copyArrayInto(tempArray,permArray,heigth,width);
+     //check si ligne complète est vrai
         for (int i = 0; i < heigth; i++)
             {
                 for (int j = 0; j < width; j++)
@@ -137,18 +196,20 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
                     *score+=100;
                 }
             }
+            
     //     //sinon descendre tableau temp *burp* -1
     }else{
+        //printf("TimeStamp %d\n",time(NULL)%60);
         for (int i = heigth-1; i > 0; i--)
         {
             for (int j = 0; j < width; j++)
             {   
-                printf("i=%d j=%d \n",i,j);
+                //printf("i=%d j=%d \n",i,j);
                 //bug
                 tempArray[i][j]=tempArray[i-1][j];
             }
         }
-        
+        flag =0;
     }
 }
 //suppr line + 
@@ -163,6 +224,18 @@ void supprLine(int row,int ** permArray,int width, int heigth){
        {
         permArray[i+1][j]=permArray[i][j];
        }
+    }
+}
+void copyArrayInto(int ** tempArray,int ** permArray,int heigth, int width){
+    for (int i = 0; i < heigth; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (tempArray[i][j]!=0)
+            {
+                permArray[i][j]=tempArray[i][j];
+            }  
+        }
     }
 }
 
