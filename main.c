@@ -1,9 +1,9 @@
 //#define SDL_MAIN_HANDLED
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-//#include <SDL2/SDL.h>
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -18,7 +18,7 @@ commande de compilation :
 MAC :   gcc main.c -o prog $(sdl2-config --cflags --libs)
         gcc main.c func.c ./menu/menu.c -o prog $(sdl2-config --cflags --libs) -lSDL_ttf
 WINDOWS : gcc main.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 
-WINDOWS sans terminal : gcc main.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 -mwindows
+WINDOWS sans terminal : gcc main.c func.c games/snake/snake.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 -mwindows
 */
 
 

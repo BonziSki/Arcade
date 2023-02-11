@@ -28,7 +28,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit);
 int updateSnake(Snake * snake, Fruit * fruit, int * dir_h, int * dir_v);
 
 void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
-
+void  addSnakeNode(Snake * snake,int dir_h,int dir_v);
 
 
 
