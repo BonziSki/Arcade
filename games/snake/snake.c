@@ -18,20 +18,6 @@
 
 
 
-<<<<<<< HEAD
-
-typedef struct Snake Snake;
-struct Snake
-{
-    int x;
-    int y;
-    Snake * next;
-};
-=======
->>>>>>> cf960beb33f641228e7223e3383ec004f27a0bba
-
-
-
 Snake * createSnake() {
 
     printf("\n\nCréation du serpent : \n");
@@ -107,7 +93,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
     //Dessin du snake
     int nextNodeNull = 0;
 
-    while (tempSnake->next != NULL){
+    while (!nextNodeNull){
         //printf("print snake node : x = %d | y = %d | next = %p\n", tempSnake->x, tempSnake->y, tempSnake->next);
 
         rect->x = tempSnake->x * CASE_SIZE;
