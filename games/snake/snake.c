@@ -56,6 +56,10 @@ Snake * createSnake() {
     return temp;
 }
 
+Snake * addSnakeNode(Snake * snake){
+    return 0;
+}
+
 void createFruit(Fruit * fruit, Snake * snake){
     
     fruit->x = rand() % MAX_CASE_WIDTH;
@@ -101,8 +105,10 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
 
     //Dessin du snake
+    int nextNodeNull = 0;
+
     while (tempSnake->next != NULL){
-        printf("print snake node : x = %d | y = %d | next = %p\n", tempSnake->x, tempSnake->y, tempSnake->next);
+        //printf("print snake node : x = %d | y = %d | next = %p\n", tempSnake->x, tempSnake->y, tempSnake->next);
 
         rect->x = tempSnake->x * CASE_SIZE;
         rect->y = tempSnake->y * CASE_SIZE;
@@ -110,6 +116,10 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
         rect->w = CASE_SIZE;
 
         SDL_RenderFillRect(renderer, rect);
+
+        if (tempSnake->next == NULL){
+            nextNodeNull = 1;
+        }
 
         tempSnake = tempSnake->next;
     }
@@ -153,24 +163,153 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
     Snake * snake = createSnake();
 
-    printf("\n%p\n", snake);
-
-
     Fruit * fruit = malloc(sizeof(Fruit));
     createFruit(fruit, snake);
 
-    printf("\nFruit : x = %d | y = %d", fruit->x, fruit->y);
+    int dir_h = 0;
+    //Directions horizontales:
+    //  1 = droite
+    // -1 = gauche
+
+    int dir_v = 0;
+    //Directions horizontales:
+    //  1 = bas
+    // -1 = haut
 
 
-    drawSnake(renderer, snake, fruit);
-    SDL_Delay(1000);
+    int quitsnake = 0;
+    int update = 1;
+    SDL_Event eventsnake;
+
+    while(!quitsnake){
+        while (SDL_PollEvent(&eventsnake)){
+            if (eventsnake.type == SDL_QUIT){
+                quitsnake = 1;
+            }
+        }
+        update = updateSnake(snake, fruit, &dir_h, &dir_v);
+        drawSnake(renderer, snake, fruit);
+        SDL_Delay(200);
+    }
+    
 
     free(snake);
     free(fruit);
 
 };
 
-int updateSnake(Snake * Snake, Fruit * Fruit);
+int updateSnake(Snake * snake, Fruit * fruit, int * dir_h, int * dir_v){
+
+    int loose = 0;
+
+    //vérification des entrées du user
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)){
+        if (event.type == SDL_QUIT){
+            //quitter le programme
+            return 0;
+        }
+        if (event.type == SDL_KEYDOWN){
+            switch (event.key.keysym.sym){
+
+                case SDLK_UP:
+                        printf("UP\n");
+                    if(*dir_v != 1){
+                        *dir_v = -1;
+                        *dir_h = 0;
+                    }
+                    break;
+
+                case SDLK_DOWN:
+                    if(*dir_v != -1){
+                        printf("DOWN\n");
+                        *dir_v = 1;
+                        *dir_h = 0;
+                    }
+                    break;
+
+                case SDLK_LEFT:
+                    if(*dir_h != 1){
+                        printf("LEFT\n");
+                        *dir_h = -1;
+                        *dir_v = 0;
+                    }
+                    break;
+
+                case SDLK_RIGHT:
+                    if(*dir_h != -1){
+                        printf("RIGHT\n");
+                        *dir_h = 1;
+                        *dir_v = 0;
+                    }
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+    }
+    
+
+
+    //Update de la position du snake en fonction de sa direction
+    /*
+    int tempX, tempX2;
+    int tempY, tempY2;
+    int nextNodeNull = 0;
+    int firstLoop = 1;
+    Snake * tempSnake = snake;
+
+    while (!nextNodeNull){
+
+        if (firstLoop){
+            tempX = tempSnake->x;
+            tempY = tempSnake->y;
+
+            tempSnake->x = tempSnake->x + *dir_h;
+            tempSnake->y = tempSnake->y + *dir_v;
+
+            //vérification de collisions avec les côtés de la fenetre
+            if ((snake->x < 0 || snake->x > MAX_CASE_WIDTH) || (snake->y < 0 || snake->y > MAX_CASE_HEIGHT)){
+                // le joueur a perdu
+            }
+            
+
+            firstLoop = 0;
+
+        }else{
+            tempX2 = tempSnake->x;
+            tempY2 = tempSnake->y;
+
+            tempSnake->x = tempX;
+            tempSnake->y = tempY;
+
+            tempX = tempX2;
+            tempY = tempY2;
+
+        }
+        
+
+        if (tempSnake->next == NULL){
+            nextNodeNull = 1;
+        }
+        
+        tempSnake = tempSnake->next;
+    }
+    
+    
+
+
+    //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
+    if (snake->x == fruit->x && snake->y == fruit->y){
+        //augmenter le snake de 1
+    }
+
+    */
+    
+    return 0;
+}
 
 
 
