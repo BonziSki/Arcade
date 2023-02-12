@@ -101,12 +101,10 @@ void viewAllNodes(Snake * snake){
 }
  
 
-void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
+void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int score){
     
     Snake * tempSnake = snake;
-    // Initialisation du score
-    snake->score = 0; 
-
+        
     //nettoyage de l'écran
     SDL_ClearScreen(renderer);
 
@@ -155,47 +153,12 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
 
     free(rect);
 
-    /*----------------------------------------------------------------------------------------*/
-    //Dessin du score
-    // On crée un texte à partir du score
-    char scoreString[10];
-    snprintf(scoreString, 10, "Score: %d", snake->score);
-
-    // On charge la police d'écriture pour le texte
-    TTF_Font* font = TTF_OpenFont("./ressources/font/ARCADEPI.TTF", 20);
-
-    if (font == NULL) {
-        SDL_ExitWithError("Erreur lors du chargement de la police d'écriture");
-    }
-
-    // Creation de la surface
-    SDL_Color color = { 255, 255, 255 };
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreString, color);
-
-    if (textSurface == NULL) {
-        SDL_ExitWithError("Erreur lors de la création de la surface de texte");
-    }
-
-    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-
-    if (textTexture == NULL) {
-        SDL_ExitWithError("Erreur lors de la création de la texture de texte");
-    }
-
-    // On crée le rectangle pour le texte
-    SDL_Rect textRect = { 10, 10, textSurface->w, textSurface->h };
-
-    // On dessine le texte sur le rendu
-    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-
-    // On libère les ressources
-    SDL_FreeSurface(textSurface);
-    SDL_DestroyTexture(textTexture);
-    TTF_CloseFont(font);
-
-/*----------------------------------------------------------------------------------------*/
-
-
+    
+    SDL_Color white ={255,255,255};
+        char texte[2];
+        sprintf(texte,"Score: %d", score);
+        SDL_WriteText(renderer,20,20,35,35,white,texte);
+        
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
 
@@ -209,8 +172,8 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
 void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
     Snake * snake = createSnake();
-
     Fruit * fruit = malloc(sizeof(Fruit));
+    int score =0;
 
     createFruit(fruit, snake);
 
@@ -230,7 +193,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     SDL_Event eventsnake;
 
     while(!quitsnake){
-        if (updateSnake(snake, &snake, fruit, &dir_h, &dir_v)==0){
+        if (updateSnake(snake, &snake, fruit, &dir_h, &dir_v, score)==0){
             printf("BREAKPOINT");
             quitsnake=1;
             SDL_ClearScreen(renderer);
@@ -239,7 +202,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
         };
 
 
-        drawSnake(renderer, snake, fruit);
+        drawSnake(renderer, snake, fruit, score);
         SDL_Delay(200);
     }
 
@@ -249,7 +212,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
 };
 
-int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_h, int * dir_v){
+int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_h, int * dir_v, int score){
 
     //vérification des entrées du user
     SDL_Event event;
@@ -350,14 +313,16 @@ int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_
 
 
     //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
-    snake->score = 0;
+    
     if (snake->x == fruit->x && snake->y == fruit->y){
         free(snake);
         *snake_pointer = addSnakeNode(snake,*dir_h,*dir_v);
         createFruit(fruit,snake);
         snake = addSnakeNode(snake, 0, 0);
-        snake->score++;
-    }
+        score = score +1;
+   }
+
+
 
     return 1;
 }

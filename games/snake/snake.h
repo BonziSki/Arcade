@@ -25,8 +25,8 @@ typedef struct Fruit
 Snake * createSnake();
 void createFruit(Fruit * fruit,  Snake * snake);
 
-void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit);
-int updateSnake(Snake * snake,Snake ** snake_pointer, Fruit * fruit, int * dir_h, int * dir_v);
+void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int score);
+int updateSnake(Snake * snake,Snake ** snake_pointer, Fruit * fruit, int * dir_h, int * dir_v, int score);
 
 void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
 Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v);
