@@ -3,6 +3,7 @@
 // #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
 // #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,6 +33,9 @@ int main(int argc, char **argv){
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
         SDL_ExitWithError("Initialisation SDL");
     }
+    if (TTF_Init() != 0){
+        SDL_ExitWithError("Initialisation TTF");
+    }
     
     //programme
     SDL_Window * window = NULL;
@@ -57,7 +61,7 @@ int main(int argc, char **argv){
         }
     }
     
-    
+    TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
