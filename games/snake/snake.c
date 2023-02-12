@@ -288,12 +288,12 @@ int updateSnake(int ** snake, int size, Fruit * fruit, int * dir_h, int * dir_v)
 
 
     //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
-    // if (snake->x == fruit->x && snake->y == fruit->y){
-    //     free(snake);
-    //     *snake_pointer = addSnakeNode(snake,*dir_h,*dir_v);
-    //     createFruit(fruit,snake);
-    //     //score++
-    // }
+    if (snake[i][0] == fruit->x && snake[i][1] == fruit->y){
+
+        addSnakeNode(&snake, size, *dir_h, *dir_v);
+        createFruit(fruit, snake, size);
+        //score++
+    }
 
     
     
