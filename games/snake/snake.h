@@ -35,7 +35,7 @@ typedef struct Fruit
 
 
 int ** createSnake(int size);
-void addSnakeNode(int *** snake, int size, int dir_h, int dir_v);
+void addSnakeNode(int ** snake, int size, int dir_h, int dir_v);
 void createFruit(Fruit * fruit, int ** snake, int size);
 void viewAllNodes(int ** snake, int size);
 void drawSnake(SDL_Renderer * renderer, int ** snake, int size, Fruit *fruit);

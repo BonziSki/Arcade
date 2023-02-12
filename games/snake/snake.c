@@ -46,12 +46,17 @@ int ** createSnake(int size) {
     return temp;
 }
 
-void addSnakeNode(int *** snake, int size, int dir_h, int dir_v){
+void addSnakeNode(int ** snake, int size, int dir_h, int dir_v){
     //allocation d'un tableau avec un taille de + 1
     snake = realloc(snake, sizeof(int *) * (size + 1));
 
     //décalage de tout le tableau pour libérer la première case
-    memmove(snake + 1, snake, (sizeof(int *) * size));
+    for (int i = size - 1; i > 1; i--){
+        snake[i][0] = snake[i - 1][0]; 
+        snake[i][1] = snake[i - 1][1]; 
+    }
+    
+    // memmove(snake + 1, snake, (sizeof(int *) * size));s
 
     //assignation des coordonnées de la nouvelles première case
     snake[0][0] = snake[1][0] + dir_h;
@@ -186,7 +191,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
 
         drawSnake(renderer, snake, size, fruit);
-        SDL_Delay(2000);
+        SDL_Delay(200);
     }
 
     //free de la mémoire
@@ -288,9 +293,9 @@ int updateSnake(int ** snake, int size, Fruit * fruit, int * dir_h, int * dir_v)
 
 
     //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
-    if (snake[i][0] == fruit->x && snake[i][1] == fruit->y){
+    if (snake[0][0] == fruit->x && snake[0][1] == fruit->y){
 
-        addSnakeNode(&snake, size, *dir_h, *dir_v);
+        addSnakeNode(snake, size, *dir_h, *dir_v);
         createFruit(fruit, snake, size);
         //score++
     }
