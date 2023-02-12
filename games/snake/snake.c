@@ -1,12 +1,12 @@
 
 //--------- SDL ---------
 //MAC
-// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
  
 //Windows
-#include <SDL2/SDL.h> 
-#include <SDL2/SDL_ttf.h>
+// #include <SDL2/SDL.h> 
+// #include <SDL2/SDL_ttf.h>
 
 //-----------------------
 
@@ -44,9 +44,10 @@ Snake * createSnake() {
 }
 
 Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v){
+    printf("test test");
     Snake * newSnake = malloc(sizeof(Snake));
-    newSnake->y=snake->y-dir_h;
-    newSnake->x=snake->x-dir_v;
+    newSnake->x = snake->x + dir_h;
+    newSnake->y = snake->y + dir_v;
     newSnake->next=snake;
     
     return newSnake;
@@ -303,7 +304,6 @@ int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_
 
     //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
     if (snake->x == fruit->x && snake->y == fruit->y){
-        free(snake);
         *snake_pointer = addSnakeNode(snake,*dir_h,*dir_v);
         createFruit(fruit,snake);
         //score++
