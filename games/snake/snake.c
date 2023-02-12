@@ -47,12 +47,25 @@ int ** createSnake(int size) {
 }
 
 void addSnakeNode(int ** snake, int size, int dir_h, int dir_v){
+
     //allocation d'un tableau avec un taille de + 1
-    snake = realloc(snake, sizeof(int *) * (size + 1));
+    int ** tempSnake = malloc(sizeof(int *) * (size + 1));
+
+    //copie des éléments
+    for (int i = 0; i < size; i++){
+        tempSnake[i] = snake[i];
+    }
+    free(snake);
+    tempSnake[size] = malloc(sizeof(int) * 2);
+
+    snake = tempSnake;
 
     //décalage de tout le tableau pour libérer la première case
-    for (int i = size - 1; i > 1; i--){
+
+    for (int i = (size - 2); i > 1; i--){
+        printf("x = %d est passé de la position %d à la position %d", snake[i - 1][0], i - 1, 1);
         snake[i][0] = snake[i - 1][0]; 
+        printf("y = %d est passé de la position %d à la position %d", snake[i - 1][1], i - 1, 1);
         snake[i][1] = snake[i - 1][1]; 
     }
     
@@ -185,12 +198,12 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     SDL_Event eventsnake;
 
     while(!quitsnake){
+        drawSnake(renderer, snake, size, fruit);
+
         if (updateSnake(snake, size, fruit, &dir_h, &dir_v) == 0){
             quitsnake = 1;
         };
 
-
-        drawSnake(renderer, snake, size, fruit);
         SDL_Delay(200);
     }
 
