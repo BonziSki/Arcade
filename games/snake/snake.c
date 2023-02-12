@@ -102,7 +102,7 @@ void viewAllNodes(Snake * snake){
 }
 
 
-void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
+void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score){
 
     Snake * tempSnake = snake;
 
@@ -111,7 +111,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
     SDL_ClearScreen(renderer);
 
     //changement de couleur
-    if (SDL_SetRenderDrawColor(renderer, 200, 200, 200, SDL_ALPHA_OPAQUE) != 0){
+    if (SDL_SetRenderDrawColor(renderer, 200, 180, 180, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
     }
 
@@ -154,9 +154,19 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
 
     free(rect);
 
+
+    //Dessin du score
+    char buffer[12];
+    sprintf(buffer, "Score : %d", *score);
+
+    SDL_Color white = {180, 180, 200};
+
+    SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
+
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
     printf("############\n");
+
 }
 
 
@@ -165,7 +175,6 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     Snake * snake = createSnake();
 
     Fruit * fruit = malloc(sizeof(Fruit));
-
     createFruit(fruit, snake);
 
     int dir_h = 1;
@@ -178,6 +187,8 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     //Directions horizontales:
     //  1 = bas
     // -1 = haut
+
+    int score = 0;
 
 
     int quitsnake = 0;
@@ -193,7 +204,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
         };
 
 
-        drawSnake(renderer, snake, fruit);
+        drawSnake(renderer, snake, fruit, &score);
         SDL_Delay(200);
     }
 

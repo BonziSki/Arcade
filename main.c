@@ -32,6 +32,9 @@ int main(int argc, char **argv){
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
         SDL_ExitWithError("Initialisation SDL");
     }
+
+    //initialisation de SDL_ttf
+    TTF_Init();
     
     //programme
     SDL_Window * window = NULL;
