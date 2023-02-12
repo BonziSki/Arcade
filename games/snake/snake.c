@@ -99,12 +99,13 @@ void viewAllNodes(Snake * snake){
     printf("\n");
     
 }
-
+ 
 
 void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
-
+    
     Snake * tempSnake = snake;
-
+    // Initialisation du score
+    snake->score = 0; 
 
     //nettoyage de l'écran
     SDL_ClearScreen(renderer);
@@ -116,6 +117,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
 
     //Dessin du terrain
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+    
 
     //Dessin du snake
     int nextNodeNull = 0;
@@ -153,9 +155,54 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit){
 
     free(rect);
 
+    /*----------------------------------------------------------------------------------------*/
+    //Dessin du score
+    // On crée un texte à partir du score
+    char scoreString[10];
+    snprintf(scoreString, 10, "Score: %d", snake->score);
+
+    // On charge la police d'écriture pour le texte
+    TTF_Font* font = TTF_OpenFont("./ressources/font/ARCADEPI.TTF", 20);
+
+    if (font == NULL) {
+        SDL_ExitWithError("Erreur lors du chargement de la police d'écriture");
+    }
+
+    // Creation de la surface
+    SDL_Color color = { 255, 255, 255 };
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreString, color);
+
+    if (textSurface == NULL) {
+        SDL_ExitWithError("Erreur lors de la création de la surface de texte");
+    }
+
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+    if (textTexture == NULL) {
+        SDL_ExitWithError("Erreur lors de la création de la texture de texte");
+    }
+
+    // On crée le rectangle pour le texte
+    SDL_Rect textRect = { 10, 10, textSurface->w, textSurface->h };
+
+    // On dessine le texte sur le rendu
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+
+    // On libère les ressources
+    SDL_FreeSurface(textSurface);
+    SDL_DestroyTexture(textTexture);
+    TTF_CloseFont(font);
+
+/*----------------------------------------------------------------------------------------*/
+
+
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
+
+    
     printf("############\n");
+
+    
 }
 
 
@@ -198,6 +245,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
     free(snake);
     free(fruit);
+    
 
 };
 
@@ -302,149 +350,14 @@ int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_
 
 
     //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
+    snake->score = 0;
     if (snake->x == fruit->x && snake->y == fruit->y){
         free(snake);
         *snake_pointer = addSnakeNode(snake,*dir_h,*dir_v);
         createFruit(fruit,snake);
-        //score++
+        snake = addSnakeNode(snake, 0, 0);
+        snake->score++;
     }
 
-    
-    
     return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void insertBeginning(Snake* snake, int x, int y) {
-    
-//     if (snake->head == NULL) {
-        
-//         Node* node = malloc(sizeof(Node));
-//         if (node != NULL) {
-//             node->next = snake->tail;
-//             node->body.x = x;
-//             node->body.y = y;
-//             node->body.w = 25;
-//             node->body.h = 25;
-//             snake->head = node;
-//         }
-//         return;
-//     }
-
-//     else {
-//         Node* temp = snake->head;
-//         Node* node = malloc(sizeof(Node));
-//         if (node != NULL) {
-//             node->body.x = x;
-//             node->body.y = y;
-//             node->body.w = 25;
-//             node->body.h = 25;
-//             node->next = snake->head;
-//             snake->head = node;
-//         }
-        
-//     }
-    
-// }
-
-// void insertEnd(Snake* snake, int x, int y) {
-
-//     if (snake->tail == NULL) {
-//         Node* node = malloc(sizeof(Node));
-//         node->next = NULL;
-//         snake->head->next = node;
-//         node->body.x = x;
-//         node->body.y = y;
-//         node->body.w = 25;
-//         node->body.h = 25;
-//         snake->tail = node;
-//     }
-
-//     else {
-//         Node* node = malloc(sizeof(Node));
-//         if (node != NULL) {
-//             node->next = NULL;
-//             node->body.x = x;
-//             node->body.y = y;
-//             node->body.w = 25;
-//             node->body.h = 25;
-//             snake->tail->next = node;
-//             snake->tail = node;
-//         }
-        
-//     }
-// }
-
-// void deleteBeginning(Snake* snake) {
-    
-//     if (snake->head != NULL) {
-//         Node* temp = snake->head;
-//         snake->head = snake->head->next;
-//         free(temp);
-//     }
-// }
-
-// void deleteEnd(Snake* snake) {
-
-//     if (snake->tail != NULL) {
-//         Node* temp = snake->head;
-//         while (temp->next != snake->tail) {
-//             temp = temp->next;
-//         }
-//         snake->tail = temp;
-//         free(temp);
-//     }
-
-// }

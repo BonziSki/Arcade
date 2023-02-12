@@ -10,6 +10,7 @@ struct Snake
 {
     int x;
     int y;
+    int score;
     Snake * next;
 };
 
@@ -29,6 +30,7 @@ int updateSnake(Snake * snake,Snake ** snake_pointer, Fruit * fruit, int * dir_h
 
 void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
 Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v);
+void drawScore(SDL_Renderer *renderer, int score);
 
 
 
