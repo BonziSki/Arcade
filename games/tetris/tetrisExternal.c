@@ -40,19 +40,18 @@ int ** createPermTable(int height, int width){
     
     return permArray;
 }
-player * createPlayer(int x, int y){
-    player * temp = malloc(sizeof(player));
-    temp->x= WIDTH_TABLE/2;
-    temp->y= 0;
-    temp->previous_x=0;
-    temp->previous_y=0;
+
+
+Timer * createTimer(int x, int y){
+    Timer * temp = malloc(sizeof(Timer));
+    temp->initializedTimer=0;
     return temp;
 }
 
-int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score, SDL_Renderer * renderer,player * player){  
+int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int * score, SDL_Renderer * renderer,Timer * timestamp){  
     SDL_Event event;
-    player->previous_x=player->x;
-    player->previous_y=player->y;
+
+    int coll_flag=0;
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
@@ -61,82 +60,69 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
             case SDLK_RIGHT:
-                    if (player->x!=WIDTH_TABLE-1)
-                    {
-                        if (permArray[player->y][player->x+1]==0)
-                        {
-                            player->x++;
-                        }else{
-                            printf("collision!\n");
-                            copyArrayInto(tempArray,permArray,heigth,width);
-                            player->x=WIDTH_TABLE/2;
-                            player->y=0;
-                        }  
+            for (int i = 0; i < heigth; i++){
+                    //check coll temp array
+                    if (tempArray[i][width-1]!=0){
+                        coll_flag=1;
                     }
-                    printf("player x:%d y:%d\n",player->x,player->y);
+                    //check coll permarray si pas a droite max déja
+                    if (coll_flag!=1){
+                        for (int i = 0; i < heigth; i++){
+                            for (int j = width-1; j > 0; j--){
+                                if (tempArray[i][j]!=0){
+                                    if (permArray[i][j+1]){
+                                        coll_flag=1;
+                                    }
+                                }
+                            }
+                        }
+                    }   
+                }
+                if (coll_flag!=1){
+                    for (int i = 0; i < heigth; i++){
+                        for (int j = width-1; j>0; j--){
+                            tempArray[i][j]=tempArray[i][j-1];
+                            tempArray[i][j-1]=0;
+                        }
+                    }
+                }
                         //ICI CHECK COLLISION AVEC LA DROITE
                 break;
             case SDLK_LEFT:
-            int flag=0;
-                for (int i = 0; i < heigth; i++)
-                {
-                    if (/* condition */)
-                    {
-                        /* code */
+                for (int i = 0; i < heigth; i++){
+                    //check coll temp array
+                    if (tempArray[i][0]!=0){
+                        coll_flag=1;
                     }
-                    
-                    if(tempArray[i][0]==0 && permArray[][]==0){
-                        flag=1;
-                    }
-                }
-                if (flag==1)
-                {
-                    for (int i = 0; i < heigth; i++)
-                    {
-                        for (int j = 0; j < width-1; j++)
-                        {
-                            tempArray[i][j]=tempArray[i][j+1]
+                    //check coll permarray si pas a gauche max déja
+                    if (coll_flag!=1){
+                        for (int i = 0; i < heigth; i++){
+                            for (int j = 0; j < width-1; j++){
+                                if (tempArray[i][j]!=0){
+                                    if (permArray[i][j-1]){
+                                        coll_flag=1;
+                                    }
+                                }
+                            }
                         }
-                        tempArray[i][width]=0;
-                    }
-                    
+                    }       
                 }
-                    
-                    
-
-
-                // if (player->x!=0)
-                //     {
-                //         if (permArray[player->y][player->x-1]==0)
-                //         {
-                //             player->x--;
-                //         }else{
-                //             printf("collision!\n");
-                //             copyArrayInto(tempArray,permArray,heigth,width);
-                //             player->x=WIDTH_TABLE/2;
-                //             player->y=0;
-                //         }  
-                //     }
-                //     printf("player x:%d y:%d\n",player->x,player->y);
+                if (coll_flag!=1){
+                    for (int i = 0; i < heigth; i++){
+                        for (int j = 0; j < width-1; j++){
+                            tempArray[i][j]=tempArray[i][j+1];
+                            tempArray[i][j+1]=0;
+                        }
+                    }
+                }
                         //ICI CHECK COLLISION AVEC LA GAUCHE
                 break;
             case SDLK_DOWN:
-                if (player->y!=0)
-                {
-                    if (permArray[player->y+1][player->x]==0)
-                        {
-                            player->y++;
-                        }else{
-                            copyArrayInto(tempArray,permArray,heigth,width);
-                            player->x=WIDTH_TABLE/2;
-                            player->y=0;
-                        }  
-                }
-                
-                        //ICI CHECK COLLISION AVEC Le sol plus augment vitesse
+                    //directement jump a l'instruction de descente et skip le timestamp
+                goto descente;
                 break;
-            case SDLK_RCTRL:
-                        //rotation avec ctrl de droite
+            case SDLK_UP:
+                        //rotation avec la flèche du haut
                         
                         break;
             case SDLK_ESCAPE:
@@ -149,100 +135,142 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
             }
         }
     }
-    
-
-    int flag =0;
-    int lineFlag= 1;
-    //Check collision
-    /*
-    A CHANGER 
-
-    check collision en bas si bouton down ou descente du tableau
-    */
-    for (int i = 0; i < heigth; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            if (tempArray[i][j]!=0 && permArray[i+1][j]!=0)
-            {
-                //trigger flag
-                flag=1;
-            }
-            if (flag==1)
-            {
-                break;
-            }
-        }
-        if (flag==1)
-        {
-            break;
-        }   
-    }
-    // //copie tableau temp dans perm moins cellule vide
-    if (flag==1)
-    {
-       copyArrayInto(tempArray,permArray,heigth,width);
-     //check si ligne complète est vrai
-        for (int i = 0; i < heigth; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    if (permArray[i][j]==0)
-                    {
-                        lineFlag=0;
-                    }else{
-                        //break;
-                        }
-                }
-                if (lineFlag==1)
-                {
-                    supprLine(i,permArray,width,heigth);
-                    *score+=100;
-                }
-            }
-            
-    //     //sinon descendre tableau temp *burp* -1
-    }else{
-        //printf("TimeStamp %d\n",time(NULL)%60);
-        for (int i = heigth-1; i > 0; i--)
-        {
+    //si 1 seconde écoulé descendre 
+    // a regarde GetTickCount()
+    if (time(NULL)>timestamp->initializedTimer){
+        descente:
+        for (int i = heigth-1; i > 0; i--){
             for (int j = 0; j < width; j++)
-            {   
-                //printf("i=%d j=%d \n",i,j);
-                //bug
+            {
                 tempArray[i][j]=tempArray[i-1][j];
+                tempArray[i-1][j]=0;
+            } 
+        }
+        timestamp->initializedTimer=0;
+    }
+    //collision avec juste sol
+    for (int i = 0; i < width; i++){
+        if (tempArray[heigth-1][i]!=0){
+            copyArrayInto(tempArray,permArray,heigth,width);
+            SpawnTetroid(tempArray,heigth,width,(rand()%(4-1))+1,(rand()%(7-1))+1);
+        }
+    }
+    //collsiion avec permArray
+    for (int i = heigth-1; i > 0; i--){
+        for (int j = 0; j < width; j++){
+            if (tempArray[i][j]!=0){
+                if (permArray[i+1][j]!=0){
+                    copyArrayInto(tempArray,permArray,heigth,width);
+                    SpawnTetroid(tempArray,heigth,width,(rand()%(4-1))+1,(rand()%(7-1))+1);
+                }
+            } 
+        } 
+    }
+    //check si ligne complète
+    int lineFlag=0;
+    for (int i = heigth-1; i > 0; i--){
+        for (int j = 0; j < width-1; j++){
+            if (permArray[i][j]!=0){
+                lineFlag=1;
+            }else {
+                lineFlag=0;
             }
         }
-        flag =0;
+        //BUG de check sur la droite du tableau
+        if (lineFlag==1){
+            lineFlag=0;
+            score+=100;
+            printf("Ligne complet\nscore=%d\n",score);
+            supprLine(i,permArray,width,heigth);
+        }
+    }
+    return 1;
+}
+
+void SpawnTetroid(int ** tempArray,int heigth,int width,int color, int choice){
+    if (tempArray[0][width/2]!=0){
+        //loose screen
+    }
+    
+    switch (choice){
+    case 1:
+        //line shape
+        tempArray[0][width/2]=color;
+        tempArray[0][width/2-1]=color;
+        tempArray[0][width/2+1]=color;
+        tempArray[0][width/2+2]=color;
+        break;
+     case 2:
+        //L shape
+        tempArray[1][width/2]=color;
+        tempArray[1][width/2-1]=color;
+        tempArray[1][width/2+1]=color;
+        tempArray[0][width/2+1]=color;
+        break;
+    case 3:
+        //reverse L shape
+        tempArray[1][width/2]=color;
+        tempArray[0][width/2-1]=color;
+        tempArray[1][width/2+1]=color;
+        tempArray[1][width/2-1]=color;
+        break;
+    case 4:
+        //square shape
+        tempArray[1][width/2]=color;
+        tempArray[1][width/2+1]=color;
+        tempArray[0][width/2]=color;
+        tempArray[0][width/2+1]=color;
+        break;
+    case 5:
+        //S shape
+        tempArray[0][width/2]=color;
+        tempArray[0][width/2+1]=color;
+        tempArray[1][width/2]=color;
+        tempArray[1][width/2-1]=color;
+        break;
+     case 6:
+        //Z (or reverse S) shape
+        tempArray[0][width/2]=color;
+        tempArray[0][width/2-1]=color;
+        tempArray[1][width/2]=color;
+        tempArray[1][width/2+1]=color;
+        break;
+    case 7:
+        // T shape
+        tempArray[0][width/2]=color;
+        tempArray[1][width/2]=color;
+        tempArray[1][width/2+1]=color;
+        tempArray[1][width/2+-1]=color;
+        break;                           
+    default:
+        break;
     }
 }
-//suppr line + 
+
 void supprLine(int row,int ** permArray,int width, int heigth){
-    for (int i = 0; i < width; i++)
-    {
+    for (int i = 0; i < width; i++){
         permArray[row][i]=0;
     }
-    for (int i = heigth; i > 0; i--)
-    {
-       for (int j = 0; j < width; j++)
-       {
-        permArray[i+1][j]=permArray[i][j];
-       }
-    }
+    // for (int i = row; i > 0; i--){
+    //    for (int j = 0; j < width; j++){
+    //     permArray[i][j]=permArray[i-1][j];
+    //     permArray[i-1][j]=0;
+    //    }
+    // }
 }
 void copyArrayInto(int ** tempArray,int ** permArray,int heigth, int width){
-    for (int i = 0; i < heigth; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            if (tempArray[i][j]!=0)
-            {
+    for (int i = 0; i < heigth; i++){
+        for (int j = 0; j < width; j++){
+            if (tempArray[i][j]!=0){
                 permArray[i][j]=tempArray[i][j];
+                tempArray[i][j]=0;
             }  
         }
     }
 }
 
+
+//clean tous sauf les controles que l'ont ne redessine pas
 void PartialClean(SDL_Renderer * renderer){
 
     if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE)){

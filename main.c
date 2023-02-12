@@ -7,7 +7,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include<time.h>
 #include "menu/menu.h"
 #include "func.h"
 #include "games/pong/pong.h"
@@ -22,6 +22,8 @@ WINDOWS sans terminal : gcc main.c func.c menu/menu.c menu/escape.c games/pong/p
 
 
 int main(int argc, char **argv){
+
+    srand(time(NULL));
 
     SDL_PrintVersion();
 

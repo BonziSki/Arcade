@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 #include "tetris.h"
@@ -25,18 +26,25 @@ void MainTetrisLoop(SDL_Window * window, SDL_Renderer * renderer){
     DrawControl(renderer);
     int ** tempArray = createTmpTable(HEIGTH_TABLE,WIDTH_TABLE);
     int ** permArray = createPermTable(HEIGTH_TABLE,WIDTH_TABLE);
-    player * Player1 = createPlayer();
+    Timer * TimeStamp1 = createTimer();
+    //number = (rand() % (upper - lower + 1)) + lower
+    SpawnTetroid(tempArray,HEIGTH_TABLE,WIDTH_TABLE,(rand()%(4-1))+1,(rand()%(7-1))+1);
 
     int quit=0;
     while (!quit)
-    {
-        if(updateTetris(tempArray,permArray,HEIGTH_TABLE,WIDTH_TABLE,&score,renderer,Player1)==0){
+    {   
+        //check GetTickCount()
+        // Set to ~60 fps.
+        // 1000 ms/ 60 fps = 1/16 s^2/frame
+        if (TimeStamp1->initializedTimer==0){
+            TimeStamp1->initializedTimer=time(NULL);
+        }
+        if(updateTetris(tempArray,permArray,HEIGTH_TABLE,WIDTH_TABLE,&score,renderer,TimeStamp1)==0){
             quit=1;
             break;
         };
-        SDL_Delay(10);
-        DrawGame(renderer, tempArray, permArray,Player1);
-        DrawNext(renderer);
+        DrawGame(renderer, tempArray, permArray);
+        DrawNext(renderer,1,1);
         //score last a cause de sdl_ttf
         DrawScore(renderer,score);
         SDL_RenderPresent(renderer);
@@ -62,7 +70,7 @@ void DrawScore(SDL_Renderer * renderer,int score){
     SDL_WriteTextBuffered(renderer,(rect->x+rect->w/2)-30,rect->y+10,40,40,greyWhite,str);
     free(rect);
 }
-void DrawNext(SDL_Renderer * renderer){
+void DrawNext(SDL_Renderer * renderer,int choice, int color){
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
     if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
@@ -72,8 +80,14 @@ void DrawNext(SDL_Renderer * renderer){
     rect->w=240;
     rect->h=180;
     SDL_RenderDrawRect(renderer,rect);
+    int middle_x=rect->x+rect->w/2;
+    int middle_y=rect->y+rect->h/2;
 
     //ici dessin de prochaine pièce
+    rect->w=CELL_SIZE;
+    rect->h=CELL_SIZE;
+    rect->x=middle_x;
+    rect->y=middle_y;
 }
 void DrawControl(SDL_Renderer * renderer){
 
@@ -91,7 +105,7 @@ void DrawControl(SDL_Renderer * renderer){
     free(rect);
 }
 
-void DrawGame(SDL_Renderer * renderer,int ** tempArray,int ** permArray,player * Player1){
+void DrawGame(SDL_Renderer * renderer,int ** tempArray,int ** permArray){
     int first_x = WIDTH/3;
     int first_y = HEIGHT/6;
     PartialClean(renderer);
@@ -99,17 +113,10 @@ void DrawGame(SDL_Renderer * renderer,int ** tempArray,int ** permArray,player *
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
     rect->w = CELL_SIZE;
     rect->h = CELL_SIZE;
-    
-    tempArray[Player1->previous_y][Player1->previous_x]=0;
-    tempArray[Player1->y][Player1->x]=1;
-    printf("player x:%d y:%d px:%d py:%d\n",Player1->x,Player1->y,Player1->previous_x,Player1->previous_y);
     // print tableau temporaire
-    for (int i = 0; i < HEIGTH_TABLE; i++)
-    {
-        for (int j = 0; j < WIDTH_TABLE; j++)
-        {
-            switch (tempArray[i][j])
-            {
+    for (int i = 0; i < HEIGTH_TABLE; i++){
+        for (int j = 0; j < WIDTH_TABLE; j++){
+            switch (tempArray[i][j]){
             case 0:
                 //case vide
                 if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
@@ -128,6 +135,32 @@ void DrawGame(SDL_Renderer * renderer,int ** tempArray,int ** permArray,player *
                     rect->x = first_x+(j*rect->w);
                     SDL_RenderFillRect(renderer, rect);
                 break;
+            case 2:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,255, 92, 51, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
+                break;
+            case 3:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,102, 255, 51, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
+                break;
+            case 4:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,204, 51, 153, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
             default:
                 break;
             }
@@ -136,18 +169,9 @@ void DrawGame(SDL_Renderer * renderer,int ** tempArray,int ** permArray,player *
 if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
     }
-    permArray[6][6]=1;
-    permArray[10][6]=3;
-    permArray[10][7]=3;
-    permArray[11][5]=4;
-    permArray[11][6]=4;
-    permArray[4][8]=2;
-    for (int i = 0; i < HEIGTH_TABLE; i++)
-    {
-        for (int j = 0; j < WIDTH_TABLE; j++)
-        {
-            switch (permArray[i][j])
-            {
+    for (int i = 0; i < HEIGTH_TABLE; i++){
+        for (int j = 0; j < WIDTH_TABLE; j++){
+            switch (permArray[i][j]){
             case 0:
             //case vide
                     if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
@@ -159,7 +183,7 @@ if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
                 break;
             case 1:
             //case pleine coloré 
-                    if (SDL_SetRenderDrawColor(renderer,219, 77, 255, SDL_ALPHA_OPAQUE) != 0){
+                    if (SDL_SetRenderDrawColor(renderer,77, 219, 255, SDL_ALPHA_OPAQUE) != 0){
                         SDL_ExitWithError("Changement de couleur du rendu");
                     }
                         rect->y = first_y+(i*rect->h);
@@ -198,5 +222,4 @@ if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
             }
         }
     }
-    // clean tableau temporaire
 }
