@@ -34,7 +34,7 @@ int main(int argc, char **argv){
     }
 
     //initialisation de SDL_ttf
-    TTF_Init();
+    // TTF_Init();
     
     //programme
     SDL_Window * window = NULL;

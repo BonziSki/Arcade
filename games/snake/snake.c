@@ -26,11 +26,11 @@ Snake * createSnake() {
     int midScreen = ((WIDTH / CASE_SIZE) % 2) ? (WIDTH / CASE_SIZE)/2 : ((WIDTH / CASE_SIZE) - 1)/2;
     printf("milieu de l'ecran : %d\n", midScreen);
 
-    Snake* temp = NULL;
+    Snake * temp = NULL;
 
 
-    for (int i = midScreen; i > midScreen - 4; i--){
-        Snake* snake = malloc(sizeof(Snake));
+    for (int i = midScreen; i > midScreen - 3; i--){
+        Snake * snake = malloc(sizeof(Snake));
 
         snake->y = 10;
         snake->x = i;
@@ -123,7 +123,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
     while (!nextNodeNull){
         //printf("print snake node : x = %d | y = %d | next = %p\n", tempSnake->x, tempSnake->y, tempSnake->next);
-        viewAllNodes(snake);
+        
         rect->x = tempSnake->x * CASE_SIZE;
         rect->y = tempSnake->y * CASE_SIZE;
         rect->h = CASE_SIZE;
@@ -156,12 +156,12 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
 
     //Dessin du score
-    char buffer[12];
-    sprintf(buffer, "Score : %d", *score);
+    // char buffer[12];
+    // sprintf(buffer, "Score : %d", *score);
 
-    SDL_Color white = {180, 180, 200};
+    // SDL_Color white = {180, 180, 200};
 
-    SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
+    // SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
@@ -195,7 +195,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     SDL_Event eventsnake;
 
     while(!quitsnake){
-        if (updateSnake(snake, &snake, fruit, &dir_h, &dir_v)==0){
+        if (updateSnake(snake, &snake, &score, fruit, &dir_h, &dir_v)==0){
             printf("BREAKPOINT");
             quitsnake=1;
             SDL_ClearScreen(renderer);
@@ -213,7 +213,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
 };
 
-int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_h, int * dir_v){
+int updateSnake(Snake * snake, Snake ** snake_pointer, int * score, Fruit * fruit, int * dir_h, int * dir_v){
 
     //vérification des entrées du user
     SDL_Event event;
@@ -286,6 +286,32 @@ int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_
                 printf("loose\n");
                 return 0;
             }
+
+            //vérification si le serpent s'est mangé lui-même
+            if (*score > 0){
+                int nextNodeNull = 0;
+                Snake * verifSnake = tempSnake->next;
+
+                while (!nextNodeNull){
+                    if (tempSnake->x == verifSnake->x){
+                        if (tempSnake->y == verifSnake->y){
+                            printf("loose\n");
+                            return 0;
+                        }
+                    }
+                    
+
+                    if (verifSnake->next == NULL){
+                        nextNodeNull = 1;
+                    }
+
+                    verifSnake = verifSnake->next;
+                
+                }
+            }
+            
+
+            
             
 
             firstLoop = 0;
@@ -315,12 +341,15 @@ int updateSnake(Snake * snake, Snake ** snake_pointer, Fruit * fruit, int * dir_
 
     //si il a mangé un fruit, augmenter sa taille et faire spawn un nouveau fruit
     if (snake->x == fruit->x && snake->y == fruit->y){
+        //ajout d'un noeud au snake
         *snake_pointer = addSnakeNode(snake,*dir_h,*dir_v);
-        createFruit(fruit,snake);
-        //score++
-    }
 
-    
+        //création d'un nouveau fruit
+        createFruit(fruit,snake);
+
+        //incrémentation du score
+        *score = *score + 1;
+    }
     
     return 1;
 }
