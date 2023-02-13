@@ -24,5 +24,11 @@ void supprLine(int row,int ** permArray,int width, int heigth);
 int updateTetris(int ** tempArray, int ** permArray,int heigth, int width,int * score, SDL_Renderer * renderer,Timer * timestamp);
 void copyArrayInto(int ** tempArray,int ** permArray,int heigth, int width);
 void SpawnTetroid(int ** tempArray,int heigth,int width,int color, int choice);
+void print_tabl(int ** tabl,int width, int heigth);
+void pushX(int tabl [4][4]);
+void pushY(int tabl [4][4]);
+void rotation(int tabl [4][4]);
+void copyArrayIntoDefined(int tabl_source[4][4],int tabl_dest[4][4]);
+int ** getTablInTabl(int ** permArray,int heigth, int width);
 
 #endif
