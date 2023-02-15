@@ -66,15 +66,15 @@ void DrawEscape(SDL_Renderer * renderer, int choice){
     rect->w = 80;
     rect->h = 60;
     rect->x = 300;
-        for (int i = 0; i < 2; i++)
-    {
+
+    for (int i = 0; i < 2; i++){
         if (choice==i)
         {
             if (SDL_SetRenderDrawColor(renderer, 0, 255,0, SDL_ALPHA_OPAQUE) != 0){
                 SDL_ExitWithError("Changement de couleur du rendu");
             }
         }
-        rect->y = 140+ (80 + (rect->h*i*2));
+        rect->y = 140 + (80 + (rect->h*i*2));
             SDL_RenderFillRect(renderer, rect);
         if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
             SDL_ExitWithError("Changement de couleur du rendu");
