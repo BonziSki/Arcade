@@ -122,9 +122,9 @@ int updateTetris(int ** tempArray, int ** permArray,int heigth, int width, int *
                 goto descente;
                 break;
             case SDLK_UP:
-                        //rotation avec la flèche du haut
-                        getTablInTabl(tempArray,heigth,width);
-                        break;
+                        // //rotation avec la flèche du haut
+                        // getTablInTabl(tempArray,heigth,width);
+                        // break;
             case SDLK_ESCAPE:
                         if(Escape(renderer)==0){
                             return 0;

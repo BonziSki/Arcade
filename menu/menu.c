@@ -40,10 +40,10 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                                 mainPongLoop(window, renderer);
                                 break;
                             case 1:
-                                //func(game)
+                                //TRON
                                 break;
                             case 2:
-                                //func(game)
+                                //SNAKE
                                 break;
                             case 3:
                                 MainTetrisLoop(window,renderer);
