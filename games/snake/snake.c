@@ -1,12 +1,12 @@
 
 //--------- SDL ---------
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
  
 //Windows
-// #include <SDL2/SDL.h> 
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h> 
+#include <SDL2/SDL_ttf.h>
 
 //-----------------------
 
@@ -156,12 +156,12 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
 
     //Dessin du score
-    // char buffer[12];
-    // sprintf(buffer, "Score : %d", *score);
+    char buffer[12];
+    sprintf(buffer, "Score : %d", *score);
 
-    // SDL_Color white = {180, 180, 200};
+    SDL_Color white = {180, 180, 200};
 
-    // SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
+    SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
@@ -196,7 +196,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
     while(!quitsnake){
         if (updateSnake(snake, &snake, &score, fruit, &dir_h, &dir_v)==0){
-            printf("BREAKPOINT");
+            
             quitsnake=1;
             SDL_ClearScreen(renderer);
             //print lose menu
