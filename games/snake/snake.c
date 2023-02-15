@@ -1,21 +1,22 @@
 
 //--------- SDL ---------
 //MAC
-// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
  
 //Windows
-#include <SDL2/SDL.h> 
-#include <SDL2/SDL_ttf.h>
+// #include <SDL2/SDL.h> 
+// #include <SDL2/SDL_ttf.h>
 
 //-----------------------
 
 #include <stdio.h>
 #include <stdlib.h>
-#include<time.h>
+#include <time.h>
 
 #include "snake.h"
 #include "../../func.h"
+#include "../../menu/menu.h"
 
 
 
@@ -156,12 +157,12 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
 
     //Dessin du score
-    char buffer[12];
-    sprintf(buffer, "Score : %d", *score);
+    // char buffer[12];
+    // sprintf(buffer, "Score : %d", *score);
 
-    SDL_Color white = {180, 180, 200};
+    // SDL_Color white = {180, 180, 200};
 
-    SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
+    // SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
@@ -195,25 +196,164 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
     SDL_Event eventsnake;
 
     while(!quitsnake){
-        if (updateSnake(snake, &snake, &score, fruit, &dir_h, &dir_v)==0){
-            
-            quitsnake=1;
-            SDL_ClearScreen(renderer);
+        if (updateSnake(renderer, snake, &snake, &score, fruit, &dir_h, &dir_v) == 0){
+            printf("BREAKPOINT");
+
+            //affichage du menu de game over
+            if(gameOverMenuSnake(renderer, score) == 0){
+                //free du serpent
+                freeSnake(snake);
+
+                //free du fruit
+                free(fruit);
+
+                //quitter le jeu snake
+                quitsnake = 1;
+
+                
+            }else{
+            //restart le jeu
+                //on refait le snake entièrement pour repartir à zero
+                freeSnake(snake);
+                snake = createSnake();
+
+                //reset des direction
+                dir_h = 1;
+                dir_v = 0;
+
+                //reset du score
+                score = 0;
+            }
+
+
             //print lose menu
-            break;
+
         };
 
 
         drawSnake(renderer, snake, fruit, &score);
         SDL_Delay(200);
     }
+}
+
+void freeSnake(Snake * snake){
+    int nextNodeNull = 0;
+    Snake * nextSnake = snake->next;
+    Snake * nextNextSnake = nextSnake->next;
 
     free(snake);
-    free(fruit);
+    
+    while(!nextNodeNull){
+        free(nextSnake);
 
-};
+        nextSnake = nextNextSnake;
+        nextNextSnake = nextSnake->next;
 
-int updateSnake(Snake * snake, Snake ** snake_pointer, int * score, Fruit * fruit, int * dir_h, int * dir_v){
+        if (nextNextSnake == NULL){
+            free(nextSnake);
+            nextNodeNull = 1;
+        }
+    }
+}
+
+int gameOverMenuSnake(SDL_Renderer * renderer, int score){
+    int quit = 0;
+    int choice = 0;
+    SDL_Event event;
+    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+
+    while (!quit){
+    //Dessin du menu
+        //clear de la fenetre
+        SDL_ClearScreen(renderer);
+
+        //changement de couleur du renderer
+        if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+            SDL_ExitWithError("Changement de couleur du rendu");
+        }
+
+        //
+        rect->w = 80;
+        rect->h = 60;
+        rect->x = 300;
+
+        for (int i = 0; i < 2; i++){
+            //on change la couleur du rectangle correspondant au choix du user
+            if (choice == i){
+                if (SDL_SetRenderDrawColor(renderer, 0, 255,0, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+            }
+            
+            //calcul du y du rectangle
+            rect->y = 140 + (80 + (rect->h * i * 2));
+
+            //rendu du rectangle
+            SDL_RenderFillRect(renderer, rect);
+
+            //reset de la couleur
+            if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+                SDL_ExitWithError("Changement de couleur du rendu");
+            }
+        }
+
+        //deuxieme rectangle
+        rect->w = 240;
+        rect->h = 80;
+        rect->x = WIDTH/2-rect->w/2;
+        rect->y = 100;
+
+        //rendu du rectangle
+        SDL_RenderFillRect(renderer, rect);
+
+        //recentrer les zones   
+        SDL_Color greyWhite = {200, 200, 200};
+        char * dico[] = {"voulez vous rejouer ?","oui","non"};
+
+        // SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
+        // SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
+        // SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+
+        SDL_RenderPresent(renderer);
+
+
+        //gestion des choix du user
+        while (SDL_PollEvent(&event)){
+            switch (event.type){
+
+                case SDL_QUIT:
+                    return 0;
+                    break; 
+
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym){
+
+                        case SDLK_DOWN:
+                            if (choice < 1){
+                                choice++;
+                                printf("choice : %d",choice);
+                            }
+                            break;
+
+                        case SDLK_UP:
+                            if (choice > 0){
+                                choice--;
+                                printf("choice : %d",choice);
+                            }
+                            break;
+
+                        case SDLK_RETURN:
+                            return choice;
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+    return 0;
+}
+
+int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, int * score, Fruit * fruit, int * dir_h, int * dir_v){
 
     //vérification des entrées du user
     SDL_Event event;
@@ -226,6 +366,12 @@ int updateSnake(Snake * snake, Snake ** snake_pointer, int * score, Fruit * frui
         if (event.type == SDL_KEYDOWN){
                 //nécessite un cooldown entre les touches
             switch (event.key.keysym.sym){
+
+                case SDLK_ESCAPE:
+                        if(Escape(renderer) == 0){
+                            return 0;
+                        }
+                    break;
 
                 case SDLK_UP:
                     if(*dir_v != 1){
