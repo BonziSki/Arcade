@@ -21,7 +21,7 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
 
     if (pn == 1){
         temp->x = (width / 2) - 20;
-        temp->y = height;
+        temp->y = height / 2;
 
         temp->dir_h = 1;
         temp->dir_v = 0;
@@ -29,7 +29,7 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
         temp->score = 0;
     }else{
         temp->x = (width / 2) + 20;
-        temp->y = height;
+        temp->y = height / 2;
         
         temp->dir_h = -1;
         temp->dir_v = 0;
@@ -55,12 +55,29 @@ int ** createTronMap(int width, int height){
     return temp;
 }
 
-
+void viewMap(int ** map){
+    printf("\n############## Dessin des trainées du joueur 1 ################\n");
+    for (int i = 0; i < MAP_HEIGHT; i++){
+        for (int j = 0; j < MAP_WIDTH; j++){
+            if (map[i][j] == 1){
+                printf("#");
+            }else if (map[i][j] == 2){
+                printf("@");
+            }else{
+                printf("O");
+            }
+        }
+        printf("\n");
+    }
+}
 
 void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer * p2){
 
     //nettoyage de l'écran
     SDL_ClearScreen(renderer);
+
+    
+    
 
 
     //Rectangle
@@ -77,22 +94,16 @@ void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer *
 
     for (int i = 0; i < MAP_HEIGHT; i++){
         for (int j = 0; j < MAP_WIDTH; j++){
-            if (map[i][j] != 0){
-                printf("1");
-                rect->x = i * CASE_SIZE;
-                rect->y = j * CASE_SIZE;
+            if (map[i][j] == 1){
+                rect->x = j * CASE_SIZE;
+                rect->y = i * CASE_SIZE;
                 rect->w = CASE_SIZE;
                 rect->h = CASE_SIZE;
 
                 SDL_RenderFillRect(renderer, rect);
-            }else{
-                printf("O");
             }
         }
-        printf("\n");
     }
-    printf("\n");
-    printf("\n");
     
 
 
@@ -105,9 +116,9 @@ void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer *
 
     for (int i = 0; i < MAP_HEIGHT; i++){
         for (int j = 0; j < MAP_WIDTH; j++){
-            if (map[i][j] == 1){
-                rect->x = i * CASE_SIZE;
-                rect->y = j * CASE_SIZE;
+            if (map[i][j] == 2){
+                rect->x = j * CASE_SIZE;
+                rect->y = i * CASE_SIZE;
                 rect->w = CASE_SIZE;
                 rect->h = CASE_SIZE;
             
@@ -158,12 +169,18 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
 
     int lose = 0;
 
-
     //Update de la map
-    printf("\n%d\n", map[p1->y][p1->x]);
     map[p1->y][p1->x] = 1;
-    printf("%d\n", map[p1->y][p1->x]);
+    map[p1->y - p1->dir_v][p1->x - p1->dir_h] = 1;
+    
+    printf("\n\naprès changemnet 1 : \nX = %d | Y = %d\nX2 = %d | Y2 = %d\n\n", p1->x, p1->y, p1->x - p1->dir_h, p1->y - p1->dir_v);
+    viewMap(map);
+
     map[p2->y][p2->x] = 2;
+    map[p2->y - p2->dir_v][p2->x - p2->dir_h] = 2;
+
+    printf("\n\naprès changemnet 2 : \n\n");
+    viewMap(map);
 
 
     //Detection des touches
@@ -242,13 +259,13 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     
     //Update des positions
     //joueur 1
-    printf("\np1 x = %d", p1->x);
-    printf("\np1 y = %d\n", p1->y);
     p1->x = p1->x + (2 * p1->dir_h);
     p1->y = p1->y + (2 * p1->dir_v);
 
+
     if (map[p1->y][p1->x] != 0 || (p1->x > MAP_WIDTH || p1->x < 0) || (p1->y > MAP_HEIGHT || p1->y < 0)){
-        lose += 1;
+        p2->score = p2->score + 1;
+        lose = 1;
     }
 
     
@@ -258,41 +275,50 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     p2->y = p2->y + (2 * p2->dir_v);
 
     if (map[p2->y][p2->x] != 0 || (p2->x > MAP_WIDTH || p2->x < 0) || (p2->y > MAP_HEIGHT || p2->y < 0)){
-        lose += 2;
+        p1->score = p1->score + 1;
+        lose = 1;
     }
     
-    //Update des scores
-    int winner = updateTronScore(p1, p2, lose);
-    
-    if(winner == 1){
-        return 1;
-    }else if(winner == 2){
-        return 2;
-    }else{
-        return 0;
+
+    //si un joueur à perdu
+    if(lose){
+        resetTronMap(p1, p2, map, MAP_WIDTH, MAP_HEIGHT);
     }
+
+
+    //si un joueur atteint le score max
+    if (p1->score == WINNING_SCORE){
+        /* code */
+    }else if (p2->score == WINNING_SCORE){
+        /* code */
+    }
+    
+    return 0;
 }
 
-int updateTronScore(TronPlayer * p1, TronPlayer * p2, int looser){
+void resetTronMap(TronPlayer * p1, TronPlayer * p2, int ** map, int width, int height){
+    //Reset de la position du joueur 1
+    p1->x = (width / 2) - 20;
+    p1->y = height / 2;
 
-    if(looser == 1){
-        p2->score = p2->score + 1;
+    p1->dir_h = 1;
+    p1->dir_v = 0;
 
-        if(p2->score == WINNING_SCORE){
-            return 2;
+
+    //Reset de la position du joueur 2
+    p2->x = (width / 2) + 20;
+    p2->y = height / 2;
+
+    p2->dir_h = -1;
+    p2->dir_v = 0;
+
+
+    //Reset de la map
+    for (int i = 0; i < height; i++){
+        for (int j = 0; j < width; j++){
+            map[i][j] = 0;
         }
-    }else if(looser == 2){
-        p1->score = p1->score + 1;
-
-        if(p1->score == WINNING_SCORE){
-            return 1;
-        }
-
-    }else if(looser == -1){
-        p1->score = 0;
-        p2->score = 0;
     }
-    return 0;
 }
 
 void drawWinner(SDL_Renderer * renderer, int winner, int score_p1, int score_p2){
@@ -304,12 +330,12 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
     printf("tron launched");
 
     int ** map = NULL;
-    
     map = createTronMap(MAP_WIDTH, MAP_HEIGHT);
 
     if (map == NULL){
         SDL_ExitWithError("allouage de la mémoire pour la map de tron");
     }
+
     
 
     TronPlayer * p1 = NULL;
@@ -330,7 +356,7 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
     int quitTron = 0;
     int update = 0;
 
-    testScreen(renderer);
+    // testScreen(renderer);
     SDL_Event eventtron;
 
     while (!quitTron){
@@ -338,7 +364,13 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
 
         if (update == -1){
             quitTron = 1;
+        }else if(update == 1){
+            /* code */
+        }else if(update == 2){
+            /* code */
         }
+        
+        
         // else if (update == 1){
         //     drawWinner(renderer, 1, p1->score, p2->score);
         // }else if (update == 2){
