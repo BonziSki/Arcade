@@ -52,6 +52,9 @@ int main(int argc, char **argv){
     SDL_Event event;
 
     mainLoopSnake(window, renderer);
+
+    SDL_ClearScreen(renderer);
+    SDL_RenderPresent(renderer);
     
     while (!quit){
         while (SDL_PollEvent(&event)){

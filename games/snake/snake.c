@@ -22,10 +22,7 @@
 
 Snake * createSnake() {
 
-    printf("\n\nCreation du serpent : \n");
-    
     int midScreen = ((WIDTH / CASE_SIZE) % 2) ? (WIDTH / CASE_SIZE)/2 : ((WIDTH / CASE_SIZE) - 1)/2;
-    printf("milieu de l'ecran : %d\n", midScreen);
 
     Snake * temp = NULL;
 
@@ -37,15 +34,11 @@ Snake * createSnake() {
         snake->x = i;
         snake->next = temp;
         temp = snake;
-
-        printf("noeud nb %d : x = %d | y = %d | next = %p\n", i, snake->x, snake->y, snake->next);
-        printf("temp = %p\n", temp);
     }
     return temp;
 }
 
 Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v){
-    printf("test test");
     Snake * newSnake = malloc(sizeof(Snake));
     newSnake->x = snake->x + dir_h;
     newSnake->y = snake->y + dir_v;
@@ -140,7 +133,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
         tempSnake = tempSnake->next;
         
     }
-     viewAllNodes(snake);
+    // viewAllNodes(snake);
     //changement de couleur
     if (SDL_SetRenderDrawColor(renderer, 200, 20, 20, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
@@ -166,7 +159,6 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
-    printf("############\n");
 
 }
 
@@ -201,6 +193,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
             //affichage du menu de game over
             if(gameOverMenuSnake(renderer, score) == 0){
+                printf("\n\nau revoir !\n");
                 //free du serpent
                 freeSnake(snake);
 
@@ -224,16 +217,14 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
                 //reset du score
                 score = 0;
             }
-
-
             //print lose menu
-
         };
 
 
         drawSnake(renderer, snake, fruit, &score);
         SDL_Delay(200);
     }
+
 }
 
 void freeSnake(Snake * snake){
@@ -331,18 +322,19 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int score){
                         case SDLK_DOWN:
                             if (choice < 1){
                                 choice++;
-                                printf("choice : %d",choice);
+                                printf("choice : %d\n",choice);
                             }
                             break;
 
                         case SDLK_UP:
                             if (choice > 0){
                                 choice--;
-                                printf("choice : %d",choice);
+                                printf("choice : %d\n",choice);
                             }
                             break;
 
                         case SDLK_RETURN:
+                            printf("\nENTRER\n");
                             return choice;
                             break;
                     }
@@ -410,8 +402,8 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
             }
         }
     }
+
     //Update de la position du snake en fonction de sa direction
-    
     int tempX, tempX2;
     int tempY, tempY2;
     int nextNodeNull = 0;
@@ -428,7 +420,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
             tempSnake->y = tempSnake->y + *dir_v;
 
             //vérification de collisions avec les côtés de la fenetre
-            if ((snake->x < 0 || snake->x > MAX_CASE_WIDTH) || (snake->y < 0 || snake->y > MAX_CASE_HEIGHT)){
+            if ((snake->x < 0 || snake->x >= MAX_CASE_WIDTH) || (snake->y < 0 || snake->y >= MAX_CASE_HEIGHT)){
                 printf("loose\n");
                 return 0;
             }
