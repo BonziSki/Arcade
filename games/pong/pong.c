@@ -260,20 +260,29 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     while(!quitpong){
         update = pongUpdate(renderer, ball, p1, p2);
 
-        if(update == 1){
-            //le joueur 1 gagne
-
-        }else if (update == 2){
-            //le joueur 2 gagne
-            
-        }else if (update == -1){
+        if (update == 0){
             //quitter le jeu
             free(p1);
             free(p2);
             free(ball);
 
             quitpong = 1;
+        }else if (update == 1){
+            //reset de la balle
+            resetBall(-1, ball);
+
+            //reset du score
+            p1->score = 0;
+            p2->score = 0;
+
+            //reset des positions des joueurs
+            p1->y = (HEIGHT / 2) - 20;
+            p2->y = (HEIGHT / 2) - 20;
+
+
+
         }
+        
         
         
         drawPongGame(window, renderer, ball, p1, p2);
@@ -393,5 +402,5 @@ int pongUpdate(SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Play
         ball->vertical_direction = ball->vertical_direction * -1;
     }
 
-    return 0;
+    return -1;
 }
