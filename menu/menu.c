@@ -46,7 +46,7 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                                 //SNAKE
                                 break;
                             case 3:
-                                MainTetrisLoop(window,renderer);
+                                MainTetrisLoop(renderer);
                                 break;
                             default:
                                 break;

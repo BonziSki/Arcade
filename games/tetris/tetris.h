@@ -11,24 +11,20 @@ typedef struct Timer
 }Timer;
 
 
+
 Timer * createTimer();
-void MainTetrisLoop(SDL_Window * window, SDL_Renderer * renderer);
+void MainTetrisLoop(SDL_Renderer * renderer);
 void PartialClean(SDL_Renderer * renderer);
- int ** createTmpTable(int height, int width);
- int ** createPermTable(int height, int width);
+int ** createArray(int height, int width);
 void DrawControl(SDL_Renderer * renderer);
-void DrawGame(SDL_Renderer * renderer,int ** tempArray,int ** permArray);
-void DrawNext(SDL_Renderer * renderer,int choice, int color);
-void DrawScore(SDL_Renderer * renderer,int score);
-void supprLine(int row,int ** permArray,int width, int heigth);
-int updateTetris(int ** tempArray, int ** permArray,int heigth, int width,int * score, SDL_Renderer * renderer,Timer * timestamp);
-void copyArrayInto(int ** tempArray,int ** permArray,int heigth, int width);
-void SpawnTetroid(int ** tempArray,int heigth,int width,int color, int choice);
-void print_tabl(int ** tabl,int width, int heigth);
-void pushX(int tabl [4][4]);
-void pushY(int tabl [4][4]);
-void rotation(int tabl [4][4]);
-void copyArrayIntoDefined(int tabl_source[4][4],int tabl_dest[4][4]);
-int ** getTablInTabl(int ** permArray,int heigth, int width);
+void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x,int y);
+void DrawNext(SDL_Renderer * renderer,int ** miniArray);
+void DrawScore(SDL_Renderer * renderer,int * score);
+void supprLine(int row,int ** permArray);
+int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score, SDL_Renderer * renderer,Timer * TIMESTAMP);
+void copyArrayInto(int ** sourceArray,int ** destArray,int heigth, int width);
+void updateMiniArray(int ** miniArray, int choice,int color);
+
+
 
 #endif
