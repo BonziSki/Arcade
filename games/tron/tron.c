@@ -263,25 +263,23 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     
     //Update des positions
     //joueur 1
-    p1->x = p1->x + (2 * p1->dir_h);
-    p1->y = p1->y + (2 * p1->dir_v);
-
-
-    if (map[p1->y][p1->x] != 0 || (p1->x > MAP_WIDTH || p1->x < 0) || (p1->y > MAP_HEIGHT || p1->y < 0)){
+    if (map[p1->y + (2 * p1->dir_v)][p1->x + (2 * p1->dir_h)] != 0 || ((p1->x + (2 * p1->dir_h)) > MAP_WIDTH || (p1->x + (2 * p1->dir_h)) < 0) || ((p1->y + (2 * p1->dir_v)) > MAP_HEIGHT || (p1->y + (2 * p1->dir_v)) < 0)){
         p2->score = p2->score + 1;
         lose = 1;
     }
 
+    p1->x = p1->x + (2 * p1->dir_h);
+    p1->y = p1->y + (2 * p1->dir_v);
     
 
     //joueur 2
-    p2->x = p2->x + (2 * p2->dir_h);
-    p2->y = p2->y + (2 * p2->dir_v);
-
-    if (map[p2->y][p2->x] != 0 || (p2->x > MAP_WIDTH || p2->x < 0) || (p2->y > MAP_HEIGHT || p2->y < 0)){
+    if (map[p2->y + (2 * p2->dir_v)][p2->x + (2 * p2->dir_h)] != 0 || ((p2->x + (2 * p2->dir_h)) > MAP_WIDTH || (p2->x + (2 * p2->dir_h)) < 0) || ((p2->y + (2 * p2->dir_v)) > MAP_HEIGHT || (p2->y + (2 * p2->dir_v)) < 0)){
         p1->score = p1->score + 1;
         lose = 1;
     }
+
+    p2->x = p2->x + (2 * p2->dir_h);
+    p2->y = p2->y + (2 * p2->dir_v);
     
 
     //si un joueur à perdu
