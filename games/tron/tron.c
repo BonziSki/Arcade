@@ -41,13 +41,13 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
 }
 
 int ** createTronMap(int width, int height){
-    int ** temp = malloc(sizeof(int *) * width);
+    int ** temp = malloc(sizeof(int *) * height);
 
-    for (int i = 0; i < width; i++){
-        temp[i] = malloc(sizeof(int) * height);
+    for (int i = 0; i < height; i++){
+        temp[i] = malloc(sizeof(int) * width);
 
         //mise à 0 des cases
-        for (int j = 0; j < height; j++){
+        for (int j = 0; j < width; j++){
             temp[i][j] = 0;
         }
     }
@@ -170,17 +170,21 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     int lose = 0;
 
     //Update de la map
+    printf("map avant changement \n");
+    viewMap(map);
     map[p1->y][p1->x] = 1;
-    map[p1->y - p1->dir_v][p1->x - p1->dir_h] = 1;
+    printf("map après changement n°1\n");
+    viewMap(map);
+    map[(p1->y - p1->dir_v)][(p1->x - p1->dir_h)] = 1;
     
-    printf("\n\naprès changemnet 1 : \nX = %d | Y = %d\nX2 = %d | Y2 = %d\n\n", p1->x, p1->y, p1->x - p1->dir_h, p1->y - p1->dir_v);
+    printf("\n\naprès changemnet 2 : \nX = %d | Y = %d\nX2 = %d | Y2 = %d\n\n", p1->x, p1->y, p1->x - p1->dir_h, p1->y - p1->dir_v);
     viewMap(map);
 
     map[p2->y][p2->x] = 2;
     map[p2->y - p2->dir_v][p2->x - p2->dir_h] = 2;
 
-    printf("\n\naprès changemnet 2 : \n\n");
-    viewMap(map);
+    // printf("\n\naprès changemnet 2 : \n\n");
+    // viewMap(map);
 
 
     //Detection des touches
