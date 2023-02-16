@@ -4,8 +4,9 @@
 #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> //MAC
 #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 
-#include "../../func.h"
 #include "tron.h"
+#include "../../func.h"
+#include "../../menu/menu.h"
 
 #define WINNING_SCORE 3
 #define CASE_SIZE 10
@@ -165,20 +166,13 @@ void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer *
 
 
 
-int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
+int updateTron(SDL_Renderer * renderer, TronPlayer * p1, TronPlayer * p2, int ** map){
 
     int lose = 0;
 
     //Update de la map
-    printf("map avant changement \n");
-    viewMap(map);
     map[p1->y][p1->x] = 1;
-    printf("map après changement n°1\n");
-    viewMap(map);
     map[(p1->y - p1->dir_v)][(p1->x - p1->dir_h)] = 1;
-    
-    printf("\n\naprès changemnet 2 : \nX = %d | Y = %d\nX2 = %d | Y2 = %d\n\n", p1->x, p1->y, p1->x - p1->dir_h, p1->y - p1->dir_v);
-    viewMap(map);
 
     map[p2->y][p2->x] = 2;
     map[p2->y - p2->dir_v][p2->x - p2->dir_h] = 2;
@@ -196,66 +190,74 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
         }
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
-            //touches pour le joueur 1
-            case SDLK_z:
-                if (p1->dir_v != 1){
-                    p1->dir_h = 0;
-                    p1->dir_v = -1;
-                }
-                break;
+                //menu pause
+                case SDLK_ESCAPE:
+                        if(Escape(renderer) == 0){
+                            return 0;
+                        }
+                    break;
 
-            case SDLK_q:
-                if (p1->dir_h != 1){
-                    p1->dir_v = 0;
-                    p1->dir_h = -1;
-                }
-                break;
 
-            case SDLK_s:
-                if (p1->dir_v != -1){
-                    p1->dir_h = 0;
-                    p1->dir_v = 1;
-                }
-                break;
+                //touches pour le joueur 1
+                case SDLK_z:
+                    if (p1->dir_v != 1){
+                        p1->dir_h = 0;
+                        p1->dir_v = -1;
+                    }
+                    break;
 
-            case SDLK_d:
-                if (p1->dir_h != -1){
-                    p1->dir_v = 0;
-                    p1->dir_h = 1;
-                }
-                break;
-            
-            //touches pour le joueur 2
-            case SDLK_UP:
-                if (p2->dir_v != 1){
-                    p2->dir_h = 0;
-                    p2->dir_v = -1;
-                }
-                break;
+                case SDLK_q:
+                    if (p1->dir_h != 1){
+                        p1->dir_v = 0;
+                        p1->dir_h = -1;
+                    }
+                    break;
 
-            case SDLK_DOWN:
-                if (p2->dir_v != -1){
-                    p2->dir_h = 0;
-                    p2->dir_v = 1;
-                }
-                break;
+                case SDLK_s:
+                    if (p1->dir_v != -1){
+                        p1->dir_h = 0;
+                        p1->dir_v = 1;
+                    }
+                    break;
 
-            case SDLK_LEFT:
-                if (p2->dir_h != 1){
-                    p2->dir_v = 0;
-                    p2->dir_h = -1;
-                }
-                break;
+                case SDLK_d:
+                    if (p1->dir_h != -1){
+                        p1->dir_v = 0;
+                        p1->dir_h = 1;
+                    }
+                    break;
+                
+                //touches pour le joueur 2
+                case SDLK_UP:
+                    if (p2->dir_v != 1){
+                        p2->dir_h = 0;
+                        p2->dir_v = -1;
+                    }
+                    break;
 
-            case SDLK_RIGHT:
-                if (p2->dir_h != -1){
-                    p2->dir_v = 0;
-                    p2->dir_h = 1;
-                }
-                break;
-            
-            default:
-                break;
+                case SDLK_DOWN:
+                    if (p2->dir_v != -1){
+                        p2->dir_h = 0;
+                        p2->dir_v = 1;
+                    }
+                    break;
+
+                case SDLK_LEFT:
+                    if (p2->dir_h != 1){
+                        p2->dir_v = 0;
+                        p2->dir_h = -1;
+                    }
+                    break;
+
+                case SDLK_RIGHT:
+                    if (p2->dir_h != -1){
+                        p2->dir_v = 0;
+                        p2->dir_h = 1;
+                    }
+                    break;
+                
+                default:
+                    break;
             }
         }
     }
@@ -263,7 +265,14 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     
     //Update des positions
     //joueur 1
-    if (map[p1->y + (2 * p1->dir_v)][p1->x + (2 * p1->dir_h)] != 0 || ((p1->x + (2 * p1->dir_h)) > MAP_WIDTH || (p1->x + (2 * p1->dir_h)) < 0) || ((p1->y + (2 * p1->dir_v)) > MAP_HEIGHT || (p1->y + (2 * p1->dir_v)) < 0)){
+
+    printf("p1 : x = %d | y = %d\n", p1->x, p1->y);
+
+    if (((p1->x + (2 * p1->dir_h)) >= MAP_WIDTH || (p1->x + (2 * p1->dir_h)) < 0) || ((p1->y + (2 * p1->dir_v)) > MAP_HEIGHT || (p1->y + (2 * p1->dir_v)) < 0) || ((p1->y + (2 * p1->dir_v)) + 1 > MAP_HEIGHT)){
+        p2->score = p2->score + 1;
+        lose = 1;
+
+    }else if (map[p1->y + (2 * p1->dir_v)][p1->x + (2 * p1->dir_h)] != 0){
         p2->score = p2->score + 1;
         lose = 1;
     }
@@ -272,8 +281,13 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
     p1->y = p1->y + (2 * p1->dir_v);
     
 
+
     //joueur 2
-    if (map[p2->y + (2 * p2->dir_v)][p2->x + (2 * p2->dir_h)] != 0 || ((p2->x + (2 * p2->dir_h)) > MAP_WIDTH || (p2->x + (2 * p2->dir_h)) < 0) || ((p2->y + (2 * p2->dir_v)) > MAP_HEIGHT || (p2->y + (2 * p2->dir_v)) < 0)){
+    if (((p2->x + (2 * p2->dir_h)) >= MAP_WIDTH || (p2->x + (2 * p2->dir_h)) < 0) || ((p2->y + (2 * p2->dir_v)) > MAP_HEIGHT || (p2->y + (2 * p2->dir_v)) < 0) || ((p2->y + (2 * p2->dir_v)) + 1 > MAP_HEIGHT)){
+        p1->score = p1->score + 1;
+        lose = 1;
+
+    }else if(map[p2->y + (2 * p2->dir_v)][p2->x + (2 * p2->dir_h)] != 0){
         p1->score = p1->score + 1;
         lose = 1;
     }
@@ -290,12 +304,12 @@ int updateTron(TronPlayer * p1, TronPlayer * p2, int ** map){
 
     //si un joueur atteint le score max
     if (p1->score == WINNING_SCORE){
-        /* code */
+        return drawWinner(renderer, 1, p1->score, p2->score);
     }else if (p2->score == WINNING_SCORE){
-        /* code */
+        return drawWinner(renderer, 2, p1->score, p2->score);
     }
     
-    return 0;
+    return -1;
 }
 
 void resetTronMap(TronPlayer * p1, TronPlayer * p2, int ** map, int width, int height){
@@ -323,9 +337,110 @@ void resetTronMap(TronPlayer * p1, TronPlayer * p2, int ** map, int width, int h
     }
 }
 
-void drawWinner(SDL_Renderer * renderer, int winner, int score_p1, int score_p2){
+int drawWinner(SDL_Renderer * renderer, int winner, int score_p1, int score_p2){
     //bloquer le jeu jusqu'au relancement de la part du joueur
+    int quit = 0;
+    int choice = 0;
+    SDL_Event event;
+    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+
+    while (!quit){
+    //Dessin du menu
+        //clear de la fenetre
+        SDL_ClearScreen(renderer);
+
+        //changement de couleur du renderer
+        if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+            SDL_ExitWithError("Changement de couleur du rendu");
+        }
+
+        //
+        rect->w = 80;
+        rect->h = 60;
+        rect->x = 300;
+
+        for (int i = 0; i < 2; i++){
+            //on change la couleur du rectangle correspondant au choix du user
+            if (choice == i){
+                if (SDL_SetRenderDrawColor(renderer, 0, 255,0, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+            }
+            
+            //calcul du y du rectangle
+            rect->y = 140 + (80 + (rect->h * i * 2));
+
+            //rendu du rectangle
+            SDL_RenderFillRect(renderer, rect);
+
+            //reset de la couleur
+            if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+                SDL_ExitWithError("Changement de couleur du rendu");
+            }
+        }
+
+        //deuxieme rectangle
+        rect->w = 240;
+        rect->h = 80;
+        rect->x = WIDTH / 2 - rect->w / 2;
+        rect->y = 100;
+
+        //rendu du rectangle
+        SDL_RenderFillRect(renderer, rect);
+
+        //recentrer les zones   
+        SDL_Color greyWhite = {200, 200, 200};
+        char buffer[100];
+
+        sprintf(buffer, "Le vainqueur est le joueur %d", winner);
+        
+
+        // SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
+        // SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
+        // SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+
+        SDL_RenderPresent(renderer);
+
+
+        //gestion des choix du user
+        while (SDL_PollEvent(&event)){
+            switch (event.type){
+
+                case SDL_QUIT:
+                    return 0;
+                    break; 
+
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym){
+
+                        case SDLK_DOWN:
+                            if (choice < 1){
+                                choice++;
+                                printf("choice : %d",choice);
+                            }
+                            break;
+
+                        case SDLK_UP:
+                            if (choice > 0){
+                                choice--;
+                                printf("choice : %d",choice);
+                            }
+                            break;
+
+                        case SDLK_RETURN:
+                            return choice;
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+    return 0;
 }
+
+
+
+
 
 void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
 
@@ -362,22 +477,17 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
     SDL_Event eventtron;
 
     while (!quitTron){
-        update = updateTron(p1, p2, map);
+        update = updateTron(renderer, p1, p2, map);
 
-        if (update == -1){
+        if (update == 0){
             quitTron = 1;
-        }else if(update == 1){
-            /* code */
-        }else if(update == 2){
-            /* code */
+        }else if (update == 1){
+            //reset du score et de la map
+            p1->score = 0;
+            p2->score = 0;
+
+            resetTronMap(p1, p2, map, MAP_WIDTH, MAP_HEIGHT);
         }
-        
-        
-        // else if (update == 1){
-        //     drawWinner(renderer, 1, p1->score, p2->score);
-        // }else if (update == 2){
-        //     drawWinner(renderer, 2, p1->score, p2->score);
-        // }
 
         drawTron(renderer, map, p1, p2);
         
