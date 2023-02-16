@@ -1,6 +1,8 @@
 #ifndef B
 #define B
 
+#define WINNING_SCORE 5
+
 typedef struct Ball{
     int x;
     int y;
@@ -23,7 +25,7 @@ Pong_Player * createPongPlayer(int nplayer);
 Ball * createPongBall();
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2);
 void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer);
-int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2);
+int pongUpdate(SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2);
 
 
 

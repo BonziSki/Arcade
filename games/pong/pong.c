@@ -9,6 +9,7 @@
 
 #include "pong.h"
 #include "../../func.h"
+#include "../../menu/menu.h"
 
 
 Pong_Player * createPongPlayer(int nplayer){
@@ -139,6 +140,113 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
     SDL_RenderPresent(renderer);
 };
 
+int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
+    int quit = 0;
+    int choice = 0;
+    SDL_Event event;
+    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+
+    while (!quit){
+    //Dessin du menu
+        //clear de la fenetre
+        SDL_ClearScreen(renderer);
+
+        //changement de couleur du renderer
+        if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+            SDL_ExitWithError("Changement de couleur du rendu");
+        }
+
+        //
+        rect->w = 80;
+        rect->h = 60;
+        rect->x = 300;
+
+        for (int i = 0; i < 2; i++){
+            //on change la couleur du rectangle correspondant au choix du user
+            if (choice == i){
+                if (SDL_SetRenderDrawColor(renderer, 0, 255,0, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+            }
+            
+            //calcul du y du rectangle
+            rect->y = 140 + (80 + (rect->h * i * 2));
+
+            //rendu du rectangle
+            SDL_RenderFillRect(renderer, rect);
+
+            //reset de la couleur
+            if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+                SDL_ExitWithError("Changement de couleur du rendu");
+            }
+        }
+
+        //deuxieme rectangle
+        rect->w = 240;
+        rect->h = 80;
+        rect->x = WIDTH/2-rect->w/2;
+        rect->y = 100;
+
+        //rendu du rectangle
+        SDL_RenderFillRect(renderer, rect);
+
+        //recentrer les zones   
+        SDL_Color greyWhite = {200, 200, 200};
+
+
+        char string[100];
+
+        if (score_p1 > score_p2){
+            sprintf(string, "le gagnant est le joueur %d", 1);
+        }else{
+            sprintf(string, "le gagnant est le joueur %d", 2);
+        }
+        
+        
+
+        // SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,string);
+        // SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
+        // SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+
+        SDL_RenderPresent(renderer);
+
+
+        //gestion des choix du user
+        while (SDL_PollEvent(&event)){
+            switch (event.type){
+
+                case SDL_QUIT:
+                    return 0;
+                    break; 
+
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym){
+
+                        case SDLK_DOWN:
+                            if (choice < 1){
+                                choice++;
+                                printf("choice : %d",choice);
+                            }
+                            break;
+
+                        case SDLK_UP:
+                            if (choice > 0){
+                                choice--;
+                                printf("choice : %d",choice);
+                            }
+                            break;
+
+                        case SDLK_RETURN:
+                            return choice;
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+    return 0;
+}
+
 void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
 
     Pong_Player * p1 = createPongPlayer(1);
@@ -146,21 +254,34 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
     Ball * ball = createPongBall();
 
     int quitpong = 0;
+    int update = 0;
     
 
     while(!quitpong){
-        if(pongUpdate(ball, p1, p2) == 0){
+        update = pongUpdate(renderer, ball, p1, p2);
+
+        if(update == 1){
+            //le joueur 1 gagne
+
+        }else if (update == 2){
+            //le joueur 2 gagne
+            
+        }else if (update == -1){
+            //quitter le jeu
+            free(p1);
+            free(p2);
+            free(ball);
+
             quitpong = 1;
         }
+        
+        
         drawPongGame(window, renderer, ball, p1, p2);
         SDL_Delay(10);
-        if (p1->score == 2){
-            quitpong = 1;
-        }
     }
 }
 
-int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
+int pongUpdate(SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2){
     //Update des positions des joueurs
     SDL_Event event;
 
@@ -171,40 +292,49 @@ int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         }
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
-            //touches pour le joueur 1
-            case SDLK_z:
-                if (p1->y > 10){
-                    p1->y = p1->y - 20;
-                }else{
-                    p1->y = 0;
-                }
-                break;
-            case SDLK_s:
-                if(p1->y < HEIGHT - 50){
-                    p1->y = p1->y + 20;
-                }else{
-                    p1->y = HEIGHT - 40;
-                }
-                break;
-            
-            //touches pour le joueur 2
-            case SDLK_UP:
-                if (p2->y > 10){
-                    p2->y = p2->y - 20;
-                }else{
-                    p2->y = 0;
-                }
-                break;
-            case SDLK_DOWN:
-                if(p2->y < HEIGHT - 50){
-                    p2->y = p2->y + 20;
-                }else{
-                    p2->y = HEIGHT - 40;
-                }
-                break;
-            
-            default:
-                break;
+
+                case SDLK_ESCAPE:
+                    if(Escape(renderer) == 0){
+                        return 0;
+                    }
+                    break;
+
+                //touches pour le joueur 1
+                case SDLK_z:
+                    if (p1->y > 10){
+                        p1->y = p1->y - 20;
+                    }else{
+                        p1->y = 0;
+                    }
+                    break;
+
+                case SDLK_s:
+                    if(p1->y < HEIGHT - 50){
+                        p1->y = p1->y + 20;
+                    }else{
+                        p1->y = HEIGHT - 40;
+                    }
+                    break;
+                
+                //touches pour le joueur 2
+                case SDLK_UP:
+                    if (p2->y > 10){
+                        p2->y = p2->y - 20;
+                    }else{
+                        p2->y = 0;
+                    }
+                    break;
+
+                case SDLK_DOWN:
+                    if(p2->y < HEIGHT - 50){
+                        p2->y = p2->y + 20;
+                    }else{
+                        p2->y = HEIGHT - 40;
+                    }
+                    break;
+                
+                default:
+                    break;
             }
         }
     }
@@ -242,6 +372,13 @@ int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         }
     }
     
+    //si le score maximum est atteint
+    if (p1->score == WINNING_SCORE || p2->score == WINNING_SCORE){
+        return drawWinner(renderer, p1->score, p2->score);
+    }
+    
+    
+    
     
 
     //update Y
@@ -256,5 +393,5 @@ int pongUpdate(Ball * ball, Pong_Player * p1, Pong_Player * p2){
         ball->vertical_direction = ball->vertical_direction * -1;
     }
 
-    return 1;
+    return 0;
 }
