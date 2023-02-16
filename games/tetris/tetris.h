@@ -22,9 +22,9 @@ void DrawNext(SDL_Renderer * renderer,int ** miniArray);
 void DrawScore(SDL_Renderer * renderer,int * score);
 void supprLine(int row,int ** permArray);
 int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score, SDL_Renderer * renderer,Timer * TIMESTAMP);
-void copyArrayInto(int ** sourceArray,int ** destArray,int heigth, int width);
+void copyArrayInto(int ** sourceArray,int ** destArray,int x,int y);
 void updateMiniArray(int ** miniArray, int choice,int color);
-
-
+void cleanArray(int ** miniArray);
+void LockArrayInto(int ** sourceArray,int ** destArray,int x,int y);
 
 #endif

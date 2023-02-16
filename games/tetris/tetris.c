@@ -21,13 +21,14 @@ void MainTetrisLoop(SDL_Renderer * renderer){
     int ** tempArray = createArray(HEIGTH_TABLE,WIDTH_TABLE);
     int ** permArray = createArray(HEIGTH_TABLE,WIDTH_TABLE);
     int ** miniArray = createArray(3,3);
-    int x=WIDTH/2;
+    int x=WIDTH_TABLE/2;
     int y=0;
     
     Timer * TimeStamp1 = createTimer();
     //number = (rand() % (upper - lower + 1)) + lower
-    updateMiniArray(miniArray,(rand()%(4-1))+1,(rand()%(4-1))+1);
-
+    printf("rand = %d\n",(rand()%7)+1);
+    updateMiniArray(miniArray,(rand()%7)+1,(rand()%4)+1);
+    
     int quit=0;
     while (!quit)
     {   
@@ -108,10 +109,10 @@ void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x, i
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
     rect->w = CELL_SIZE;
     rect->h = CELL_SIZE;
-    // print tableau temporaire
+    // print tableau mini
     for (int i = y; i < y+3; i++){
         for (int j = x; j < x+3; j++){
-            switch (miniArray[i][j]){
+            switch (miniArray[i-y][j-x]){
             case 0:
                 //case vide
                 if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
