@@ -35,6 +35,8 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
     SDL_Event event;
     
     int coll_flag=0;
+    int l_empty=1;
+    int r_empty=1;
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
@@ -43,69 +45,72 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
             case SDLK_LEFT:
-            //si déja tous a doite, rien faire
+            //vérifie condition miniArray
             for (int i = 0; i < 3; i++)
             {
                 if (miniArray[i][0]!=0){
-                    if (*x==-1){
-                        coll_flag=1;
-                    }else if (*x==0){
-                        coll_flag=1;
-                    }
+                    l_empty=0;
                 }
             }
-            //check collision permArray
-            if (coll_flag!=1){
-                for (int i = 0; i < 3; i++)
+            if (l_empty==1){
+                if (*x==-1)
                 {
-                    if (miniArray[i][0]!=0)
-                    {
-                        for (int j = 0; j < 3; j++){
-                            if (permArray[i+*y][j+*x]!=0){
-                                coll_flag=1;
-                            }
-                        } 
-                    }else{
-                        for (int j = 0; j < 3; j++){
-                            if (permArray[i+*y][j+*x-1]!=0){
-                                coll_flag=1;
-                            }
-                        } 
-                    }
+                    coll_flag=1;
                 }
-                if (coll_flag!=1){
-                    *x-=1;
-                }
-            }
-            //ICI CHECK COLLISION AVEC LA DROITE
-                break;
-            case SDLK_RIGHT:
-            //si déja tous a gauche, rien faire
-            if (*x==WIDTH_TABLE-1){
+            }else if (*x==0){
                 coll_flag=1;
             }
             //check collision permArray
+            //check collision permArray
             if (coll_flag!=1){
-                for (int i = 0; i < 3; i++)
-                {
-                    if (miniArray[i][2]!=0)
-                    {
-                        for (int j = 0; j < 3; j++){
-                            if (permArray[i+*y][j+*x]!=0){
-                                coll_flag=1;
-                            }
-                        } 
-                    }else{
-                        for (int j = 0; j < 3; j++){
-                            if (permArray[i+*y][j+*x+1]!=0){
+                for (int i = 0; i < 3; i++){
+                    for (int j = 0; j < 3; j++){
+                        if (permArray[*y+i][*x-1+j]!=0){
+                            if (miniArray[i][j]!=0){
                                 coll_flag=1;
                             }
                         }
-                    }
+                    }     
                 }
+            }
                 if (coll_flag!=1){
-                    *x+=1;
+                    *x-=1;
                 }
+            //ICI CHECK COLLISION AVEC LA DROITE
+                break;
+            case SDLK_RIGHT:
+            //si déja tous a droite, rien faire
+            for (int i = 0; i < 3; i++)
+            {
+                if (miniArray[i][2]!=0){
+                    r_empty=0;
+                }
+            }
+            if (r_empty==1){
+                printf("x %d\n",*x);
+                if (*x==8)
+                {
+                    coll_flag=1;
+                }
+            }else{
+                if (*x==7){
+                    coll_flag=1;
+                }
+            }
+            //check collision permArray
+            if (coll_flag!=1){
+                for (int i = 0; i < 3; i++){
+                    for (int j = 0; j < 3; j++){
+                        if (permArray[*y+i][*x+1+j]!=0){
+                            if (miniArray[i][j]!=0){
+                                coll_flag=1;
+                            }
+                        }
+                    }     
+                }
+            }
+            if (coll_flag!=1){
+                *x+=1;
             }
             //ICI CHECK COLLISION AVEC LA GAUCHE
                 break;
@@ -115,7 +120,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                 break;
             case SDLK_UP:
                         // //rotation avec la flèche du haut
-                        rotation(miniArray);
+                        rotation(miniArray,x,y,permArray);
                         break;
             case SDLK_ESCAPE:
                         if(Escape(renderer)==0){

@@ -26,6 +26,6 @@ void copyArrayInto(int ** sourceArray,int ** destArray,int x,int y);
 void updateMiniArray(int ** miniArray, int choice,int color);
 void cleanArray(int ** miniArray);
 void LockArrayInto(int ** sourceArray,int ** destArray,int x,int y);
-void rotation(int ** miniArray);
+void rotation(int ** miniArray,int * x,int * y,int ** permArray);
 
 #endif
