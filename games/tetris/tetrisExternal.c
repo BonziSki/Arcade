@@ -44,8 +44,15 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
             switch (event.key.keysym.sym){
             case SDLK_LEFT:
             //si déja tous a doite, rien faire
-            if (*x==0){
-                coll_flag=1;
+            for (int i = 0; i < 3; i++)
+            {
+                if (miniArray[i][0]!=0){
+                    if (*x==-1){
+                        coll_flag=1;
+                    }else if (*x==0){
+                        coll_flag=1;
+                    }
+                }
             }
             //check collision permArray
             if (coll_flag!=1){
@@ -76,7 +83,6 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
             //si déja tous a gauche, rien faire
             if (*x==WIDTH_TABLE-1){
                 coll_flag=1;
-                
             }
             //check collision permArray
             if (coll_flag!=1){
@@ -109,7 +115,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                 break;
             case SDLK_UP:
                         // //rotation avec la flèche du haut
-                        // getTablInTabl(tempArray,heigth,width);
+                        rotation(miniArray);
                         break;
             case SDLK_ESCAPE:
                         if(Escape(renderer)==0){
@@ -127,6 +133,23 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
         descente:
         TIMESTAMP->initializedTimer=0;
         *y+=1;
+    }
+    //collsiion avec permArray
+    //BUG
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+            if (miniArray[i][j]!=0){
+                if (permArray[i+*y][j+*x]!=0){
+                printf("COL \n");
+                LockArrayInto(miniArray,permArray,*x,*y-1);
+                cleanArray(miniArray);
+                updateMiniArray(miniArray,(rand()%(7))+1,(rand()%(4))+1);
+                *x=WIDTH_TABLE/2;
+                *y=0;
+                
+                }
+            }
+        }  
     }
     //collision avec juste sol
     //BUG
@@ -153,31 +176,13 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
         }
     }
     
-    //collsiion avec permArray
-    //BUG
-    for (int i = 0; i < 3; i++){
-        for (int j = 0; j < 3; j++){
-            if (miniArray[i][j]!=0){
-                if (permArray[i+*y][j+*x]!=0){
-                printf("COL \n");
-                LockArrayInto(miniArray,permArray,*x,*y-1);
-                cleanArray(miniArray);
-                updateMiniArray(miniArray,(rand()%(7))+1,(rand()%(4))+1);
-                *x=WIDTH_TABLE/2;
-                *y=0;
-                
-                }
-            }
-        }  
-    }
+
     //check si ligne complète
     //bug
-    int lineFlag=0;
+    int lineFlag=1;
     for (int i = HEIGTH_TABLE-1; i > 0; i--){
         for (int j = 0; j < WIDTH_TABLE; j++){
-            if (permArray[i][j]!=0){
-                lineFlag=1;
-            }else {
+            if (permArray[i][j]==0){
                 lineFlag=0;
             }
         }

@@ -115,12 +115,12 @@ void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x, i
             switch (miniArray[i-y][j-x]){
             case 0:
                 //case vide
-                if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
-                    SDL_ExitWithError("Changement de couleur du rendu");
-                }
-                    rect->y = first_y+(i*rect->h);
-                    rect->x = first_x+(j*rect->w);
-                    SDL_RenderDrawRect(renderer,rect);
+                // if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
+                //     SDL_ExitWithError("Changement de couleur du rendu");
+                // }
+                //     rect->y = first_y+(i*rect->h);
+                //     rect->x = first_x+(j*rect->w);
+                //     SDL_RenderDrawRect(renderer,rect);
                 break;
             case 1:
             //case pleine coloré 
