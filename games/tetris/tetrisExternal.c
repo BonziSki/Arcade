@@ -11,8 +11,6 @@
 #include "../../func.h"
 #include "../../menu/menu.h"
  
-
-
 int ** createArray(int height, int width){
     int ** Array = malloc(sizeof(int *) * height);
     for (int i = 0; i < height; i++){
@@ -37,7 +35,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
     int coll_flag=0;
     int l_empty=1;
     int r_empty=1;
-    int down_empty=1;
+    int b_empty=1;
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
@@ -139,67 +137,76 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
         TIMESTAMP->initializedTimer=0;
         *y+=1;
     }
-    //collsiion avec permArray
-    //BUG
-    for (int i = 0; i < 3; i++){
-        for (int j = 0; j < 3; j++){
-            if (*y<=17){
-                if (miniArray[i][j]!=0){
-                    if (permArray[i+*y][j+*x]!=0){
-                    LockArrayInto(miniArray,permArray,*x,*y-1);
-                    cleanArray(miniArray);
-                    updateMiniArray(miniArray,*choice,*color);
-                    *color = (rand()%4)+1;
-                    *choice = (rand()%7)+1;
-                    *x=WIDTH_TABLE/2;
-                    *y=0;
-                    
-                    }
-                }
-            }else{
-                if (miniArray[i][j]!=0){
-                    if (permArray[i+*y][j+*x]!=0){
-                    LockArrayInto(miniArray,permArray,*x,*y);
-                    cleanArray(miniArray);
-                    updateMiniArray(miniArray,*choice,*color);
-                    *color = (rand()%4)+1;
-                    *choice = (rand()%7)+1;
-                    *x=WIDTH_TABLE/2;
-                    *y=0;
-                    
-                    }
-                }
-            }
-        }  
-    }
-    
-
-    for (int i = 2; i > -1; i--){
+    //check condition tabl
+    for (int i = 0; i < 3; i++)
+    {
         if (miniArray[2][i]!=0){
-            //collision avec  sol
-            if(*y==HEIGTH_TABLE-1){
-                LockArrayInto(miniArray,permArray,*x,*y);
-                cleanArray(miniArray);
-                updateMiniArray(miniArray,*choice,*color);
-                *color = (rand()%4)+1;
-                *choice = (rand()%7)+1;
-                *x=WIDTH_TABLE/2;
-                *y=0;
-            }
-        }else{
-            if(*y==HEIGTH_TABLE-2){
-                LockArrayInto(miniArray,permArray,*x,*y);
-                cleanArray(miniArray);
-                updateMiniArray(miniArray,*choice,*color);
-                *color = (rand()%4)+1;
-                *choice = (rand()%7)+1;
-                *x=WIDTH_TABLE/2;
-                *y=0;
-            }
+           b_empty=0;
         }
     }
 
-
+    //collsiion avec permArray
+    int flag_coll_perm=0;
+    if (*y<=17){
+        if (b_empty){
+            for (int i = 0; i < 3-b_empty; i++){
+                for (int j = 0; j < 3; j++){
+                    if (miniArray[i][j]!=0){
+                        if (permArray[i+*y+1][j+*x]!=0){
+                            //fixe
+                            LockArrayInto(miniArray,permArray,*x,*y);
+                            cleanArray(miniArray);
+                            updateMiniArray(miniArray,*choice,*color);
+                            *color = (rand()%4)+1;
+                            *choice = (rand()%7)+1;
+                            *x=WIDTH_TABLE/2;
+                            *y=0;
+                            flag_coll_perm=1;
+                        }
+                    }
+                }
+            }
+        }else if(!b_empty){
+            for (int i = 0; i < 3-b_empty; i++){
+                for (int j = 0; j < 3; j++){
+                    if (miniArray[i][j]!=0){
+                        if (permArray[i+*y][j+*x]!=0){
+                            //fixe
+                            LockArrayInto(miniArray,permArray,*x,*y-1);
+                            cleanArray(miniArray);
+                            updateMiniArray(miniArray,*choice,*color);
+                            *color = (rand()%4)+1;
+                            *choice = (rand()%7)+1;
+                            *x=WIDTH_TABLE/2;
+                            *y=0;
+                            flag_coll_perm=1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //collsiion avec sol
+    if (!flag_coll_perm){
+        if (*y==17 && !b_empty){
+            LockArrayInto(miniArray,permArray,*x,*y);
+            cleanArray(miniArray);
+            updateMiniArray(miniArray,*choice,*color);
+            *color = (rand()%4)+1;
+            *choice = (rand()%7)+1;
+            *x=WIDTH_TABLE/2;
+            *y=0;
+        }else if(*y==18){
+            LockArrayInto(miniArray,permArray,*x,*y);
+            cleanArray(miniArray);
+            updateMiniArray(miniArray,*choice,*color);
+            *color = (rand()%4)+1;
+            *choice = (rand()%7)+1;
+            *x=WIDTH_TABLE/2;
+            *y=0;
+        }
+    }
     //check si ligne complète
     int lineFlag=1;
     for (int i = HEIGTH_TABLE-1; i > 0; i--){
@@ -217,8 +224,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
         lineFlag=1;
     }
     
-    if (permArray[1][WIDTH_TABLE/2]!=0 || permArray[1][WIDTH_TABLE/2+1]!=0 || permArray[1][WIDTH_TABLE/2-1]!=0)
-    {
+    if (permArray[1][WIDTH_TABLE/2]!=0 || permArray[1][WIDTH_TABLE/2+1]!=0 || permArray[1][WIDTH_TABLE/2-1]!=0){
         return 0;
     }
     

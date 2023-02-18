@@ -57,21 +57,20 @@ void MainTetrisLoop(SDL_Renderer * renderer){
     printf("\nbreakpoint quit =%d\n",quit);
     //loose screen
     if(gameOverMenu(renderer, &score) == 0){
+        //NON
         printf("\nau revoir !\n");
         freeArray(permArray,20);
         freeArray(tempArray,3);
         freeArray(miniArray,3);
-        //free
+        //score => fichier du high Score si score > High Score
     }else{
     //restart le jeu
-    //free
         freeArray(permArray,20);
         freeArray(tempArray,3);
         freeArray(miniArray,3);
         MainTetrisLoop(renderer);
+        //score => fichier du high Score si score > High Score
     }
-    //print lose menu
-    SDL_ClearScreen(renderer);
 }
 
 
