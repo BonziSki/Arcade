@@ -31,12 +31,13 @@ Timer * createTimer(){
     return temp;
 }
 
-int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score, SDL_Renderer * renderer,Timer * TIMESTAMP){  
+int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score, SDL_Renderer * renderer,Timer * TIMESTAMP,int * choice, int * color){  
     SDL_Event event;
     
     int coll_flag=0;
     int l_empty=1;
     int r_empty=1;
+    int down_empty=1;
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
@@ -87,7 +88,6 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                 }
             }
             if (r_empty==1){
-                printf("x %d\n",*x);
                 if (*x==8)
                 {
                     coll_flag=1;
@@ -143,47 +143,64 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
     //BUG
     for (int i = 0; i < 3; i++){
         for (int j = 0; j < 3; j++){
-            if (miniArray[i][j]!=0){
-                if (permArray[i+*y][j+*x]!=0){
-                printf("COL \n");
-                LockArrayInto(miniArray,permArray,*x,*y-1);
-                cleanArray(miniArray);
-                updateMiniArray(miniArray,(rand()%(7))+1,(rand()%(4))+1);
-                *x=WIDTH_TABLE/2;
-                *y=0;
-                
+            if (*y<=17){
+                if (miniArray[i][j]!=0){
+                    if (permArray[i+*y][j+*x]!=0){
+                    LockArrayInto(miniArray,permArray,*x,*y-1);
+                    cleanArray(miniArray);
+                    updateMiniArray(miniArray,*choice,*color);
+                    *color = (rand()%4)+1;
+                    *choice = (rand()%7)+1;
+                    *x=WIDTH_TABLE/2;
+                    *y=0;
+                    
+                    }
+                }
+            }else{
+                if (miniArray[i][j]!=0){
+                    if (permArray[i+*y][j+*x]!=0){
+                    LockArrayInto(miniArray,permArray,*x,*y);
+                    cleanArray(miniArray);
+                    updateMiniArray(miniArray,*choice,*color);
+                    *color = (rand()%4)+1;
+                    *choice = (rand()%7)+1;
+                    *x=WIDTH_TABLE/2;
+                    *y=0;
+                    
+                    }
                 }
             }
         }  
     }
-    //collision avec juste sol
-    //BUG
+    
+
     for (int i = 2; i > -1; i--){
         if (miniArray[2][i]!=0){
+            //collision avec  sol
             if(*y==HEIGTH_TABLE-1){
-                printf("SOL 1 \n");
                 LockArrayInto(miniArray,permArray,*x,*y);
                 cleanArray(miniArray);
-                updateMiniArray(miniArray,(rand()%(7))+1,(rand()%(4))+1);
+                updateMiniArray(miniArray,*choice,*color);
+                *color = (rand()%4)+1;
+                *choice = (rand()%7)+1;
                 *x=WIDTH_TABLE/2;
                 *y=0;
             }
-        }
-        else{
+        }else{
             if(*y==HEIGTH_TABLE-2){
-                printf("SOL 2 \n");
                 LockArrayInto(miniArray,permArray,*x,*y);
                 cleanArray(miniArray);
-                updateMiniArray(miniArray,(rand()%(7))+1,(rand()%(4))+1);
+                updateMiniArray(miniArray,*choice,*color);
+                *color = (rand()%4)+1;
+                *choice = (rand()%7)+1;
                 *x=WIDTH_TABLE/2;
                 *y=0;
             }
         }
     }
-    
+
 
     //check si ligne complète
-    //bug
     int lineFlag=1;
     for (int i = HEIGTH_TABLE-1; i > 0; i--){
         for (int j = 0; j < WIDTH_TABLE; j++){
@@ -197,8 +214,15 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
             printf("Ligne complet\nscore=%d\n",*score);
             supprLine(i,permArray);
         }
+        lineFlag=1;
     }
     
+    if (permArray[1][WIDTH_TABLE/2]!=0 || permArray[1][WIDTH_TABLE/2+1]!=0 || permArray[1][WIDTH_TABLE/2-1]!=0)
+    {
+        return 0;
+    }
+    
+
     return 1;
 }
 
@@ -319,4 +343,10 @@ void PartialClean(SDL_Renderer * renderer){
     if (SDL_RenderFillRect(renderer, &FillBlack)){
         SDL_ExitWithError("Impossible de clear l'écran");
     }
+}
+void freeArray(int ** array,int size){
+    for (int i = 0; i < size; i++) {
+        free(array[i]);
+    }
+    free(array);
 }

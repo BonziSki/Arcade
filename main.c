@@ -25,7 +25,7 @@ int main(int argc, char **argv){
 
     srand(time(NULL));
 
-    SDL_PrintVersion();
+    //SDL_PrintVersion();
 
     //initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0){

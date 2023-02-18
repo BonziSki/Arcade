@@ -97,14 +97,33 @@ void rotation(int ** miniArray,int * x,int * y,int ** permArray){
                 } 
             } 
         }
-    if (can_rotate)
-    {
-        if (l_moveable)
-        {
+    if (l_moveable!=0){
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                if (permArray[*y+i][*x+j-1]!=0){
+                    if (rotated_shape[i][j]!=0){
+                        can_rotate=0;
+                    }
+                }
+            } 
+        } 
+    }
+    if (r_moveable!=0){
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                if (permArray[*y+i][*x+j+1]!=0){
+                    if (rotated_shape[i][j]!=0){
+                        can_rotate=0;
+                    }
+                }
+            } 
+        } 
+    }    
+    if (can_rotate){
+        if (l_moveable){
             *x-=1;
         }
-        if (r_moveable)
-        {
+        if (r_moveable){
             *x+=1;
         }
         //shape=shape_buffer

@@ -18,17 +18,21 @@ void MainTetrisLoop(SDL_Renderer * renderer){
     SDL_ClearScreen(renderer);
     int score=0;
     DrawControl(renderer);
-    int ** tempArray = createArray(HEIGTH_TABLE,WIDTH_TABLE);
     int ** permArray = createArray(HEIGTH_TABLE,WIDTH_TABLE);
     int ** miniArray = createArray(3,3);
+    int ** tempArray = createArray(3,3);
     int x=WIDTH_TABLE/2;
     int y=0;
     
     Timer * TimeStamp1 = createTimer();
     //number = (rand() % (upper - lower + 1)) + lower
-    printf("rand = %d\n",(rand()%7)+1);
-    updateMiniArray(miniArray,(rand()%7)+1,(rand()%4)+1);
-    
+    int color = (rand()%4)+1;
+    int choice = (rand()%7)+1;
+    updateMiniArray(miniArray,choice,color);
+    color = (rand()%4)+1;
+    choice = (rand()%7)+1;
+    updateMiniArray(tempArray,choice,color);
+
     int quit=0;
     while (!quit)
     {   
@@ -38,15 +42,35 @@ void MainTetrisLoop(SDL_Renderer * renderer){
         if (TimeStamp1->initializedTimer==0){
             TimeStamp1->initializedTimer=time(NULL);
         }
-        if(updateTetris(permArray,miniArray,&x,&y,&score,renderer,TimeStamp1)==0){
+        if(updateTetris(permArray,miniArray,&x,&y,&score,renderer,TimeStamp1,&choice,&color)==0){
             quit=1;
+            
             break;
         };
+        cleanArray(tempArray);
+        updateMiniArray(tempArray,choice,color);
         DrawGame(renderer, miniArray, permArray,x,y);
-        DrawNext(renderer,miniArray);
+        DrawNext(renderer,tempArray);
         DrawScore(renderer,&score);
         SDL_RenderPresent(renderer);
     }
+    printf("\nbreakpoint quit =%d\n",quit);
+    //loose screen
+    if(gameOverMenu(renderer, &score) == 0){
+        printf("\nau revoir !\n");
+        freeArray(permArray,20);
+        freeArray(tempArray,3);
+        freeArray(miniArray,3);
+        //free
+    }else{
+    //restart le jeu
+    //free
+        freeArray(permArray,20);
+        freeArray(tempArray,3);
+        freeArray(miniArray,3);
+        MainTetrisLoop(renderer);
+    }
+    //print lose menu
     SDL_ClearScreen(renderer);
 }
 
@@ -69,7 +93,7 @@ void DrawScore(SDL_Renderer * renderer,int * score){
     free(rect);
 }
 
-void DrawNext(SDL_Renderer * renderer,int ** miniArray){
+void DrawNext(SDL_Renderer * renderer,int ** tempArray){
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
     if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
@@ -79,10 +103,64 @@ void DrawNext(SDL_Renderer * renderer,int ** miniArray){
     rect->w=240;
     rect->h=180;
     SDL_RenderDrawRect(renderer,rect);
-    int middle_x=rect->x+rect->w/2;
-    int middle_y=rect->y+rect->h/2;
-
+    int first_y=(HEIGHT/6)+60;
+    int first_x=(WIDTH/3)+(CELL_SIZE*WIDTH_TABLE)+70;  
     //ici dessin de prochaine pièce
+    rect->w = CELL_SIZE;
+    rect->h = CELL_SIZE;
+    // print tableau mini
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+            switch (tempArray[i][j]){
+            case 0:
+                //case vide
+                if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderDrawRect(renderer,rect);
+                break;
+            case 1:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,77, 219, 255, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
+                break;
+            case 2:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,255, 92, 51, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
+                break;
+            case 3:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,102, 255, 51, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
+                break;
+            case 4:
+            //case pleine coloré 
+                if (SDL_SetRenderDrawColor(renderer,204, 51, 153, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+                    rect->y = first_y+(i*rect->h);
+                    rect->x = first_x+(j*rect->w);
+                    SDL_RenderFillRect(renderer, rect);
+            default:
+                break;
+            }
+        }
+    }
 }
 
 void DrawControl(SDL_Renderer * renderer){
@@ -114,13 +192,6 @@ void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x, i
         for (int j = x; j < x+3; j++){
             switch (miniArray[i-y][j-x]){
             case 0:
-                //case vide
-                // if (SDL_SetRenderDrawColor(renderer, 191, 191, 191, SDL_ALPHA_OPAQUE) != 0){
-                //     SDL_ExitWithError("Changement de couleur du rendu");
-                // }
-                //     rect->y = first_y+(i*rect->h);
-                //     rect->x = first_x+(j*rect->w);
-                //     SDL_RenderDrawRect(renderer,rect);
                 break;
             case 1:
             //case pleine coloré 
@@ -219,4 +290,100 @@ if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
             }
         }
     }
+}
+int gameOverMenu(SDL_Renderer * renderer, int * score){
+    int quit = 0;
+    int choice = 0;
+    SDL_Event event;
+    SDL_Rect * rect = malloc(sizeof(SDL_Rect));
+
+    while (!quit){
+    //Dessin du menu
+        //clear de la fenetre
+        SDL_ClearScreen(renderer);
+
+        //changement de couleur du renderer
+        if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+            SDL_ExitWithError("Changement de couleur du rendu");
+        }
+
+        //
+        rect->w = 80;
+        rect->h = 60;
+        rect->x = 300;
+
+        for (int i = 0; i < 2; i++){
+            //on change la couleur du rectangle correspondant au choix du user
+            if (choice == i){
+                if (SDL_SetRenderDrawColor(renderer, 0, 255,0, SDL_ALPHA_OPAQUE) != 0){
+                    SDL_ExitWithError("Changement de couleur du rendu");
+                }
+            }
+            
+            //calcul du y du rectangle
+            rect->y = 140 + (80 + (rect->h * i * 2));
+
+            //rendu du rectangle
+            SDL_RenderFillRect(renderer, rect);
+
+            //reset de la couleur
+            if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
+                SDL_ExitWithError("Changement de couleur du rendu");
+            }
+        }
+
+        //deuxieme rectangle
+        rect->w = 240;
+        rect->h = 80;
+        rect->x = WIDTH/2-rect->w/2;
+        rect->y = 100;
+
+        //rendu du rectangle
+        SDL_RenderFillRect(renderer, rect);
+
+        //recentrer les zones   
+        SDL_Color greyWhite = {200, 200, 200};
+        char * dico[] = {"voulez vous rejouer ?","oui","non"};
+
+        SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
+        SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
+        SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
+
+        SDL_RenderPresent(renderer);
+
+
+        //gestion des choix du user
+        while (SDL_PollEvent(&event)){
+            switch (event.type){
+
+                case SDL_QUIT:
+                    return 0;
+                    break; 
+
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym){
+
+                        case SDLK_DOWN:
+                            if (choice < 1){
+                                choice++;
+                                printf("choice : %d\n",choice);
+                            }
+                            break;
+
+                        case SDLK_UP:
+                            if (choice > 0){
+                                choice--;
+                                printf("choice : %d\n",choice);
+                            }
+                            break;
+
+                        case SDLK_RETURN:
+                            return choice;
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+    return 0;
 }

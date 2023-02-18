@@ -21,11 +21,12 @@ void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x,in
 void DrawNext(SDL_Renderer * renderer,int ** miniArray);
 void DrawScore(SDL_Renderer * renderer,int * score);
 void supprLine(int row,int ** permArray);
-int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score, SDL_Renderer * renderer,Timer * TIMESTAMP);
+int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score, SDL_Renderer * renderer,Timer * TIMESTAMP,int * choice, int * color);
 void copyArrayInto(int ** sourceArray,int ** destArray,int x,int y);
 void updateMiniArray(int ** miniArray, int choice,int color);
 void cleanArray(int ** miniArray);
 void LockArrayInto(int ** sourceArray,int ** destArray,int x,int y);
 void rotation(int ** miniArray,int * x,int * y,int ** permArray);
-
+int gameOverMenu(SDL_Renderer * renderer, int * score);
+void freeArray(int ** array,int size);
 #endif
