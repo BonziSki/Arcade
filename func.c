@@ -7,7 +7,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "func.h"
+#define BUFFER 9
 
+int checkFileEmpty(char * file_path){
+    FILE * fichier =NULL;
+    fichier =fopen(file_path,"r");
+    int size;
+    if (fichier)
+    {
+        fseek(fichier,0,SEEK_END);
+        size = ftell(fichier);
+        fclose(fichier);
+    }
+    return size;
+}
+
+void writeInFile(char * file_path, int int_input){
+    FILE * fichier =NULL;
+    fichier =fopen(file_path,"w+");
+    if (fichier != NULL){
+        char char_buffer[BUFFER];
+        sprintf(char_buffer,"%d",int_input);
+
+        fputs(char_buffer,fichier);
+
+
+        fclose(fichier);
+    }else{
+        printf("rater\n");
+    }
+    
+}
+
+char * readInFile(char * file_path){
+    FILE * fichier =NULL;
+    fichier =fopen(file_path,"r");
+    char * chaine = malloc(sizeof(char)*BUFFER);
+    int size;
+    if (fichier != NULL){
+
+        fgets(chaine,BUFFER-1,fichier);
+        //Fermeture du fichier
+        fclose(fichier);
+        return chaine;
+    }else{
+        printf("rater\n");
+    }
+}
 void SDL_ExitWithError(char * message){
     SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError());
     SDL_Quit();
