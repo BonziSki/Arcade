@@ -34,6 +34,11 @@ int main(int argc, char **argv){
         SDL_ExitWithError("Initialisation SDL");
     }
 
+    //initialisation de la gestion du texte
+    if (TTF_Init() != 0){
+        SDL_ExitWithError("Initialisation TTF");
+    }
+
     // initialisation de SDL_ttf
     TTF_Init();
     
@@ -44,18 +49,14 @@ int main(int argc, char **argv){
     if(SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer) != 0){
         SDL_ExitWithError("Impossible de créer la fenetre et le rendu");
     }
-    SDL_SetWindowTitle(window,"JEUX");
 
 
-
-    int quit = 0;
+    
     SDL_Event event;
-
-    mainLoopSnake(window, renderer);
-
+    int quit = 0;
+    mainPongLoop(window, renderer);
     SDL_ClearScreen(renderer);
     SDL_RenderPresent(renderer);
-    
     while (!quit){
         while (SDL_PollEvent(&event)){
             if (event.type == SDL_QUIT){
@@ -64,7 +65,7 @@ int main(int argc, char **argv){
         }
     }
     
-    
+    TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
