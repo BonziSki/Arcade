@@ -39,7 +39,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
-            return 0;
+            return 2;
         }
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){

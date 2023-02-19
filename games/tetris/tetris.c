@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <string.h>
 
 #include "tetris.h"
 #include "../../func.h"
@@ -355,7 +355,33 @@ int gameOverMenu(SDL_Renderer * renderer, int * score){
         SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
         SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
+        //Ecriture score dans fichier
+        //print score
+
+        char char_buffer[9];
+        sprintf(char_buffer,"%d",*score);
+        SDL_WriteTextBuffered(renderer,620,420,40,40,greyWhite,char_buffer);
+        //score :
+        SDL_WriteTextBuffered(renderer,520,420,80,40,greyWhite,"score :");
+        // highscore :
+        SDL_WriteTextBuffered(renderer,500,460,100,40,greyWhite,"highscore :");
+        //print highscore
+        if (checkFileEmpty("ressources/score/score_tetris.txt")>0){
+            if(atoi(readInFile("ressources/score/score_tetris.txt"))<*score){
+                writeInFile("ressources/score/score_tetris.txt",*score);
+                SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
+            }else{
+                SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,readInFile("ressources/score/score_tetris.txt"));
+            }
+            
+        }else{
+            writeInFile("ressources/score/score_tetris.txt",*score);
+            SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
+        }
         SDL_RenderPresent(renderer);
+
+
+
 
 
         //gestion des choix du user

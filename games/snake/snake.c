@@ -12,7 +12,7 @@
 #include "snake.h"
 #include "../../func.h"
 #include "../../menu/menu.h"
-
+#include <string.h>
 
 
 Snake * createSnake() {
@@ -145,12 +145,12 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
 
     //Dessin du score
-    // char buffer[12];
-    // sprintf(buffer, "Score : %d", *score);
+    char buffer[12];
+    sprintf(buffer, "Score : %d", *score);
 
-    // SDL_Color white = {180, 180, 200};
+    SDL_Color white = {180, 180, 200};
 
-    // SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
+    SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
@@ -198,7 +198,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
         }
         if (quitsnake==1)
         {
-             if(gameOverMenuSnake(renderer, score) == 1){
+             if(gameOverMenuSnake(renderer, &score) == 1){
                 printf("\n\nau revoir !\n");
                 //free du serpent
                 freeSnake(snake);
@@ -236,7 +236,7 @@ void freeSnake(Snake * snake){
     }
 }
 
-int gameOverMenuSnake(SDL_Renderer * renderer, int score){
+int gameOverMenuSnake(SDL_Renderer * renderer, int * score){
     int quit = 0;
     int choice = 0;
     SDL_Event event;
@@ -294,6 +294,34 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int score){
         SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
         SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
+
+        //Ecriture score dans fichier
+        //print score
+        char char_buffer[9];
+        sprintf(char_buffer,"%d",*score);
+        SDL_WriteTextBuffered(renderer,620,420,40,40,greyWhite,char_buffer);
+        //score :
+        SDL_WriteTextBuffered(renderer,520,420,80,40,greyWhite,"score :");
+        // highscore :
+        SDL_WriteTextBuffered(renderer,500,460,100,40,greyWhite,"highscore :");
+        //print highscore
+        if (checkFileEmpty("ressources/score/score_snake.txt")>0){
+            if(atoi(readInFile("ressources/score/score_snake.txt"))<*score){
+                writeInFile("ressources/score/score_snake.txt",*score);
+                SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
+            }else{
+                SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,readInFile("ressources/score/score_snake.txt"));
+            }
+            
+        }else{
+            writeInFile("ressources/score/score_snake.txt",*score);
+            SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
+        }
+        SDL_RenderPresent(renderer);
+
+
+
+
         SDL_RenderPresent(renderer);
 
 
@@ -342,7 +370,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
-            return 0;
+            return 2;
         }
         if (event.type == SDL_KEYDOWN){
                 //nécessite un cooldown entre les touches
