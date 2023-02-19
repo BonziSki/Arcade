@@ -190,21 +190,34 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer,int speed_modifie
 
     while(!quitsnake){
         update = updateSnake(renderer, snake, &snake, &score, fruit, &dir_h, &dir_v);
+
         if (update == 0){
-            printf("BREAKPOINT");
-            quitsnake = 1;
-        }else if (update == 2){
-            //sortie manuel du joeur
-            quitsnake = 2;
-        }
-
-        drawSnake(renderer, snake, fruit, &score);
-
-        SDL_Delay(200 - (speed_modifier * 10));
-    }
-
-    if (quitsnake==1){
+            //le joueur a perdu
             if(gameOverMenuSnake(renderer, &score) == 1){
+                printf("\n\nau revoir !\n");
+                //free du serpent
+                freeSnake(snake);
+                //free du fruit
+                free(fruit);
+                //quitter le jeu snake
+                quitsnake = 1;
+                    
+            }else{
+            //restart le jeu
+                //on refait le snake entièrement pour repartir à zero
+                freeSnake(snake);
+                
+                snake = createSnake();
+
+                int dir_h = 1;
+
+                int dir_v = 0;
+
+                int score = 0;
+            }
+
+        }else if (update == -1){
+            //sortie manuel du joeur
             printf("\n\nau revoir !\n");
             //free du serpent
             freeSnake(snake);
@@ -212,13 +225,11 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer,int speed_modifie
             free(fruit);
             //quitter le jeu snake
             quitsnake = 1;
-            
-        }else{
-        //restart le jeu
-            //on refait le snake entièrement pour repartir à zero
-            freeSnake(snake);
-            mainLoopSnake(window,renderer,speed_modifier);
         }
+
+        drawSnake(renderer, snake, fruit, &score);
+
+        SDL_Delay(200 - (speed_modifier * 10));
     }
 }
 
@@ -379,7 +390,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
-            return 2;
+            return -1;
         }
         if (event.type == SDL_KEYDOWN){
                 //nécessite un cooldown entre les touches
@@ -387,7 +398,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
 
                 case SDLK_ESCAPE:
                         if(Escape(renderer) == 0){
-                            return 2;
+                            return -1;
                         }
                     break;
 
