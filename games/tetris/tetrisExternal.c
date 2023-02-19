@@ -1,9 +1,9 @@
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -60,7 +60,6 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                 coll_flag=1;
             }
             //check collision permArray
-            //check collision permArray
             if (coll_flag!=1){
                 for (int i = 0; i < 3; i++){
                     for (int j = 0; j < 3; j++){
@@ -85,13 +84,13 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                     r_empty=0;
                 }
             }
-            if (r_empty==1){
-                if (*x==8)
+            if (r_empty == 1){
+                if (*x == 8)
                 {
                     coll_flag=1;
                 }
             }else{
-                if (*x==7){
+                if (*x == 7){
                     coll_flag=1;
                 }
             }
@@ -108,7 +107,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                 }
             }
             if (coll_flag!=1){
-                *x+=1;
+                *x += 1;
             }
             //ICI CHECK COLLISION AVEC LA GAUCHE
                 break;

@@ -1,9 +1,9 @@
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -400,11 +400,11 @@ int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_
         char buffer[50];
 
         sprintf(buffer, "Le vainqueur est le joueur %d", winner);
-        char * dico[] = {"voulez vous rejouer ?","oui","non"};
-        // SDL_WriteTextBuffered(renderer,300,60,180,30,greyWhite,buffer);
-        // SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
-        // SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
-        // SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
+        char * dico[] = {"voulez vous rejouer ?","non","oui"};
+        SDL_WriteTextBuffered(renderer,300,60,180,30,greyWhite,buffer);
+        SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
+        SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
+        SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
         SDL_RenderPresent(renderer);
 
@@ -497,6 +497,8 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
 
             freeTronMap(map, MAP_HEIGHT);
             return;
+        }else if (update == 2){
+            break;
         }
         drawTron(renderer, map, p1, p2);
         

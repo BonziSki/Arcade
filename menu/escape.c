@@ -1,9 +1,9 @@
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -79,11 +79,11 @@ void DrawEscape(SDL_Renderer * renderer, int choice){
             SDL_ExitWithError("Changement de couleur du rendu");
         }
     }
-    rect->w = 240;
-    rect->h = 80;
-    rect->x = WIDTH/2-rect->w/2;
-    rect->y = 100;
-    SDL_RenderFillRect(renderer, rect);
+    // rect->w = 240;
+    // rect->h = 80;
+    // rect->x = WIDTH/2-rect->w/2;
+    // rect->y = 100;
+    // SDL_RenderFillRect(renderer, rect);
 
 //recentrer les zones
     SDL_Color greyWhite = {200, 200, 200};
