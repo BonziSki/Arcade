@@ -1,9 +1,9 @@
 //MAC
-// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+// #include <SDL2/SDL.h>
+// #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,6 +44,7 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
     return temp;
 }
 
+
 int ** createTronMap(int width, int height){
     int ** temp = malloc(sizeof(int *) * height);
 
@@ -57,6 +58,13 @@ int ** createTronMap(int width, int height){
     }
 
     return temp;
+}
+
+void freeTronMap(int ** map, int h){
+    for (int i = 0; i < h; i++){
+        free(map[i]);
+    }
+    free(map);
 }
 
 void viewMap(int ** map){
@@ -167,8 +175,6 @@ void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer *
     SDL_RenderPresent(renderer);
     free(rect);
 }
-
-
 
 int updateTron(SDL_Renderer * renderer, TronPlayer * p1, TronPlayer * p2, int ** map){
 
@@ -344,6 +350,7 @@ int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_
     SDL_Event event;
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
 
+
     while (!quit){
     //Dessin du menu
         //clear de la fenetre
@@ -394,10 +401,10 @@ int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_
 
         sprintf(buffer, "Le vainqueur est le joueur %d", winner);
         char * dico[] = {"voulez vous rejouer ?","oui","non"};
-        SDL_WriteTextBuffered(renderer,300,60,180,30,greyWhite,buffer);
-        SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
-        SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
-        SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
+        // SDL_WriteTextBuffered(renderer,300,60,180,30,greyWhite,buffer);
+        // SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
+        // SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
+        // SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
         SDL_RenderPresent(renderer);
 
@@ -439,10 +446,6 @@ int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_
     return 0;
 }
 
-
-
-
-
 void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
 
 
@@ -473,27 +476,27 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
     int quitTron = 0;
     int update = 0;
 
-    // testScreen(renderer);
     SDL_Event eventtron;
 
     while (!quitTron){
         update = updateTron(renderer, p1, p2, map);
         printf("update = %d\n",update);
-        if (update==1||update==0){
-            //loose
-            quitTron=1;
-        }else if (update==2){
-            //sortie manuel du joeur
-            quitTron=2;
-        };
-        printf("quitTron = %d\n",quitTron);
-        if (quitTron==1){
+        if (update == 1){
             //reset du score et de la map
             p1->score = 0;
             p2->score = 0;
 
             resetTronMap(p1, p2, map, MAP_WIDTH, MAP_HEIGHT);
-            quitTron=-1;
+            
+        }else if (update == 0){
+            //sortie manuel du joueur
+            quitTron = 1;
+            //PENSER A FREE TOUT CE QU'IL FAUT
+            free(p1);
+            free(p2);
+
+            freeTronMap(map, MAP_HEIGHT);
+            return;
         }
         drawTron(renderer, map, p1, p2);
         
