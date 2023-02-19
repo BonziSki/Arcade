@@ -145,12 +145,12 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
 
     //Dessin du score
-    // char buffer[12];
-    // sprintf(buffer, "Score : %d", *score);
+    char buffer[12];
+    sprintf(buffer, "Score : %d", *score);
 
-    // SDL_Color white = {180, 180, 200};
+    SDL_Color white = {180, 180, 200};
 
-    // SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
+    SDL_WriteText(renderer, 10, 10, 50, 20, white, buffer);
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
