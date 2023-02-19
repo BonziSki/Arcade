@@ -18,7 +18,7 @@
 /*
 commande de compilation :
 MAC : gcc main.c -o prog $(sdl2-config --cflags --libs)
-WINDOWS : gcc main.c func.c menu/menu.c menu/escape.c games/pong/pong.c games/tetris/tetris.c games/tetris/tetrisExternal.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
+WINDOWS : gcc main.c func.c menu/menu.c menu/escape.c games/pong/pong.c games/tetris/tetris.c games/tetris/tetrisExternal.c games/tetris/rotation.c games/tron/tron.c games/snake/snake.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf 
 WINDOWS sans terminal : gcc main.c func.c menu/menu.c menu/escape.c games/pong/pong.c games/tetris/tetris.c games/tetris/tetrisExternal.c games/tetris/rotation.c games/tron/tron.c games/snake/snake.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -mwindows
 */
 

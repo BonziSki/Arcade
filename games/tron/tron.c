@@ -493,6 +493,7 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
             p2->score = 0;
 
             resetTronMap(p1, p2, map, MAP_WIDTH, MAP_HEIGHT);
+            quitTron=-1;
         }
         drawTron(renderer, map, p1, p2);
         
