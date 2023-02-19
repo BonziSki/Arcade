@@ -158,7 +158,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 }
 
 
-void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
+void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer,int speed_modifier){
 
     Snake * snake = createSnake();
 
@@ -194,7 +194,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
             quitsnake=2;
         };
         drawSnake(renderer, snake, fruit, &score);
-        SDL_Delay(200);
+        SDL_Delay(200-(speed_modifier*10));
         }
         if (quitsnake==1)
         {
@@ -211,7 +211,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
             //restart le jeu
                 //on refait le snake entièrement pour repartir à zero
                 freeSnake(snake);
-                mainLoopSnake(window,renderer);
+                mainLoopSnake(window,renderer,speed_modifier);
             }
         }
 }
@@ -508,138 +508,3 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
     
     return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void insertBeginning(Snake* snake, int x, int y) {
-    
-//     if (snake->head == NULL) {
-        
-//         Node* node = malloc(sizeof(Node));
-//         if (node != NULL) {
-//             node->next = snake->tail;
-//             node->body.x = x;
-//             node->body.y = y;
-//             node->body.w = 25;
-//             node->body.h = 25;
-//             snake->head = node;
-//         }
-//         return;
-//     }
-
-//     else {
-//         Node* temp = snake->head;
-//         Node* node = malloc(sizeof(Node));
-//         if (node != NULL) {
-//             node->body.x = x;
-//             node->body.y = y;
-//             node->body.w = 25;
-//             node->body.h = 25;
-//             node->next = snake->head;
-//             snake->head = node;
-//         }
-        
-//     }
-    
-// }
-
-// void insertEnd(Snake* snake, int x, int y) {
-
-//     if (snake->tail == NULL) {
-//         Node* node = malloc(sizeof(Node));
-//         node->next = NULL;
-//         snake->head->next = node;
-//         node->body.x = x;
-//         node->body.y = y;
-//         node->body.w = 25;
-//         node->body.h = 25;
-//         snake->tail = node;
-//     }
-
-//     else {
-//         Node* node = malloc(sizeof(Node));
-//         if (node != NULL) {
-//             node->next = NULL;
-//             node->body.x = x;
-//             node->body.y = y;
-//             node->body.w = 25;
-//             node->body.h = 25;
-//             snake->tail->next = node;
-//             snake->tail = node;
-//         }
-        
-//     }
-// }
-
-// void deleteBeginning(Snake* snake) {
-    
-//     if (snake->head != NULL) {
-//         Node* temp = snake->head;
-//         snake->head = snake->head->next;
-//         free(temp);
-//     }
-// }
-
-// void deleteEnd(Snake* snake) {
-
-//     if (snake->tail != NULL) {
-//         Node* temp = snake->head;
-//         while (temp->next != snake->tail) {
-//             temp = temp->next;
-//         }
-//         snake->tail = temp;
-//         free(temp);
-//     }
-
-// }

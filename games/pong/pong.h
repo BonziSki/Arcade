@@ -24,7 +24,7 @@ typedef struct Pong_Player{
 Pong_Player * createPongPlayer(int nplayer);
 Ball * createPongBall();
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2);
-void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer);
+void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifier);
 int pongUpdate(SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2);
 
 

@@ -14,5 +14,7 @@ void SDL_WriteTextBuffered(SDL_Renderer * renderer,int x, int y, int w, int h, S
 int checkFileEmpty(char * file_path);
 void writeInFile(char * file_path, int int_input);
 char * readInFile(char * file_path);
+void writeCharFile(char * file_path, char * input_string);
+char * readInFileSized(char * file_path,int size);
 
 #endif

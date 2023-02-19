@@ -28,7 +28,7 @@ void freeSnake(Snake * snake);
 void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score);
 int gameOverMenuSnake(SDL_Renderer * renderer, int * score);
 int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, int * score, Fruit * fruit, int * dir_h, int * dir_v);
-void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer);
+void mainLoopSnake(SDL_Window * window, SDL_Renderer * renderer,int speed_modifier);
 Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v);
 
 

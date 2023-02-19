@@ -446,7 +446,7 @@ int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_
     return 0;
 }
 
-void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
+void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifier){
 
 
     int ** map = NULL;
@@ -502,6 +502,6 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer){
         }
         drawTron(renderer, map, p1, p2);
         
-        SDL_Delay(200);
+        SDL_Delay(200-(speed_modifier*10));
     }
 }

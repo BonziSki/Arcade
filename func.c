@@ -18,8 +18,11 @@ int checkFileEmpty(char * file_path){
         fseek(fichier,0,SEEK_END);
         size = ftell(fichier);
         fclose(fichier);
+        return size;
+    }else{
+        return -1;
     }
-    return size;
+    
 }
 
 void writeInFile(char * file_path, int int_input){
@@ -36,8 +39,18 @@ void writeInFile(char * file_path, int int_input){
     }else{
         printf("rater\n");
     }
-    
 }
+void writeCharFile(char * file_path, char * input_string){
+    FILE * fichier =NULL;
+    fichier =fopen(file_path,"w+");
+    if (fichier != NULL){
+        fputs(input_string,fichier);
+        fclose(fichier);
+    }else{
+        printf("rater\n");
+    }
+}
+
 
 char * readInFile(char * file_path){
     FILE * fichier =NULL;
@@ -54,6 +67,27 @@ char * readInFile(char * file_path){
         printf("rater\n");
     }
 }
+
+char * readInFileSized(char * file_path,int file_size){
+    FILE * fichier =NULL;
+    fichier =fopen(file_path,"r");
+    char * chaine = malloc(sizeof(char)*file_size);
+    if (fichier != NULL){
+        int cpt=0;
+        while ((chaine[cpt]=fgetc(fichier))!=EOF)
+        {
+            cpt++;
+        }
+        
+        //fgets(chaine,file_size-1,fichier);
+        //Fermeture du fichier
+        fclose(fichier);
+        return chaine;
+    }else{
+        printf("rater\n");
+    }
+}
+
 void SDL_ExitWithError(char * message){
     SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError());
     SDL_Quit();

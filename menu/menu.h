@@ -10,5 +10,6 @@ void DrawEscape ( SDL_Renderer * renderer,int choice);
 
 int Escape ( SDL_Renderer * renderer);
 void DrawEscape ( SDL_Renderer * renderer,int choice);
+int * setup(char * filep_path);
 
 #endif

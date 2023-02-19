@@ -245,7 +245,7 @@ int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
     return 0;
 }
 
-void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
+void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifier){
 
     Pong_Player * p1 = createPongPlayer(1);
     Pong_Player * p2 = createPongPlayer(2);
@@ -284,7 +284,7 @@ void mainPongLoop(SDL_Window * window, SDL_Renderer * renderer){
         
         
         drawPongGame(window, renderer, ball, p1, p2);
-        SDL_Delay(10);
+        SDL_Delay(10-speed_modifier);
     }
 }
 

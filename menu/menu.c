@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../func.h"
 #include "../games/pong/pong.h"
@@ -14,34 +15,9 @@
 #include "../games/tron/tron.h"
 #include "menu.h"
 
-void preMenu(SDL_Window * window, SDL_Renderer * renderer){
-    TTF_Init();
-    TTF_Font * ArcadeFont = TTF_OpenFont("ressources/font/ARCADEPI.ttf", 10);
-
-    // this is the color in rgb format,
-    // maxing out all would give you the color white,
-    // and it will be your text's color
-    SDL_Color White = {255, 255, 255};
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(ArcadeFont, "press any key", White);
-
-    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-
-
-    SDL_Rect Message_rect; //create a rect
-    Message_rect.x = 0;  //controls the rect's x coordinate 
-    Message_rect.y = 0; // controls the rect's y coordinte
-    Message_rect.w = 100; // controls the width of the rect
-    Message_rect.h = 100; // controls the height of the rect
-
-    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
-
-    SDL_FreeSurface(surfaceMessage);
-    SDL_DestroyTexture(Message);
-
-    TTF_CloseFont(ArcadeFont);
-}
-
 void menu(SDL_Window * window, SDL_Renderer * renderer){
+    int * setup_int = setup("./ressources/config.config");
+    
     SDL_bool quit = SDL_FALSE;
     int choice = 0;
     while (!quit){
@@ -68,16 +44,15 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                         {
                             case 0:
                             //pong
-                                mainPongLoop(window, renderer);
+                                mainPongLoop(window, renderer,setup_int[0]);
                                 break;
                             case 1:
                                 //TRON
-                                mainTronLoop(window,renderer);
-                                printf("--- TEST ---\n");
+                                mainTronLoop(window,renderer,setup_int[1]);
                                 break;
                             case 2:
                                 //SNAKE
-                                mainLoopSnake(window,renderer);
+                                mainLoopSnake(window,renderer,setup_int[2]);
                                 break;
                             case 3:
                                 MainTetrisLoop(renderer);
@@ -171,4 +146,29 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
     
     free(textRect);
     free(rect);
+}
+
+
+int * setup(char * file_path){
+    int * temp = malloc(sizeof(int)*3);
+    for (int i = 0; i < 3; i++){
+        temp[i]=0;
+    }
+    int file_size = checkFileEmpty(file_path);
+    if(file_size ==-1){
+        //fichier non existant on le recrée alors
+        writeCharFile(file_path,";détermine la vitesse des jeux suivants\n;valeur entre [0,3]\nPong_speed=0\n;valeur entre [0,9]\nTron_speed=0\n;valeur entre [0,9]\nSnake_speed=0");
+        return temp;  
+    }else if(file_size ==0){
+        writeCharFile(file_path,";détermine la vitesse des jeux suivants\n;valeur entre [0,3]\nPong_speed=0\n;valeur entre [0,9]\nTron_speed=0\n;valeur entre [0,9]\nSnake_speed=0");
+        return temp;
+    }else{
+    //     //fichier existant et non vide on check
+        char * file_string = readInFileSized(file_path,file_size);
+        temp[0] = atoi((strstr(file_string,"Pong_speed=")+11));
+        temp[1] = atoi((strstr(file_string,"Tron_speed=")+11));
+        temp[2] = atoi((strstr(file_string,"Snake_speed=")+12));
+        return temp;
+    }
+    return temp;
 }

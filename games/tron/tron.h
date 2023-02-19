@@ -24,7 +24,7 @@ int updateTron(SDL_Renderer * renderer, TronPlayer * p1, TronPlayer * p2, int **
 void resetTronMap(TronPlayer * p1, TronPlayer * p2, int ** map, int width, int height);
 
 int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_p2);
-void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer);
+void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifier);
 
 
 
