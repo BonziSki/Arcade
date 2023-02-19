@@ -89,9 +89,10 @@ void DrawEscape(SDL_Renderer * renderer, int choice){
     SDL_Color greyWhite = {200, 200, 200};
     char * dico[] = {"voulez vous quitter?","oui","non"};
 
-SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
-// SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
-// SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+        SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
+        SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
+        SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
     SDL_RenderPresent(renderer);
+    free(rect);
 }

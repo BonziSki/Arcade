@@ -1,9 +1,9 @@
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -80,10 +80,10 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
         SDL_RenderFillRect(renderer, rect);
     }
     
-    /*
+
     //Dessin du score
     SDL_Color greyWhite = {200, 200, 200};
-    char * score[2];
+    char score[2];
 
     // //score du joueur 1
     sprintf(score, "%d", p1->score);
@@ -92,7 +92,6 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
     // //score du joueur 2
     sprintf(score, "%d", p2->score);
     SDL_WriteText(renderer, WIDTH - 60, HEIGHT - 60, 30, 30, greyWhite, score);
-    */
 
 
     //Dessin des joueurs
@@ -201,12 +200,11 @@ int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
         }else{
             sprintf(string, "le gagnant est le joueur %d", 2);
         }
-        
-        
-
-        // SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,string);
-        // SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
-        // SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+        char * dico[] = {"voulez vous rejouer ?","oui","non"};
+        SDL_WriteTextBuffered(renderer,300,60,180,30,greyWhite,string);
+        SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
+        SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
+        SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
         SDL_RenderPresent(renderer);
 

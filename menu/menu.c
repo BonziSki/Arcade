@@ -9,7 +9,9 @@
 
 #include "../func.h"
 #include "../games/pong/pong.h"
+#include "../games/snake/snake.h"
 #include "../games/tetris/tetris.h"
+#include "../games/tron/tron.h"
 #include "menu.h"
 
 void preMenu(SDL_Window * window, SDL_Renderer * renderer){
@@ -41,9 +43,9 @@ void preMenu(SDL_Window * window, SDL_Renderer * renderer){
 
 void menu(SDL_Window * window, SDL_Renderer * renderer){
     SDL_bool quit = SDL_FALSE;
-    int choice = 1;
+    int choice = 0;
     while (!quit){
-        drawMenu(window,renderer,0);
+        drawMenu(window,renderer,choice);
         SDL_Event event;
         while (SDL_PollEvent(&event)){
             switch (event.type)
@@ -70,9 +72,11 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
                                 break;
                             case 1:
                                 //TRON
+                                mainTronLoop(window,renderer);
                                 break;
                             case 2:
                                 //SNAKE
+                                mainLoopSnake(window,renderer);
                                 break;
                             case 3:
                                 MainTetrisLoop(renderer);

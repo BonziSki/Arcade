@@ -29,4 +29,5 @@ void LockArrayInto(int ** sourceArray,int ** destArray,int x,int y);
 void rotation(int ** miniArray,int * x,int * y,int ** permArray);
 int gameOverMenu(SDL_Renderer * renderer, int * score);
 void freeArray(int ** array,int size);
+
 #endif

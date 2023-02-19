@@ -1,5 +1,5 @@
-#ifndef G
-#define G
+#ifndef V
+#define V
 
 #define CASE_SIZE 25
 #define MAX_CASE_HEIGHT HEIGHT / CASE_SIZE

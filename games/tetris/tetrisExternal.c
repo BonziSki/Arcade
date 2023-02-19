@@ -122,7 +122,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
                         break;
             case SDLK_ESCAPE:
                         if(Escape(renderer)==0){
-                            return 0;
+                            return 2;
                         };
                         break;
             default:

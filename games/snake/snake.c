@@ -1,15 +1,10 @@
 
-//--------- SDL ---------
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
- 
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-// #include <SDL2/SDL.h> 
-// #include <SDL2/SDL_ttf.h>
-
-//-----------------------
-
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -185,46 +180,40 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer){
 
 
     int quitsnake = 0;
+    int update =1;
     SDL_Event eventsnake;
 
     while(!quitsnake){
-        if (updateSnake(renderer, snake, &snake, &score, fruit, &dir_h, &dir_v) == 0){
+        update=updateSnake(renderer, snake, &snake, &score, fruit, &dir_h, &dir_v);
+        if (update == 0){
             printf("BREAKPOINT");
-
-            //affichage du menu de game over
-            if(gameOverMenuSnake(renderer, score) == 0){
+            quitsnake=1;
+        }else if (update==2)
+        {
+            //sortie manuel du joeur
+            quitsnake=2;
+        };
+        drawSnake(renderer, snake, fruit, &score);
+        SDL_Delay(200);
+        }
+        if (quitsnake==1)
+        {
+             if(gameOverMenuSnake(renderer, score) == 1){
                 printf("\n\nau revoir !\n");
                 //free du serpent
                 freeSnake(snake);
-
                 //free du fruit
                 free(fruit);
-
                 //quitter le jeu snake
                 quitsnake = 1;
-
                 
             }else{
             //restart le jeu
                 //on refait le snake entièrement pour repartir à zero
                 freeSnake(snake);
-                snake = createSnake();
-
-                //reset des direction
-                dir_h = 1;
-                dir_v = 0;
-
-                //reset du score
-                score = 0;
+                mainLoopSnake(window,renderer);
             }
-            //print lose menu
-        };
-
-
-        drawSnake(renderer, snake, fruit, &score);
-        SDL_Delay(200);
-    }
-
+        }
 }
 
 void freeSnake(Snake * snake){
@@ -301,9 +290,9 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int score){
         SDL_Color greyWhite = {200, 200, 200};
         char * dico[] = {"voulez vous rejouer ?","oui","non"};
 
-        // SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
-        // SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
-        // SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
+        SDL_WriteTextBuffered(renderer,300,120,150,30,greyWhite,dico[0]);
+        SDL_WriteTextBuffered(renderer,310,230,40,40,greyWhite,dico[1]);
+        SDL_WriteTextBuffered(renderer,310,340,40,40,greyWhite,dico[2]);
 
         SDL_RenderPresent(renderer);
 
@@ -361,7 +350,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
 
                 case SDLK_ESCAPE:
                         if(Escape(renderer) == 0){
-                            return 0;
+                            return 2;
                         }
                     break;
 

@@ -34,7 +34,8 @@ void MainTetrisLoop(SDL_Renderer * renderer){
     updateMiniArray(tempArray,choice,color);
 
     int quit=0;
-    while (!quit)
+    int update=1;
+    while (quit<1)
     {   
         //check GetTickCount()
         // Set to ~60 fps.
@@ -42,10 +43,15 @@ void MainTetrisLoop(SDL_Renderer * renderer){
         if (TimeStamp1->initializedTimer==0){
             TimeStamp1->initializedTimer=time(NULL);
         }
-        if(updateTetris(permArray,miniArray,&x,&y,&score,renderer,TimeStamp1,&choice,&color)==0){
+        update = updateTetris(permArray,miniArray,&x,&y,&score,renderer,TimeStamp1,&choice,&color);
+        if(update==0){
             quit=1;
             
             break;
+        }else if (update==2)
+        {
+            //sortie manuel du joeur
+            quit=2;
         };
         cleanArray(tempArray);
         updateMiniArray(tempArray,choice,color);
@@ -54,22 +60,23 @@ void MainTetrisLoop(SDL_Renderer * renderer){
         DrawScore(renderer,&score);
         SDL_RenderPresent(renderer);
     }
-    printf("\nbreakpoint quit =%d\n",quit);
-    //loose screen
-    if(gameOverMenu(renderer, &score) == 0){
-        //NON
-        printf("\nau revoir !\n");
-        freeArray(permArray,20);
-        freeArray(tempArray,3);
-        freeArray(miniArray,3);
-        //score => fichier du high Score si score > High Score
-    }else{
-    //restart le jeu
-        freeArray(permArray,20);
-        freeArray(tempArray,3);
-        freeArray(miniArray,3);
-        MainTetrisLoop(renderer);
-        //score => fichier du high Score si score > High Score
+    if (quit==1)
+    {
+        if(gameOverMenu(renderer, &score) == 1){
+            //oui
+            printf("\nau revoir !\n");
+            freeArray(permArray,20);
+            freeArray(tempArray,3);
+            freeArray(miniArray,3);
+            //score => fichier du high Score si score > High Score
+        }else{
+        //restart le jeu
+            freeArray(permArray,20);
+            freeArray(tempArray,3);
+            freeArray(miniArray,3);
+            MainTetrisLoop(renderer);
+            //score => fichier du high Score si score > High Score
+        }
     }
 }
 
