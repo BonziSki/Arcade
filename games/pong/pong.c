@@ -12,9 +12,11 @@
 #include "../../menu/menu.h"
 
 
+//fonction de création de la structure représentant le joueur
 Pong_Player * createPongPlayer(int nplayer){
     Pong_Player * temp = malloc(sizeof(Pong_Player));
 
+    //assignation des coordonnées de départ en fonction du joueur
     if (nplayer == 1){
         temp->x = 20;
         temp->y = (HEIGHT / 2) - 20;
@@ -30,6 +32,7 @@ Pong_Player * createPongPlayer(int nplayer){
     return temp;    
 };
 
+//fonction de création de la structure représentant la balle
 Ball * createPongBall(){
     Ball * temp = malloc(sizeof(Ball));
 
@@ -40,12 +43,11 @@ Ball * createPongBall(){
     temp->vertical_direction = 1;
 
     temp->speed = 1;
-    temp->bounce = 0;
 
     return temp;
 }
 
-
+//fonction de reset de la balle (à la fin d'un round)
 void resetBall(int hdir, Ball * ball){
 
     ball->x = WIDTH / 2 - 5;
@@ -57,6 +59,7 @@ void resetBall(int hdir, Ball * ball){
     ball->speed = 1;
 }
 
+//fonction de dessin
 void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Player * p2){
 
     //nettoyage de l'écran
@@ -105,6 +108,7 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
         SDL_ExitWithError("Changement de couleur du rendu");
     }
 
+    //affichage du rectangle créé
     SDL_RenderFillRect(renderer, rect);
 
 
@@ -118,6 +122,8 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
         SDL_ExitWithError("Changement de couleur du rendu");
     }
 
+
+    //affichage du rectangle créé
     SDL_RenderFillRect(renderer, rect);
 
 
@@ -131,6 +137,7 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
         SDL_ExitWithError("Changement de couleur du rendu");
     }
 
+    //affichage du rectangle créé
     SDL_RenderFillRect(renderer, rect);
 
     
@@ -156,7 +163,7 @@ int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
             SDL_ExitWithError("Changement de couleur du rendu");
         }
 
-        //
+        //rectangle des choix
         rect->w = 80;
         rect->h = 60;
         rect->x = 300;
@@ -196,7 +203,8 @@ int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
 
 
         char string[100];
-
+        
+        //affichage du gagnant
         if (score_p1 > score_p2){
             sprintf(string, "le gagnant est le joueur %d", 1);
         }else{
@@ -303,6 +311,7 @@ int pongUpdate(SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Play
             switch (event.key.keysym.sym){
 
                 case SDLK_ESCAPE:
+                //menu echap
                     if(Escape(renderer) == 0){
                         return 0;
                     }

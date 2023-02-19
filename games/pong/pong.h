@@ -9,7 +9,6 @@ typedef struct Ball{
     int vertical_direction;
     int horizontal_direction;
     int speed;
-    int bounce;
 }Ball;
 
 typedef struct Pong_Player{

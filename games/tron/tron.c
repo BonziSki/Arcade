@@ -19,10 +19,11 @@
 
 
 
-
+//fonction de création de la structure du joueur
 TronPlayer * createTronPlayer(int pn, int width, int height){
     TronPlayer * temp = malloc(sizeof(TronPlayer));
 
+    //spawn en fonction du joueur
     if (pn == 1){
         temp->x = (width / 2) - 20;
         temp->y = height / 2;
@@ -45,6 +46,7 @@ TronPlayer * createTronPlayer(int pn, int width, int height){
 }
 
 
+//fonction de création de la structure map
 int ** createTronMap(int width, int height){
     int ** temp = malloc(sizeof(int *) * height);
 
@@ -60,6 +62,7 @@ int ** createTronMap(int width, int height){
     return temp;
 }
 
+//fonction de free de la map
 void freeTronMap(int ** map, int h){
     for (int i = 0; i < h; i++){
         free(map[i]);
@@ -67,15 +70,19 @@ void freeTronMap(int ** map, int h){
     free(map);
 }
 
+//fonction de visualisation de la map (pour le debug)
 void viewMap(int ** map){
-    printf("\n############## Dessin des trainées du joueur 1 ################\n");
+    printf("\n############## Dessin des trainées ################\n");
     for (int i = 0; i < MAP_HEIGHT; i++){
         for (int j = 0; j < MAP_WIDTH; j++){
             if (map[i][j] == 1){
+            //trainées du joueur 1
                 printf("#");
             }else if (map[i][j] == 2){
+            //trainées du joueur 1
                 printf("@");
             }else{
+            //case vide
                 printf("O");
             }
         }
@@ -83,6 +90,7 @@ void viewMap(int ** map){
     }
 }
 
+//fonction de dessin
 void drawTron(SDL_Renderer * renderer, int ** map, TronPlayer * p1, TronPlayer * p2){
 
     //nettoyage de l'écran
@@ -273,31 +281,37 @@ int updateTron(SDL_Renderer * renderer, TronPlayer * p1, TronPlayer * p2, int **
     //Update des positions
     //joueur 1
 
-
+    //vérification des collisions avec les murs
     if (((p1->x + (2 * p1->dir_h)) >= MAP_WIDTH || (p1->x + (2 * p1->dir_h)) < 0) || ((p1->y + (2 * p1->dir_v)) > MAP_HEIGHT || (p1->y + (2 * p1->dir_v)) < 0) || ((p1->y + (2 * p1->dir_v)) + 1 > MAP_HEIGHT)){
         p2->score = p2->score + 1;
         lose = 1;
 
+    //vérification des collision avec les trainées
     }else if (map[p1->y + (2 * p1->dir_v)][p1->x + (2 * p1->dir_h)] != 0){
         p2->score = p2->score + 1;
         lose = 1;
     }
 
+    //on fait avancer le joueur
     p1->x = p1->x + (2 * p1->dir_h);
     p1->y = p1->y + (2 * p1->dir_v);
     
 
 
     //joueur 2
+
+    //vérification des collisions avec les murs
     if (((p2->x + (2 * p2->dir_h)) >= MAP_WIDTH || (p2->x + (2 * p2->dir_h)) < 0) || ((p2->y + (2 * p2->dir_v)) > MAP_HEIGHT || (p2->y + (2 * p2->dir_v)) < 0) || ((p2->y + (2 * p2->dir_v)) + 1 > MAP_HEIGHT)){
         p1->score = p1->score + 1;
         lose = 1;
 
+    //vérification des collision avec les trainées
     }else if(map[p2->y + (2 * p2->dir_v)][p2->x + (2 * p2->dir_h)] != 0){
         p1->score = p1->score + 1;
         lose = 1;
     }
 
+    //on fait avancer le joueur
     p2->x = p2->x + (2 * p2->dir_h);
     p2->y = p2->y + (2 * p2->dir_v);
     
@@ -318,6 +332,8 @@ int updateTron(SDL_Renderer * renderer, TronPlayer * p1, TronPlayer * p2, int **
     return -1;
 }
 
+
+//fonction de reset (clear map + reset pos des joueurs)
 void resetTronMap(TronPlayer * p1, TronPlayer * p2, int ** map, int width, int height){
     //Reset de la position du joueur 1
     p1->x = (width / 2) - 20;
@@ -343,6 +359,7 @@ void resetTronMap(TronPlayer * p1, TronPlayer * p2, int ** map, int width, int h
     }
 }
 
+//fonction de dessin du gagnant
 int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_p2){
     //bloquer le jeu jusqu'au relancement de la part du joueur
     int quit = 0;
@@ -446,6 +463,7 @@ int drawWinnerTron(SDL_Renderer * renderer, int winner, int score_p1, int score_
     return 0;
 }
 
+//fonction main
 void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifier){
 
 
@@ -491,7 +509,8 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifie
         }else if (update == 0){
             //sortie manuel du joueur
             quitTron = 1;
-            //PENSER A FREE TOUT CE QU'IL FAUT
+
+            //free des structures
             free(p1);
             free(p2);
 
@@ -502,6 +521,6 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifie
         }
         drawTron(renderer, map, p1, p2);
         
-        SDL_Delay(200-(speed_modifier*10));
+        SDL_Delay(200 - (speed_modifier * 10));
     }
 }

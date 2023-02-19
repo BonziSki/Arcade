@@ -14,14 +14,15 @@
 #include "../../menu/menu.h"
 #include <string.h>
 
-
+//fonction de création de la structure snake
 Snake * createSnake() {
 
+    //calcul du milieu de l'écran
     int midScreen = ((WIDTH / CASE_SIZE) % 2) ? (WIDTH / CASE_SIZE)/2 : ((WIDTH / CASE_SIZE) - 1)/2;
 
     Snake * temp = NULL;
 
-
+    //création des noeud du snake
     for (int i = midScreen; i > midScreen - 3; i--){
         Snake * snake = malloc(sizeof(Snake));
 
@@ -33,6 +34,7 @@ Snake * createSnake() {
     return temp;
 }
 
+//fonction d'ajout de noeud à la structure snake
 Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v){
     Snake * newSnake = malloc(sizeof(Snake));
     newSnake->x = snake->x + dir_h;
@@ -42,15 +44,19 @@ Snake * addSnakeNode(Snake * snake,int dir_h,int dir_v){
     return newSnake;
 }
 
+
+//fonction de création de la structure fruit
 void createFruit(Fruit * fruit, Snake * snake){
     
+    //position aléatoire
     fruit->x = (rand() % MAX_CASE_WIDTH);
     fruit->y = (rand() % MAX_CASE_HEIGHT);
-    //on empeche que le fruit soit a l'extrémité
+
     Snake * tempSnake = snake;
 
     int a = 1;
 
+    //on empêche le fruit de spawn dans le corps du snake
     while (a){
         if (fruit->x == tempSnake->x){
             if (fruit->y == tempSnake->y){
@@ -69,6 +75,7 @@ void createFruit(Fruit * fruit, Snake * snake){
     }
 }
 
+//fonction qui permet de visualiser tous les noeud du snake
 void viewAllNodes(Snake * snake){
     Snake * tempSnake = snake;
     int nextNodeNull = 0;
@@ -85,12 +92,10 @@ void viewAllNodes(Snake * snake){
 
         tempSnake = tempSnake->next;
     }
-
     printf("\n");
-    
 }
 
-
+//fonction de dessin
 void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score){
 
     Snake * tempSnake = snake;
@@ -107,7 +112,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
     //Dessin du terrain
     SDL_Rect * rect = malloc(sizeof(SDL_Rect));
 
-    //Dessin du snake
+    //Dessin de tous les noeuds du snake
     int nextNodeNull = 0;
 
     while (!nextNodeNull){
@@ -128,7 +133,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
         tempSnake = tempSnake->next;
         
     }
-    // viewAllNodes(snake);
+    
     //changement de couleur
     if (SDL_SetRenderDrawColor(renderer, 200, 20, 20, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
@@ -157,7 +162,7 @@ void drawSnake(SDL_Renderer * renderer, Snake * snake, Fruit *fruit, int * score
 
 }
 
-
+//fonciton main
 void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer,int speed_modifier){
 
     Snake * snake = createSnake();
@@ -184,45 +189,51 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer,int speed_modifie
     SDL_Event eventsnake;
 
     while(!quitsnake){
-        update=updateSnake(renderer, snake, &snake, &score, fruit, &dir_h, &dir_v);
+        update = updateSnake(renderer, snake, &snake, &score, fruit, &dir_h, &dir_v);
         if (update == 0){
             printf("BREAKPOINT");
-            quitsnake=1;
-        }else if (update==2)
-        {
+            quitsnake = 1;
+        }else if (update == 2){
             //sortie manuel du joeur
-            quitsnake=2;
-        };
+            quitsnake = 2;
+        }
+
         drawSnake(renderer, snake, fruit, &score);
-        SDL_Delay(200-(speed_modifier*10));
+
+        SDL_Delay(200 - (speed_modifier * 10));
+    }
+
+    if (quitsnake==1){
+            if(gameOverMenuSnake(renderer, &score) == 1){
+            printf("\n\nau revoir !\n");
+            //free du serpent
+            freeSnake(snake);
+            //free du fruit
+            free(fruit);
+            //quitter le jeu snake
+            quitsnake = 1;
+            
+        }else{
+        //restart le jeu
+            //on refait le snake entièrement pour repartir à zero
+            freeSnake(snake);
+            mainLoopSnake(window,renderer,speed_modifier);
         }
-        if (quitsnake==1)
-        {
-             if(gameOverMenuSnake(renderer, &score) == 1){
-                printf("\n\nau revoir !\n");
-                //free du serpent
-                freeSnake(snake);
-                //free du fruit
-                free(fruit);
-                //quitter le jeu snake
-                quitsnake = 1;
-                
-            }else{
-            //restart le jeu
-                //on refait le snake entièrement pour repartir à zero
-                freeSnake(snake);
-                mainLoopSnake(window,renderer,speed_modifier);
-            }
-        }
+    }
 }
 
+//fonction de free du snake
 void freeSnake(Snake * snake){
     int nextNodeNull = 0;
+
+    //on sauvegarde les prochains noeuds
     Snake * nextSnake = snake->next;
     Snake * nextNextSnake = nextSnake->next;
 
+    //on free le noeud actuel
     free(snake);
     
+    //tant que le prochain noeud n'est pas le dernier, on free le noeud
     while(!nextNodeNull){
         free(nextSnake);
 
@@ -236,6 +247,7 @@ void freeSnake(Snake * snake){
     }
 }
 
+//fonction de gameover
 int gameOverMenuSnake(SDL_Renderer * renderer, int * score){
     int quit = 0;
     int choice = 0;
@@ -252,7 +264,7 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int * score){
             SDL_ExitWithError("Changement de couleur du rendu");
         }
 
-        //
+        //rectangles de choix
         rect->w = 80;
         rect->h = 60;
         rect->x = 300;
@@ -298,31 +310,27 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int * score){
         //Ecriture score dans fichier
         //print score
         char char_buffer[9];
-        sprintf(char_buffer,"%d",*score);
-        SDL_WriteTextBuffered(renderer,620,420,40,40,greyWhite,char_buffer);
+        sprintf(char_buffer, "%d", *score);
+        SDL_WriteTextBuffered(renderer, 620, 420, 40, 40, greyWhite, char_buffer);
         //score :
-        SDL_WriteTextBuffered(renderer,520,420,80,40,greyWhite,"score :");
+        SDL_WriteTextBuffered(renderer, 520, 420, 80, 40, greyWhite, "score :");
         // highscore :
-        SDL_WriteTextBuffered(renderer,500,460,100,40,greyWhite,"highscore :");
+        SDL_WriteTextBuffered(renderer, 500, 460, 100, 40, greyWhite, "highscore :");
         //print highscore
-        if (checkFileEmpty("ressources/score/score_snake.txt")>0){
-            if(atoi(readInFile("ressources/score/score_snake.txt"))<*score){
-                writeInFile("ressources/score/score_snake.txt",*score);
-                SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
+        if (checkFileEmpty("ressources/score/score_snake.txt") > 0){
+            if(atoi(readInFile("ressources/score/score_snake.txt")) < *score){
+                writeInFile("ressources/score/score_snake.txt", *score);
+                SDL_WriteTextBuffered(renderer, 620, 460, 40, 40, greyWhite, char_buffer);
             }else{
-                SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,readInFile("ressources/score/score_snake.txt"));
+                SDL_WriteTextBuffered(renderer, 620, 460, 40, 40, greyWhite, readInFile("ressources/score/score_snake.txt"));
             }
             
         }else{
-            writeInFile("ressources/score/score_snake.txt",*score);
-            SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
+            writeInFile("ressources/score/score_snake.txt", *score);
+            SDL_WriteTextBuffered(renderer, 620, 460, 40, 40, greyWhite, char_buffer);
         }
         SDL_RenderPresent(renderer);
 
-
-
-
-        SDL_RenderPresent(renderer);
 
 
         //gestion des choix du user
@@ -362,6 +370,7 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int * score){
     return 0;
 }
 
+//fonction d'update
 int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, int * score, Fruit * fruit, int * dir_h, int * dir_v){
 
     //vérification des entrées du user
@@ -464,11 +473,6 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
                 
                 }
             }
-            
-
-            
-            
-
             firstLoop = 0;
 
         }else{
