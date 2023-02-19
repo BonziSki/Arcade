@@ -201,14 +201,14 @@ int updateTron(SDL_Renderer * renderer, TronPlayer * p1, TronPlayer * p2, int **
 
     while (SDL_PollEvent(&event)){
         if(event.type == SDL_QUIT){
-            return 2;
+            return 0;
         }
         if (event.type == SDL_KEYDOWN){
             switch (event.key.keysym.sym){
                 //menu pause
                 case SDLK_ESCAPE:
                         if(Escape(renderer) == 0){
-                            return 2;
+                            return 0;
                         }
                     break;
 
@@ -516,9 +516,8 @@ void mainTronLoop(SDL_Window * window, SDL_Renderer * renderer,int speed_modifie
 
             freeTronMap(map, MAP_HEIGHT);
             return;
-        }else if (update == 2){
-            break;
         }
+        
         drawTron(renderer, map, p1, p2);
         
         SDL_Delay(200 - (speed_modifier * 10));
