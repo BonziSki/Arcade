@@ -216,7 +216,7 @@ void mainLoopSnake(SDL_Window* window, SDL_Renderer * renderer,int speed_modifie
                 int score = 0;
             }
 
-        }else if (update == -1){
+        }else if (update == 2){
             //sortie manuel du joeur
             printf("\n\nau revoir !\n");
             //free du serpent
@@ -390,7 +390,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT){
             //quitter le programme
-            return -1;
+            return 2;
         }
         if (event.type == SDL_KEYDOWN){
                 //nécessite un cooldown entre les touches
@@ -398,7 +398,7 @@ int updateSnake(SDL_Renderer * renderer, Snake * snake, Snake ** snake_pointer, 
 
                 case SDLK_ESCAPE:
                         if(Escape(renderer) == 0){
-                            return -1;
+                            return 2;
                         }
                     break;
 
