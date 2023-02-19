@@ -78,6 +78,7 @@ void MainTetrisLoop(SDL_Renderer * renderer){
             //score => fichier du high Score si score > High Score
         }
     }
+    free(TimeStamp1);
 }
 
 
@@ -167,6 +168,7 @@ void DrawNext(SDL_Renderer * renderer,int ** tempArray){
             }
         }
     }
+    free(rect);
 }
 
 void DrawControl(SDL_Renderer * renderer){
@@ -296,6 +298,7 @@ if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
             }
         }
     }
+    free(rect);
 }
 int gameOverMenu(SDL_Renderer * renderer, int * score){
     int quit = 0;
@@ -346,6 +349,7 @@ int gameOverMenu(SDL_Renderer * renderer, int * score){
 
         //rendu du rectangle
         SDL_RenderFillRect(renderer, rect);
+        free(rect);
 
         //recentrer les zones   
         SDL_Color greyWhite = {200, 200, 200};

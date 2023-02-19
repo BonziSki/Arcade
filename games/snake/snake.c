@@ -285,7 +285,7 @@ int gameOverMenuSnake(SDL_Renderer * renderer, int * score){
 
         //rendu du rectangle
         SDL_RenderFillRect(renderer, rect);
-
+        free(rect);
         //recentrer les zones   
         SDL_Color greyWhite = {200, 200, 200};
         char * dico[] = {"voulez vous rejouer ?","oui","non"};

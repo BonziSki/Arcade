@@ -80,6 +80,8 @@ void menu(SDL_Window * window, SDL_Renderer * renderer){
             }
         }
     }
+    //free
+    free(setup_int);
 }
 
 

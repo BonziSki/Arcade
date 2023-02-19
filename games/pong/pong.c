@@ -137,6 +137,7 @@ void drawPongGame(SDL_Window * window, SDL_Renderer * renderer, Ball * ball, Pon
 
     //affichage de tous les éléments
     SDL_RenderPresent(renderer);
+    free(rect);
 };
 
 int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
@@ -188,6 +189,7 @@ int drawWinner(SDL_Renderer * renderer, int score_p1, int score_p2){
 
         //rendu du rectangle
         SDL_RenderFillRect(renderer, rect);
+        free(rect);
 
         //recentrer les zones   
         SDL_Color greyWhite = {200, 200, 200};
