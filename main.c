@@ -1,14 +1,13 @@
 //#define SDL_MAIN_HANDLED
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 //Windows
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
 #include "menu/menu.h"
 #include "func.h"
 #include "games/snake/snake.h"
@@ -18,10 +17,9 @@
 
 /*
 commande de compilation :
-MAC :   gcc main.c -o prog $(sdl2-config --cflags --libs)
-        gcc main.c func.c ./menu/menu.c -o prog $(sdl2-config --cflags --libs) -lSDL_ttf
-WINDOWS : gcc main.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 
-WINDOWS sans terminal : gcc main.c func.c games/snake/snake.c -o prog.exe -I include -L lib -lmingw32 -lSDL2main -lSDL2 -mwindows
+MAC : gcc main.c -o prog $(sdl2-config --cflags --libs)
+WINDOWS : gcc main.c func.c menu/menu.c menu/escape.c games/pong/pong.c games/tetris/tetris.c games/tetris/tetrisExternal.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
+WINDOWS sans terminal : gcc main.c func.c menu/menu.c menu/escape.c games/pong/pong.c games/tetris/tetris.c games/tetris/tetrisExternal.c -o prog.exe -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -mwindows
 */
 
 
@@ -29,7 +27,7 @@ int main(int argc, char **argv){
 
     srand(time(NULL));
 
-    SDL_PrintVersion();
+    //SDL_PrintVersion();
 
     //initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
@@ -58,20 +56,8 @@ int main(int argc, char **argv){
     }
 
 
-    
-    SDL_Event event;
-    int quit = 0;
-    mainPongLoop(window, renderer);
-    SDL_ClearScreen(renderer);
-    SDL_RenderPresent(renderer);
-    while (!quit){
-        while (SDL_PollEvent(&event)){
-            if (event.type == SDL_QUIT){
-                quit = 1;
-            }
-        }
-    }
-    
+    menu(window,renderer);
+
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

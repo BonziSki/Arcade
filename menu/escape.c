@@ -1,10 +1,9 @@
 //MAC
-#include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
-#include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
+// #include </opt/homebrew/Cellar/sdl2/2.26.1/include/SDL2/SDL.h> 
+// #include </opt/homebrew/Cellar/sdl_ttf/2.0.11_2/include/SDL/SDL_ttf.h>
 
-//Windows
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -90,7 +89,7 @@ void DrawEscape(SDL_Renderer * renderer, int choice){
     SDL_Color greyWhite = {200, 200, 200};
     char * dico[] = {"voulez vous quitter?","oui","non"};
 
-// SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
+SDL_WriteTextBuffered(renderer,30,30,150,30,greyWhite,dico[0]);
 // SDL_WriteTextBuffered(renderer,60,60,60,60,greyWhite,dico[1]);
 // SDL_WriteTextBuffered(renderer,90,90,90,90,greyWhite,dico[2]);
 

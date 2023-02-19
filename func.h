@@ -10,5 +10,6 @@ void SDL_PrintVersion();
 void SDL_ClearScreen(SDL_Renderer * renderer);
 void testScreen(SDL_Renderer * renderer);
 void SDL_WriteText(SDL_Renderer * renderer, int x, int y, int w, int h, SDL_Color color, char * text);
+void SDL_WriteTextBuffered(SDL_Renderer * renderer,int x, int y, int w, int h, SDL_Color color, char * arraySTR);
 
 #endif
