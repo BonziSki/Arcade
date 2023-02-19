@@ -29,5 +29,4 @@ int pongUpdate(SDL_Renderer * renderer, Ball * ball, Pong_Player * p1, Pong_Play
 
 
 
-
 #endif

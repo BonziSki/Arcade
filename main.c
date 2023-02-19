@@ -12,6 +12,8 @@
 #include "menu/menu.h"
 #include "func.h"
 #include "games/snake/snake.h"
+#include "games/pong/pong.h"
+#include "games/tron/tron.h"
 
 
 /*
@@ -32,6 +34,11 @@ int main(int argc, char **argv){
     //initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
         SDL_ExitWithError("Initialisation SDL");
+    }
+
+    //initialisation de la gestion du texte
+    if (TTF_Init() != 0){
+        SDL_ExitWithError("Initialisation TTF");
     }
 
     //initialisation de la gestion du texte

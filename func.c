@@ -42,6 +42,27 @@ void SDL_ClearScreen(SDL_Renderer * renderer){
 
 }
 
+void testScreen(SDL_Renderer * renderer){
+
+    if (SDL_SetRenderDrawColor(renderer, 0, 124, 255, SDL_ALPHA_OPAQUE)){
+        SDL_ExitWithError("Impossible de changer de couleur");
+    }
+
+    SDL_Rect FillBlack = {
+        .x = 0,
+        .y = 0,
+        .h = HEIGHT,
+        .w = WIDTH / 2
+    };
+
+
+    if (SDL_RenderFillRect(renderer, &FillBlack)){
+        SDL_ExitWithError("Impossible de clear l'écran");
+    }
+
+    SDL_RenderPresent(renderer);
+}
+
 void SDL_WriteText(SDL_Renderer * renderer, int x, int y, int w, int h, SDL_Color color, char * text){
 
     //chargement de la police d'écriture
