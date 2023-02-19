@@ -144,7 +144,7 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
         }
     }
 
-    //collsiion avec permArray
+    //collision avec permArray
     int flag_coll_perm=0;
     if (*y<=17){
         if (b_empty){
@@ -232,7 +232,6 @@ int updateTetris(int ** permArray, int ** miniArray,int * x,int * y,int * score,
 }
 
 void updateMiniArray(int ** miniArray, int choice,int color){
-    // a faire collision
     switch (choice){
     case 1:
         //line shape
@@ -289,6 +288,7 @@ void updateMiniArray(int ** miniArray, int choice,int color){
 }
 
 void cleanArray(int ** miniArray){
+    //nettoyage du mini array uniquement pour eviter de garder des résidus de formes
     for (int i = 0; i < 3; i++){
         for (int j = 0; j < 3; j++){
                 miniArray[i][j]=0;

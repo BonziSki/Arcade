@@ -68,14 +68,12 @@ void MainTetrisLoop(SDL_Renderer * renderer){
             freeArray(permArray,20);
             freeArray(tempArray,3);
             freeArray(miniArray,3);
-            //score => fichier du high Score si score > High Score
         }else{
         //restart le jeu
             freeArray(permArray,20);
             freeArray(tempArray,3);
             freeArray(miniArray,3);
             MainTetrisLoop(renderer);
-            //score => fichier du high Score si score > High Score
         }
     }
     free(TimeStamp1);
@@ -185,6 +183,7 @@ void DrawControl(SDL_Renderer * renderer){
     SDL_RenderCopy(renderer,texture,NULL,rect);
     SDL_DestroyTexture(texture);
     free(rect);
+    //n'affiche qu'une photo de mon chat, cette zone sert un peu de placeholder si on aurait voulu mettre une image des controles
 }
 
 void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x, int y){
@@ -241,7 +240,7 @@ void DrawGame(SDL_Renderer * renderer,int ** miniArray,int ** permArray,int x, i
             }
         }
     }
-
+//print tableaup perm
 if (SDL_SetRenderDrawColor(renderer, 255, 0,0, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("Changement de couleur du rendu");
     }
@@ -383,11 +382,6 @@ int gameOverMenu(SDL_Renderer * renderer, int * score){
             SDL_WriteTextBuffered(renderer,620,460,40,40,greyWhite,char_buffer);
         }
         SDL_RenderPresent(renderer);
-
-
-
-
-
         //gestion des choix du user
         while (SDL_PollEvent(&event)){
             switch (event.type){

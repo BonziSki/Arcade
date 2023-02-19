@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "func.h"
 #define BUFFER 9
-
+//regarde si la taille du fichier est a 0 donc vide
 int checkFileEmpty(char * file_path){
     FILE * fichier =NULL;
     fichier =fopen(file_path,"r");
@@ -24,7 +24,7 @@ int checkFileEmpty(char * file_path){
     }
     
 }
-
+//écrit le score dans fichier (la version ou un param est un int)
 void writeInFile(char * file_path, int int_input){
     FILE * fichier =NULL;
     fichier =fopen(file_path,"w+");
@@ -40,6 +40,7 @@ void writeInFile(char * file_path, int int_input){
         printf("rater\n");
     }
 }
+//écriture dans fichier (la version ou un param est un string)
 void writeCharFile(char * file_path, char * input_string){
     FILE * fichier =NULL;
     fichier =fopen(file_path,"w+");
@@ -51,7 +52,7 @@ void writeCharFile(char * file_path, char * input_string){
     }
 }
 
-
+//lecture de première ligne d'un fichier (n'est utilisé que pour le score qui ne dépasse généralement pas plus de 9 charactères)
 char * readInFile(char * file_path){
     FILE * fichier =NULL;
     fichier =fopen(file_path,"r");
@@ -67,7 +68,7 @@ char * readInFile(char * file_path){
         printf("rater\n");
     }
 }
-
+//read tout un file et envoyé en liste
 char * readInFileSized(char * file_path,int file_size){
     FILE * fichier =NULL;
     fichier =fopen(file_path,"r");
@@ -78,8 +79,6 @@ char * readInFileSized(char * file_path,int file_size){
         {
             cpt++;
         }
-        
-        //fgets(chaine,file_size-1,fichier);
         //Fermeture du fichier
         fclose(fichier);
         return chaine;

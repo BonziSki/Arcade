@@ -79,11 +79,6 @@ void DrawEscape(SDL_Renderer * renderer, int choice){
             SDL_ExitWithError("Changement de couleur du rendu");
         }
     }
-    // rect->w = 240;
-    // rect->h = 80;
-    // rect->x = WIDTH/2-rect->w/2;
-    // rect->y = 100;
-    // SDL_RenderFillRect(renderer, rect);
 
 //recentrer les zones
     SDL_Color greyWhite = {200, 200, 200};

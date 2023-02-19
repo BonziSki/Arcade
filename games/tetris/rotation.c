@@ -97,6 +97,7 @@ void rotation(int ** miniArray,int * x,int * y,int ** permArray){
                 } 
             } 
         }
+        //si pas bougeable a gauche et entre deux blocs plein (ou limite de zone) , interdire rotation
     if (l_moveable!=0){
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 3; j++){
@@ -108,6 +109,7 @@ void rotation(int ** miniArray,int * x,int * y,int ** permArray){
             } 
         } 
     }
+    //si pas bougeable a droite et entre deux blocs plein (ou limite de zone) , interdire rotation
     if (r_moveable!=0){
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 3; j++){

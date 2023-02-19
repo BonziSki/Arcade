@@ -150,7 +150,7 @@ void drawMenu(SDL_Window * window, SDL_Renderer * renderer,int choice){
     free(rect);
 }
 
-
+//recup des parametres de config 
 int * setup(char * file_path){
     int * temp = malloc(sizeof(int)*3);
     for (int i = 0; i < 3; i++){
