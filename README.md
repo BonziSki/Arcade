@@ -19,7 +19,6 @@ Ce qu'il est requis pour commencer avec votre projet...
 
 Les étapes pour installer votre programme....
 
-- Télécharger librairie SDL et SDL_tff
 - Télécharger la branch Main de la repo Arcade ou l'ouvrir avec Git Desktop
 
 
@@ -38,10 +37,11 @@ Exécuter le fichier prog
 
 Entrez les programmes/logiciels/ressources que vous avez utilisé pour développer votre projet
 
-_exemples :_
 * Visual studio code
 * Git Desktop
 * Git Kraken
+* SDL2
+* SDL_ttf
 
 ## Versions
 Listez les versions ici 
